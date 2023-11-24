@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import './AddProduct.css';
-import { getCourses, getSubjects, getUniversities, getcategory, getsubcategory } from '../../axios/service/authServices';
+import { getCourses, getSubjects, getUniversities, getcategory, getsemester, getsubcategory } from '../../axios/service/authServices';
 import { Await } from 'react-router-dom';
 
 const AddProduct = ({ handleBack }) => {
@@ -55,27 +55,19 @@ const AddProduct = ({ handleBack }) => {
   }, []);
 
   async function getsubject(course) {
-    console.log(course)
-    const sub = getSubjects(jwtToken, course)
+    setCourse(course)
+    const sub = await getSubjects(jwtToken, course)
     setSubjectOptions(sub);
+
+  }
+  async function getsemeste(category) {
+    setCategory(category)
+    const sems = await getsemester(jwtToken, category)
+    setSemesterOptions(sems);
+
   }
 
 
-  useEffect(() => {
-    if (category) {
-      axios.get(`http://localhost:8083/api/auth/semester/${category}`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`, // Include the token in the headers
-        },
-      })
-        .then(response => {
-          setSemesterOptions(response.data);
-        })
-        .catch(error => {
-          console.error('Error fetching subjects:', error);
-        });
-    }
-  }, [category]);
 
 
 
@@ -201,10 +193,11 @@ const AddProduct = ({ handleBack }) => {
           <select id="subjcet" name="subjcet" value={subject} onChange={(e) => setSubject(e.target.value)} required>
             <option value="">Select Subjcet</option>
             {subjectOptions.map(subject => (
-              <option key={subject.id} value={subject.course.courseName}>
-                {subject.course.courseName}
+              <option key={subject.id} value={subject.id}>
+                {subject.subjectName}
               </option>
             ))}
+
           </select>
 
           {/* Add similar dropdowns for subject, university, category, subcategory, semester */}
@@ -221,10 +214,10 @@ const AddProduct = ({ handleBack }) => {
             ))}
           </select>
           <label htmlFor="category">Category</label>
-          <select id="category" name="category" value={category} onChange={(e) => setCategory(e.target.value)} required>
+          <select id="category" name="category" value={category} onChange={(e) => getsemeste(e.target.value)} required>
             <option value="">Select Category</option>
             {categoryOptions.map(category => (
-              <option key={category.id} value={category.id}>
+              <option key={category.id} value={category.name}>
                 {category.name}
               </option>
             ))}
@@ -240,7 +233,7 @@ const AddProduct = ({ handleBack }) => {
           <select id="subcategory" name="subcategory" value={subcategory} onChange={(e) => setSubject(e.target.value)} required>
             <option value="">Select Subcategory</option>
             {subcategoryOptions.map(subcategory => (
-              <option key={subcategory.id} value={subcategory.id}>
+              <option key={subcategory.id} value={subcategory.name}>
                 {subcategory.name}
               </option>
             ))}
@@ -249,8 +242,8 @@ const AddProduct = ({ handleBack }) => {
           <select id="semester" name="semester" value={semester} onChange={(e) => setSemester(e.target.value)} required>
             <option value="">Select Semester</option>
             {semesterOptions.map(semester => (
-              <option key={semester.id} value={semester.id}>
-                {semester.parentCategory.name}
+              <option key={semester.id} value={semester.name}>
+                {semester.name}
               </option>
             ))}
           </select>

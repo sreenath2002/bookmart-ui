@@ -60,3 +60,15 @@ export const getSubjects = async (token, course) => {
     return data;
 
 };
+export const getsemester = async (token, category) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAuthInstance.get(`/semester/${category}`, config);
+    return data;
+
+};

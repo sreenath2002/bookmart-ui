@@ -24,3 +24,39 @@ export const getUniversities = async (token) => {
     return data;
 
 };
+export const getsubcategory = async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAuthInstance.get('/subcategory', config);
+    return data;
+
+};
+export const getcategory = async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAuthInstance.get('/category', config);
+    return data;
+
+};
+export const getSubjects = async (token, course) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAuthInstance.get(`/subjects/${course}`, config);
+    return data;
+
+};

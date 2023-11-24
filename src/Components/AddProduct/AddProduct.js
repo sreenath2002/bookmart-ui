@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import './AddProduct.css';
-import { getCourses, getUniversities } from '../../axios/service/authServices';
+import { getCourses, getSubjects, getUniversities, getcategory, getsubcategory } from '../../axios/service/authServices';
+import { Await } from 'react-router-dom';
 
 const AddProduct = ({ handleBack }) => {
   const [title, setTitle] = useState('');
@@ -38,9 +39,13 @@ const AddProduct = ({ handleBack }) => {
     async function featchData(token) {
       const course = await getCourses(token);
       const University = await getUniversities(token);
+      const subcategory = await getsubcategory(token);
+      const category = await getcategory(token);
       setCourseOptions(course);
       setUniversityOptions(University)
-      // if (course.status && University  === 200){
+      setCategoryOptions(category);
+      setSubcategoryOptions(subcategory);
+      // if (course?.statusCode && University?.statusCode $$ subcategory.statusCode & category.statusCode === 200){
       //   setCourseOptions(course);
       // setUniversityOptions(University)
       // }
@@ -49,57 +54,12 @@ const AddProduct = ({ handleBack }) => {
 
   }, []);
 
+  async function getsubject(course) {
+    console.log(course)
+    const sub = getSubjects(jwtToken, course)
+    setSubjectOptions(sub);
+  }
 
-
-  useEffect(() => {
-    axios.get('http://localhost:8083/api/auth/subcategory', {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`, // Include the token in the headers
-      },
-    })
-      .then(response => {
-        setSubcategoryOptions(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching courses:', error);
-      });
-
-    // Fetch other dropdown options similarly for subject, university, category, subcategory, semester
-    // Use useEffect and axios to fetch data for each dropdown
-  }, []);
-
-  useEffect(() => {
-    axios.get('http://localhost:8083/api/auth/category', {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`, // Include the token in the headers
-      },
-    })
-      .then(response => {
-        setCategoryOptions(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching courses:', error);
-      });
-
-    // Fetch other dropdown options similarly for subject, university, category, subcategory, semester
-    // Use useEffect and axios to fetch data for each dropdown
-  }, []);
-
-  useEffect(() => {
-    if (course) {
-      axios.get(`http://localhost:8083/api/auth/subjects/${course}`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`, // Include the token in the headers
-        },
-      })
-        .then(response => {
-          setSubjectOptions(response.data);
-        })
-        .catch(error => {
-          console.error('Error fetching subjects:', error);
-        });
-    }
-  }, [course]);
 
   useEffect(() => {
     if (category) {
@@ -229,10 +189,10 @@ const AddProduct = ({ handleBack }) => {
         </div>
         <div className='flex'>
           <label htmlFor="course">Course</label>
-          <select id="course" name="course" value={course} onChange={(e) => setCourse(e.target.value)} required>
+          <select id="course" name="course" value={course} onChange={(e) => getsubject(e.target.value)} required>
             <option value="">Select Course</option>
             {courseOptions.map(course => (
-              <option key={course.id} value={course.id}>
+              <option key={course.id} value={course.courseName}>
                 {course.courseName}
               </option>
             ))}
@@ -241,7 +201,7 @@ const AddProduct = ({ handleBack }) => {
           <select id="subjcet" name="subjcet" value={subject} onChange={(e) => setSubject(e.target.value)} required>
             <option value="">Select Subjcet</option>
             {subjectOptions.map(subject => (
-              <option key={subject.id} value={subject.id}>
+              <option key={subject.id} value={subject.course.courseName}>
                 {subject.course.courseName}
               </option>
             ))}

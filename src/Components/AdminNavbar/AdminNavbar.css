@@ -1,0 +1,62 @@
+/* AdminNavbar.css */
+
+.navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px;
+  }
+  
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .app-name {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+  }
+  
+  .app-logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+  
+  .profile-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-info {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Move profile info to the right */
+  }
+  
+  .profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .profile-name {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .logout-btn {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .logout-btn:hover {
+    background-color: #0056b3;
+  }
+  

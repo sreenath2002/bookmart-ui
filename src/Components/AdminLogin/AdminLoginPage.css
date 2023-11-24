@@ -1,0 +1,65 @@
+/* AdminLoginPage.css */
+
+.admin-login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  .login-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 40px; /* Increased padding */
+    width: 400px; /* Increased width */
+    max-width: 80%; /* Added max-width for responsiveness */
+    text-align: center;
+  }
+  
+  .admin-login-heading {
+    font-size: 2.5em; /* Larger font size for the heading */
+    margin-bottom: 30px; /* Increased margin */
+  }
+  
+  .input-group {
+    margin-bottom: 20px; /* Increased margin between input fields */
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 10px; /* Increased margin for labels */
+  }
+  
+  input[type='text'],
+  input[type='password'] {
+    width: 100%;
+    padding: 12px; /* Increased input padding */
+    border-radius: 6px; /* Slightly rounded corners */
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2em; /* Increased button font size */
+    background-color: #007bff;
+   
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  .registration-error {
+    /* Green background color */
+   color: red; /* White text color */
+   padding: 10px 15px; /* Padding around the message */
+   border-radius: 5px; /* Rounded corners */
+   margin-bottom: 10px; /* Add some space below the message */
+   text-align: center; /* Center the text */
+ }
+  

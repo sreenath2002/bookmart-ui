@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import './AddProduct.css';
+import { getCourses, getSubjects, getUniversities, getcategory, getsemester, getsubcategory } from '../../axios/service/authServices';
+import { Await } from 'react-router-dom';
 
 const AddProduct = ({ handleBack }) => {
   const [title, setTitle] = useState('');
@@ -23,7 +25,7 @@ const AddProduct = ({ handleBack }) => {
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [subcategoryOptions, setSubcategoryOptions] = useState([]);
   const [semesterOptions, setSemesterOptions] = useState([]);
- 
+
   const [images, setImages] = useState([]);
 
   const handleImageChange = (e) => {
@@ -31,110 +33,47 @@ const AddProduct = ({ handleBack }) => {
     setImages(selectedImages);
   };
   const jwtToken = localStorage.getItem("jwt");
-  useEffect(() => {
-    axios.get('http://localhost:8083/auth/courses',{
-      headers: {
-        Authorization: `Bearer ${jwtToken}`, // Include the token in the headers
-      },
-    })
-      .then(response => {
-        setCourseOptions(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching courses:', error);
-      });
-
-    // Fetch other dropdown options similarly for subject, university, category, subcategory, semester
-    // Use useEffect and axios to fetch data for each dropdown
-  }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:8083/auth/universities',{
-      headers: {
-        Authorization: `Bearer ${jwtToken}`, // Include the token in the headers
-      },
-    })
-      .then(response => {
-        setUniversityOptions(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching courses:', error);
-      });
-
-   
-  }, []);
-
-  useEffect(() => {
-    axios.get('http://localhost:8083/auth/subcategory',{
-      headers: {
-        Authorization: `Bearer ${jwtToken}`, // Include the token in the headers
-      },
-    })
-      .then(response => {
-        setSubcategoryOptions(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching courses:', error);
-      });
-
-    // Fetch other dropdown options similarly for subject, university, category, subcategory, semester
-    // Use useEffect and axios to fetch data for each dropdown
-  }, []);
-
-  useEffect(() => {
-    axios.get('http://localhost:8083/auth/category',{
-      headers: {
-        Authorization: `Bearer ${jwtToken}`, // Include the token in the headers
-      },
-    })
-      .then(response => {
-        setCategoryOptions(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching courses:', error);
-      });
-
-    // Fetch other dropdown options similarly for subject, university, category, subcategory, semester
-    // Use useEffect and axios to fetch data for each dropdown
-  }, []);
-
-  useEffect(() => {
-    if (course) {
-      axios.get(`http://localhost:8083/auth/subjects/${course}`,{
-        headers: {
-          Authorization: `Bearer ${jwtToken}`, // Include the token in the headers
-        },
-      })
-        .then(response => {
-          setSubjectOptions(response.data);
-        })
-        .catch(error => {
-          console.error('Error fetching subjects:', error);
-        });
+    featchData(jwtToken)
+    async function featchData(token) {
+      const course = await getCourses(token);
+      const University = await getUniversities(token);
+      const subcategory = await getsubcategory(token);
+      const category = await getcategory(token);
+      setCourseOptions(course);
+      setUniversityOptions(University)
+      setCategoryOptions(category);
+      setSubcategoryOptions(subcategory);
+      // if (course?.statusCode && University?.statusCode $$ subcategory.statusCode & category.statusCode === 200){
+      //   setCourseOptions(course);
+      // setUniversityOptions(University)
+      // }
     }
-  }, [course]);
-
-  useEffect(() => {
-    if (category) {
-      axios.get(`http://localhost:8083/auth/semester/${category}`,{
-        headers: {
-          Authorization: `Bearer ${jwtToken}`, // Include the token in the headers
-        },
-      })
-        .then(response => {
-          setSemesterOptions(response.data);
-        })
-        .catch(error => {
-          console.error('Error fetching subjects:', error);
-        });
-    }
-  }, [category]);
-  
-  
-  
 
 
-  
+  }, []);
+
+  async function getsubject(course) {
+    setCourse(course)
+    const sub = await getSubjects(jwtToken, course)
+    setSubjectOptions(sub);
+
+  }
+  async function getsemeste(category) {
+    setCategory(category)
+    const sems = await getsemester(jwtToken, category)
+    setSemesterOptions(sems);
+
+  }
+
+
+
+
+
+
+
+
 
 
   const handleSubmit = (e) => {
@@ -155,7 +94,7 @@ const AddProduct = ({ handleBack }) => {
       category,
       subcategory,
       semester,
-     
+
       images,
     });
     // Call an API or update state as needed
@@ -237,15 +176,15 @@ const AddProduct = ({ handleBack }) => {
             onChange={(e) => setAuthor(e.target.value)}
             required
           />
-          
-          
+
+
         </div>
         <div className='flex'>
           <label htmlFor="course">Course</label>
-          <select id="course" name="course" value={course} onChange={(e) => setCourse(e.target.value)} required>
+          <select id="course" name="course" value={course} onChange={(e) => getsubject(e.target.value)} required>
             <option value="">Select Course</option>
             {courseOptions.map(course => (
-              <option key={course.id} value={course.id}>
+              <option key={course.id} value={course.courseName}>
                 {course.courseName}
               </option>
             ))}
@@ -255,13 +194,14 @@ const AddProduct = ({ handleBack }) => {
             <option value="">Select Subjcet</option>
             {subjectOptions.map(subject => (
               <option key={subject.id} value={subject.id}>
-                {subject.course.courseName}
+                {subject.subjectName}
               </option>
             ))}
+
           </select>
-          
+
           {/* Add similar dropdowns for subject, university, category, subcategory, semester */}
-          
+
         </div>
         <div className='flex'>
           <label htmlFor="university">University</label>
@@ -274,26 +214,26 @@ const AddProduct = ({ handleBack }) => {
             ))}
           </select>
           <label htmlFor="category">Category</label>
-          <select id="category" name="category" value={category} onChange={(e) => setCategory(e.target.value)} required>
+          <select id="category" name="category" value={category} onChange={(e) => getsemeste(e.target.value)} required>
             <option value="">Select Category</option>
             {categoryOptions.map(category => (
-              <option key={category.id} value={category.id}>
+              <option key={category.id} value={category.name}>
                 {category.name}
               </option>
             ))}
           </select>
-       
-          
+
+
           {/* Add similar dropdowns for subject, university, category, subcategory, semester */}
-          
+
         </div>
         <div className='flex'>
-          
+
           <label htmlFor="subcategory">Subcategory</label>
           <select id="subcategory" name="subcategory" value={subcategory} onChange={(e) => setSubject(e.target.value)} required>
             <option value="">Select Subcategory</option>
             {subcategoryOptions.map(subcategory => (
-              <option key={subcategory.id} value={subcategory.id}>
+              <option key={subcategory.id} value={subcategory.name}>
                 {subcategory.name}
               </option>
             ))}
@@ -301,20 +241,20 @@ const AddProduct = ({ handleBack }) => {
           <label htmlFor="semester">Semester</label>
           <select id="semester" name="semester" value={semester} onChange={(e) => setSemester(e.target.value)} required>
             <option value="">Select Semester</option>
-            {semesterOptions.map(semester=> (
-              <option key={semester.id} value={semester.id}>
-                {semester.parentCategory.name}
+            {semesterOptions.map(semester => (
+              <option key={semester.id} value={semester.name}>
+                {semester.name}
               </option>
             ))}
           </select>
-          
+
           {/* Add similar dropdowns for subject, university, category, subcategory, semester */}
-          
+
         </div>
-        
-        
+
+
         {/* Add more input fields with their respective labels and onChange handlers */}
-        
+
         {/* Input for multiple images */}
         <label htmlFor="productImages">Product Images:</label>
         <input

@@ -193,7 +193,7 @@ const UserRegister = () => {
 
         if (validateForm()) {
             try {
-                await axios.post("http://localhost:8082/auth/signup", {
+                await axios.post("http://localhost:8083/api/auth/signup", {
                     email: email,
                     password: password,
                     firstName: firstName,
@@ -226,7 +226,7 @@ const UserRegister = () => {
 
 
         try {
-            await axios.post("http://localhost:8082/auth/send-otp", {
+            await axios.post("http://localhost:8083/api/auth/send-otp", {
                 email: email
             }
 
@@ -269,7 +269,7 @@ const UserRegister = () => {
         if (validateEmail()) {
             try {
                 console.log("haiiiiiiiiiii")
-                await axios.post("http://localhost:8082/auth/emailexists", {
+                await axios.post("http://localhost:8083/api/auth/emailexists", {
                     email: email
                 }
 
@@ -314,7 +314,7 @@ const UserRegister = () => {
         event.preventDefault();
         if (validateOTP()) {
             try {
-                await axios.post("http://localhost:8082/auth/verify-otp", {
+                await axios.post("http://localhost:8083/api/auth/verify-otp", {
                     enteredotp: otp,
                     email: email
                 }

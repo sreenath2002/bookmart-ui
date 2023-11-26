@@ -51,7 +51,7 @@ const ForgotPassword = () => {
         const res = await axios.post('http://localhost:8082/auth/emailexists', {
           email: enterdEmail,
         });
-        if (res.data.message === 'Email Exists') {
+        if (res.data.statuscode === '200 OK') {
           setEmailVerify(false);
         } else {
           setEmailNotExists(true);
@@ -76,7 +76,7 @@ const ForgotPassword = () => {
           email:enterdEmail,
           newPassword: newPassword,
         });
-        if (res.data.message === 'Password Changed') {
+        if (res.data.statuscode === '200 OK') {
           setPasswordChangedMessage('Password Updated Successfully');
           setTimeout(() => {
             setPasswordChangedMessage('');

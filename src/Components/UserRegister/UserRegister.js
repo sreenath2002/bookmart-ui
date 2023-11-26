@@ -231,7 +231,7 @@ const UserRegister = () => {
             }
 
             ).then((res) => {
-                if (res.data.message == "OTP sent successfully") {
+                if (res.data.statuscode == "201 CREATED") {
                     setotpSendSucces(true)
 
                     setTimeout(() => {
@@ -275,7 +275,7 @@ const UserRegister = () => {
 
                 ).then((res) => {
                     console.log(res.data)
-                    if (res.data.message == "Email does not exist") {
+                    if (res.data.statuscode == '404 NOT_FOUND') {
                         console.log("lekwflkwafkhe")
                         handleOtpEnter();
                     }
@@ -321,7 +321,7 @@ const UserRegister = () => {
 
                 ).then((res) => {
                     console.log("sjfdhjsh")
-                    if (res.data.message == "OTP verified") {
+                    if (res.data.statuscode == '200 OK') {
                         setOptVerifiedSuccesMEssage(true)
                         setverifyOtp(false);
                         setShowFullForm(true)

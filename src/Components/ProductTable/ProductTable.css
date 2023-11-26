@@ -20,6 +20,12 @@
   
   .add-product-btn {
     margin-top: 10px;
-    padding-left: ; /* Decrease padding to reduce button width */
+    /* padding-left: ; Decrease padding to reduce button width */
+  }
+  .deleteSucces{
+    color: green;
+  }
+  .wrongMessage{
+    color: red;
   }
   

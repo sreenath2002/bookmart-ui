@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import './UserLogin.css'; // Import CSS file for custom styles
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/slices/userSlice';
 import axios from 'axios';
 const UserLogin = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +15,7 @@ const UserLogin = () => {
   const[signinError,setSigninError]=useState(false);
   const [Error, setError] = useState("");
   const navigate =useNavigate();
-
+  const dispatch = useDispatch();
   // const handleLogin = (e) => {
   //   e.preventDefault();
   //   // Your login logic here
@@ -69,7 +71,7 @@ const UserLogin = () => {
   
     if (validateForm()) {
       try {
-        const response = await axios.post("http://localhost:8083/api/auth/signin", {
+        const response = await axios.post("http://localhost:8084/api/auth/signin", {
           email: email,
           password: password,
         });
@@ -78,7 +80,12 @@ const UserLogin = () => {
           console.log(response.data);
           console.log("sldjfkb");
           localStorage.setItem("jwt", response.data.jwt);
-          navigate('/Pro')
+          if(response.data.role === "USER")
+          {
+            dispatch(setUser({email,id:response.data.id,path:'/Home',firstName:response.data.firstName,lastName:response.data.lastName,mobile:response.data.mobile}))
+            navigate('/Home')
+          }
+          
 
         } else {
           setSigninError(true);

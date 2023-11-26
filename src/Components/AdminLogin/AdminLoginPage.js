@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './AdminLoginPage.css'; // Import your CSS file for styling
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import  { setUser } from '../../redux/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 const AdminLoginPage = () => {
   const [email, setEmail] = useState('');
@@ -8,7 +10,9 @@ const AdminLoginPage = () => {
   const [signinemailError, setSigninEmailError] = useState('');
   const [signinpasswordError, setSigninPasswordError] = useState('');
   const [signinError, setSigninError] = useState(false);
+  const [notAcces,setNotAccesMEssage]=useState(false);
    const navigate=useNavigate();
+   const dispatch = useDispatch();
   const validateForm = () => {
     let isValid = true;
 
@@ -43,25 +47,41 @@ const AdminLoginPage = () => {
 
     if (validateForm()) {
       try {
-        const response = await axios.post('http://localhost:8082/auth/signin', {
+        console.log("agfskghkc")
+        
+        const response = await axios.post("http://localhost:8084/api/auth/signin", {
           email: email,
           password: password,
         });
+         
+        // console.log(response.data);
+       
 
-        console.log(response.data);
-
-        if (response.data.message === 'Sign in successfully') {
+        if (response.data.message === 'Sign in succecsfully') {
           console.log('sldjfkb');
           localStorage.setItem('jwt', response.data.jwt);
-          navigate('/AdminPage')
+          if(response.data.role === "ADMIN")
+          {
+            dispatch(setUser({email,id:response.data.id,path:'/AdminPage',firstName:response.data.firstName,lastName:response.data.lastName,mobile:response.data.mobile}))
+            navigate('/AdminPage')
+          }
+          else{
+            setNotAccesMEssage(true);
+            setTimeout(() => {
+              setNotAccesMEssage(false);
+            }, 2000);
+
+          }
           // Handle successful login
         } else {
+          console("kfsldgck")
           setSigninError(true);
           setTimeout(() => {
             setSigninError(false);
           }, 3000);
         }
       } catch (err) {
+        console.log("hfgsacgghshafdg")
         console.error(err);
         setSigninError(true);
         setTimeout(() => {
@@ -79,6 +99,11 @@ const AdminLoginPage = () => {
           {signinError && (
             <div className="registration-error">
               Email does not exist. Please register.
+            </div>
+          )}
+          {notAcces && (
+            <div className="registration-error">
+              You are Not Admin!
             </div>
           )}
           <div className="input-group">

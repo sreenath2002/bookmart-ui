@@ -1,136 +1,46 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import './BookCards.css'; // Import a CSS file for custom styles
-
+import { getNewArrivals } from '../../axios/service/productsService';
+import ProductOverview from '../ProductOverview/ProductOverview';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 const BookCards = () => {
-  // Dummy data for book cards
-  const bookData = [
-    // Data for New Arrivals section
-     {
-       id: 1,
-      bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-       bookName: 'Book 1 Name',
-       courseName: 'Course 1',
-      university: 'University Name',
- semester: 'Semester 1',
-        price: '$50',
-       realPrice: '$60',
-      discount: '20%',
-    },
-    {
-        id: 1,
-       bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        bookName: 'Book 1 Name',
-        courseName: 'Course 1',
-       university: 'University Name',
-  semester: 'Semester 1',
-         price: '$50',
-        realPrice: '$60',
-       discount: '20%',
-     },
-     {
-        id: 1,
-       bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        bookName: 'Book 1 Name',
-        courseName: 'Course 1',
-       university: 'University Name',
-  semester: 'Semester 1',
-         price: '$50',
-        realPrice: '$60',
-       discount: '20%',
-     },
-     {
-        id: 1,
-       bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        bookName: 'Book 1 Name',
-        courseName: 'Course 1',
-       university: 'University Name',
-  semester: 'Semester 1',
-         price: '$50',
-        realPrice: '$60',
-       discount: '20%',
-     },
-     {
-        id: 1,
-       bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        bookName: 'Book 1 Name',
-        courseName: 'Course 1',
-       university: 'University Name',
-  semester: 'Semester 1',
-         price: '$50',
-        realPrice: '$60',
-       discount: '20%',
-     },
-     {
-        id: 1,
-       bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        bookName: 'Book 1 Name',
-        courseName: 'Course 1',
-       university: 'University Name',
-  semester: 'Semester 1',
-         price: '$50',
-        realPrice: '$60',
-       discount: '20%',
-     },
-     {
-        id: 1,
-       bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        bookName: 'Book 1 Name',
-        courseName: 'Course 1',
-       university: 'University Name',
-  semester: 'Semester 1',
-         price: '$50',
-        realPrice: '$60',
-       discount: '20%',
-     },
-     {
-        id: 1,
-       bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        bookName: 'Book 1 Name',
-        courseName: 'Course 1',
-       university: 'University Name',
-  semester: 'Semester 1',
-         price: '$50',
-        realPrice: '$60',
-       discount: '20%',
-     },
-     {
-        id: 1,
-       bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        bookName: 'Book 1 Name',
-        courseName: 'Course 1',
-       university: 'University Name',
-  semester: 'Semester 1',
-         price: '$50',
-        realPrice: '$60',
-       discount: '20%',
-     },
-     {
-        id: 1,
-       bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        bookName: 'Book 1 Name',
-        courseName: 'Course 1',
-       university: 'University Name',
-  semester: 'Semester 1',
-         price: '$50',
-        realPrice: '$60',
-       discount: '20%',
-     },
-     {
-      id: 1,
-     bookImage: 'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-      bookName: 'Book 1 Name',
-      courseName: 'Course 1',
-     university: 'University Name',
-semester: 'Semester 1',
-       price: '$50',
-      realPrice: '$60',
-     discount: '20%',
-   },
-     
+
+  const [newArrivalbooks, setNewArrivalBooks] = useState([]);
   
-    // ... More data for other sections
-  ];
+  // Dummy data for book cards
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    
+    featchData()
+    console.log("fdsj")
+    async function featchData(){
+      console.log("-------fist start-------")
+      const newArrivals= await  getNewArrivals();
+      console.log("--------------------------------------------------")
+      console.log("-----------hai--------");
+      console.log("ejfsld")
+          
+      if(newArrivals.statuscode ==='200 OK')
+      {
+        console.log("jfsd")
+        console.log(newArrivals.result)
+        setNewArrivalBooks(newArrivals.result)
+        console.log(newArrivalbooks)
+        console.log("----books------");
+      }
+    }
+    
+  },[]);
+  
+  const handleShopNow = (id) => {
+    // Navigate to the ProductOverview component with the provided ID
+    navigate(`/ProductDetails/${id}`);
+  };
+  
 
 return (
     <Container >
@@ -138,20 +48,23 @@ return (
         <Col xs={12}>
           <h2 className='newarriwal-heading'>New Arrivals</h2>
           <div className="scrolling-wrapper">
-            {bookData.map((book) => (
-              <Card key={book.id} className="book-card">
-                <Card.Img variant="top" src={book.bookImage} />
+            {newArrivalbooks.map((newArrivalbook) => (
+              <Card key={newArrivalbook.id} className="book-card">
+                 {newArrivalbook.images[1] && newArrivalbook.images[1].imageUrl && (
+    <Card.Img variant="top" src={newArrivalbook.images[1].imageUrl} />
+  )}
                 <Card.Body>
-                  <Card.Title className="book-name">{book.bookName}</Card.Title>
+                  <Card.Title className="book-name">{newArrivalbook.title}</Card.Title>
                   <Card.Text>
-                    <p>{book.courseName}</p>
-                    <p>{book.university}</p>
-                    <p>{book.semester}</p>
-                    <p>{book.price}</p>
-                    <p className="real-price">{book.realPrice}</p>
-                    <p className="discount">{book.discount}</p>
+                    <p>{newArrivalbook.course.courseName}</p>
+                    <p>{newArrivalbook.university.universityName}</p>
+                    <p>{newArrivalbook.semester.name}</p>
+                    <p>{newArrivalbook.price}</p>
+                    <p className="real-price">{newArrivalbook.discountedPrice}</p>
+                    <p className="discount">{newArrivalbook.discountPresent}</p>
                   </Card.Text>
-                  <Button variant="primary">Shop Now</Button>
+                 
+                  <Button variant="primary" onClick={()=>handleShopNow(newArrivalbook.id)}>Shop Now</Button>
                 </Card.Body>
               </Card>
             ))}

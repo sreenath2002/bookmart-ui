@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import './UserRegister.css'; // Import CSS file for custom styles
 import { Link } from 'react-router-dom';
+import { registrationValidation } from '../../validation/validation';
+import { emailValidation } from '../../validation/validation';
 import axios from 'axios';
 const UserRegister = () => {
     const [firstName, setFirstName] = useState('');
@@ -84,83 +86,7 @@ const UserRegister = () => {
         }
     }, [timerExpired]);
 
-    const validateForm = () => {
-        let isValid = true;
-
-        // Email validation using regex
-
-
-
-        // Password length validation
-        if (password.trim() === '') {
-            setWrongPassword("Please provide password")
-            isValid = false;
-        }
-        else if (password.length < 6) {
-            setWrongPassword("Password must be at least 6 characters long");
-            isValid = false;
-        }
-
-        else {
-            setWrongPassword("");
-        }
-
-        if (firstName.trim() === '') {
-            setFirstNameError('Please provide a first name');
-            isValid = false;
-        } else if (!/^[A-Z]/.test(firstName)) {
-            setFirstNameError('First name must start with a capital letter');
-            isValid = false;
-        } else {
-            setFirstNameError('');
-        }
-
-        if (lastName.trim() === '') {
-            setsecondNameError("Please provide Lastname")
-            isValid = false;
-        }
-
-
-        else {
-            setsecondNameError("");
-        }
-        if (mobile.trim() === '') {
-            setMobileNumberError("Please provide Mobilenumber")
-            isValid = false;
-        }
-        else if (mobile.length != 10) {
-            setMobileNumberError("Mobile Number only have 10 numbers");
-            isValid = false;
-        }
-
-        else {
-            setMobileNumberError("");
-        }
-
-
-        return isValid;
-    };
-
-    const validateEmail = () => {
-        let isValid = true;
-
-        // Email validation using regex
-        const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
-        if (email.trim() === '') {
-            setEmailError("Please provide email")
-            isValid = false;
-        }
-        else if (!emailRegex.test(email)) {
-            setEmailError("Invalid email address");
-            isValid = false;
-        }
-        else {
-            setEmailError("")
-        }
-
-        return isValid;
-
-    }
+    
     const validateOTP = () => {
         let isValid = true;
 
@@ -187,46 +113,149 @@ const UserRegister = () => {
        
     }
 
-
-    async function save(event) {
-        event.preventDefault();
-
-        if (validateForm()) {
-            try {
-                await axios.post("http://localhost:8083/api/auth/signup", {
-                    email: email,
-                    password: password,
-                    firstName: firstName,
-                    lastName: lastName,
-                    mobile: mobile
-                })
+    const handleEmailValidation =async (event)=>{
+        try {
+            await emailValidation.validate(
+              {
+                email,
                 
-                setRegistrationSuccess(true);
-                setEmail('');
-                setPassword('');
-                setFirstName('');
-                setLastName('');
-                setMobile('');
-                setTimeout(() => {
-                    setRegistrationSuccess(false);
-                }, 3000);
+               
+              },
+              { abortEarly: false }
+            );
+             {
 
+                event.preventDefault();
+                
+                    try {
+                        console.log("haiiiiiiiiiii")
+                        await axios.post("http://localhost:8084/api/auth/emailexists", {
+                            email: email
+                        }
+        
+                        ).then((res) => {
+                            console.log(res.data)
+                            if (res.data.message == "Failed") {
+                                console.log("lekwflkwafkhe")
+                                handleOtpEnter();
+                            }
+                            else {
+                                setEmailExistsError(true)
+                                setTimeout(() => {
+                                    setEmailExistsError(false);
+                                }, 3000);
+                            }
+                        })
+                            .catch((error) => {
+                                setError(true)
+                                setTimeout(() => {
+                                    setError(false);
+                                }, 3000);
+                                // Handle error
+                                console.log("haiiii")
+                                console.error('Error:', error);
+        
+                            });
+        
+        
+                    }
+                    catch (err) {
+                        setError(true)
+                        setTimeout(() => {
+                            setError(false);
+                        }, 3000);
+        
+                    }
+                
             }
-            catch (err) {
-               setEmailExistsError(true)
-                setTimeout(() => {
-                    setEmailExistsError(false);
-                }, 3000);
+      
+            
+          }
+          catch(error){
+            const errors = {};
+         error.inner.forEach((e) => {
+        errors[e.path] = e.message;
+        });
 
-            }
-        }
+          setEmailError(errors.email || '');
+
+          } 
     }
+     
+    const handleFormValidation=async (event)=>{
+        event.preventDefault();
+        try {
+            await registrationValidation.validate(
+              {
+                email,
+                password,
+                firstName,
+                lastName,
+                mobile,
+                
+              },
+
+              { abortEarly: false }
+            );
+             {
+                event.preventDefault();
+                     
+                 {
+                    try {
+                        await axios.post("http://localhost:8084/api/auth/signup", {
+                            email: email,
+                            password: password,
+                            firstName: firstName,
+                            lastName: lastName,
+                            mobile: mobile
+                        })
+                        
+                        setRegistrationSuccess(true);
+                        setShowFullForm(!showfullForm)
+                        setSendOtp(!sendOtp)
+                        setEmail('');
+                        setPassword('');
+                        setFirstName('');
+                        setLastName('');
+                        setMobile('');
+                        setTimeout(() => {
+                            setRegistrationSuccess(false);
+                        }, 3000);
+        
+                    }
+                    catch (err) {
+                       setEmailExistsError(true)
+                        setTimeout(() => {
+                            setEmailExistsError(false);
+                        }, 3000);
+        
+                    }
+                }
+            }
+          }
+          catch (error){
+            const errors = {};
+         error.inner.forEach((e) => {
+        errors[e.path] = e.message;
+      });
+      console.log('Validation Errors:', errors);
+      console.log("dfghjklxcvbnmxcvbnxcvb")
+      setEmailError(errors.email || '');
+      setWrongPassword(errors.password || '');
+      setFirstNameError(errors.firstName || '');
+      setsecondNameError(errors.lastName || '');
+      setMobileNumberError(errors.mobile || '');
+      console.log('Validation Errors:', errors);
+          }
+    }
+
+    
 
     async function otpsend() {
 
 
         try {
-            await axios.post("http://localhost:8083/api/auth/send-otp", {
+            await axios.post("http://localhost:8084/api/auth/send-otp", {
                 email: email
             }
 
@@ -263,58 +292,16 @@ const UserRegister = () => {
         }
     }
 
-    async function emailExists(event) {
-
-        event.preventDefault();
-        if (validateEmail()) {
-            try {
-                console.log("haiiiiiiiiiii")
-                await axios.post("http://localhost:8083/api/auth/emailexists", {
-                    email: email
-                }
-
-                ).then((res) => {
-                    console.log(res.data)
-                    if (res.data.statuscode == '404 NOT_FOUND') {
-                        console.log("lekwflkwafkhe")
-                        handleOtpEnter();
-                    }
-                    else {
-                        setEmailExistsError(true)
-                        setTimeout(() => {
-                            setEmailExistsError(false);
-                        }, 3000);
-                    }
-                })
-                    .catch((error) => {
-                        setError(true)
-                        setTimeout(() => {
-                            setError(false);
-                        }, 3000);
-                        // Handle error
-                        console.log("haiiii")
-                        console.error('Error:', error);
-
-                    });
-
-
-            }
-            catch (err) {
-                setError(true)
-                setTimeout(() => {
-                    setError(false);
-                }, 3000);
-
-            }
-        }
-    }
+    
 
     async function otpverify(event) {
 
         event.preventDefault();
         if (validateOTP()) {
             try {
-                await axios.post("http://localhost:8083/api/auth/verify-otp", {
+                console.log(otp);
+                console.log(email)
+                await axios.post("http://localhost:8084/api/auth/verify-otp", {
                     enteredotp: otp,
                     email: email
                 }
@@ -407,7 +394,7 @@ const UserRegister = () => {
 
 
 
-                {sendOtp && <button onClick={emailExists} >Send OTP</button>}
+                {sendOtp && <button onClick={handleEmailValidation} >Send OTP</button>}
 
                 {showfullForm && (<>
                     <div className="input-group">
@@ -451,7 +438,7 @@ const UserRegister = () => {
                     </div>
                     <div className="registration-error">{passwordError}</div>
 
-                    <button onClick={save}>Register</button></>)}
+                    <button onClick={handleFormValidation}>Register</button></>)}
                 <div className='already have'>Already have Account?  <Link to="/UserLogin" className="signin link">SignIn</Link></div>
             </form>
         </div>

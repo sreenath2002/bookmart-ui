@@ -1,80 +1,35 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Button, Dropdown, Form } from 'react-bootstrap';
 import './Products.css'; // Import a CSS file for custom styles
+import { useEffect } from 'react';
 
+import { getNewArrivals } from '../../axios/service/productsService';
 const Products = () => {
   // Sample book data (can be fetched from an API or database)
-  const [books, setBooks] = useState([
-    // Sample book data
-    {
-      id: 1,
-      bookName: 'Book 1',
-      courseName: 'Course A',
-      universityName: 'University X',
-      semester: 'Semester 1',
-      price: 50,
-      image:'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-      discountedPrice: 40,
-      category: 'Category 1',
-    },
-    {
-        id: 1,
-        bookName: 'Book 1',
-        courseName: 'Course A',
-        universityName: 'University X',
-        semester: 'Semester 1',
-        price: 50,
-        image:'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        discountedPrice: 40,
-        category: 'Category 1',
-      },
+  const [books, setBooks] = useState([])
+    
+  useEffect(() => {
+    
+    featchData()
+    console.log("fdsj")
+    async function featchData(){
+      console.log("-------fist start-------")
+      const allbooks= await  getNewArrivals();
+      console.log("--------------------------------------------------")
+      console.log("-----------hai--------");
+      console.log("ejfsld")
+          
+      if(allbooks.statuscode ==='200 OK')
       {
-        id: 1,
-        bookName: 'Book 1',
-        courseName: 'Course A',
-        universityName: 'University X',
-        semester: 'Semester 1',
-        price: 50,
-        image:'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        discountedPrice: 40,
-        category: 'Category 1',
-      },
-      {
-        id: 1,
-        bookName: 'Book 1',
-        courseName: 'Course A',
-        universityName: 'University X',
-        semester: 'Semester 1',
-        price: 50,
-        image:'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        discountedPrice: 40,
-        category: 'Category 1',
-      },
-      {
-        id: 1,
-        bookName: 'Book 1',
-        courseName: 'Course A',
-        universityName: 'University X',
-        semester: 'Semester 1',
-        price: 50,
-        image:'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        discountedPrice: 40,
-        category: 'Category 1',
-      },
-      {
-        id: 1,
-        bookName: 'Book 1',
-        courseName: 'Course A',
-        universityName: 'University X',
-        semester: 'Semester 1',
-        price: 50,
-        image:'Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg',
-        discountedPrice: 40,
-        category: 'Category 1',
-      },
-    // Add more book data here
-  ]);
-
+        console.log("jfsd")
+        console.log(allbooks.result)
+        setBooks(allbooks.result)
+        console.log(allbooks)
+        console.log("----books------");
+      }
+    }
+    
+  },[]);
   // State for filters
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('');
@@ -165,15 +120,15 @@ const Products = () => {
           </div>
           {/* Display Books */}
           <Row>
-            {sortedBooks.map((book) => (
+            {books.map((book) => (
               <Col key={book.id} md={4} className="mb-3">
                 <Card>
-                  <Card.Img variant="top" src={book.image} />
+                  <Card.Img variant="top" src={book.images[1].imageUrl} />
                   <Card.Body>
-                    <Card.Title>{book.bookName}</Card.Title>
+                    <Card.Title>{book.title}</Card.Title>
                     <Card.Text>
                       <p>Course: {book.courseName}</p>
-                      <p>University: {book.universityName}</p>
+                      <p>University: {book.university.universityName}</p>
                       <p>Price: ${book.price}</p>
                       <p>Discounted Price: ${book.discountedPrice}</p>
                     </Card.Text>

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import './ForgotPassword.css'; // Import CSS file for custom styles
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 // ... (imports and other code)
 
 const ForgotPassword = () => {
@@ -48,7 +49,7 @@ const ForgotPassword = () => {
     if (validateEmail()) {
       console.log("wejfgkdsugsgh")
       try {
-        const res = await axios.post('http://localhost:8082/auth/emailexists', {
+        const res = await axios.post('http://localhost:8084/api/auth/emailexists', {
           email: enterdEmail,
         });
         if (res.data.statuscode === '200 OK') {
@@ -72,7 +73,7 @@ const ForgotPassword = () => {
     if (validatePassword()) {
       try {
         console.log("ehfsldkjhkjh")
-        const res = await axios.post('http://localhost:8082/auth/changePassword', {
+        const res = await axios.post('http://localhost:8084/api/auth/changePassword', {
           email:enterdEmail,
           newPassword: newPassword,
         });

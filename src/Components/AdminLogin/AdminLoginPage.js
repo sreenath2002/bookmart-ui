@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import  { setUser } from '../../redux/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const AdminLoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -127,6 +128,7 @@ const AdminLoginPage = () => {
               required
             />
           </div>
+          <div className='forgotpassword'><Link to="/ForgotPassword" className="signin link">Forgot Password ?</Link></div>
           <div className="registration-error">{signinpasswordError}</div>
           <button onClick={login}>Login</button>
         </form>

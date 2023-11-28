@@ -7,6 +7,7 @@ import { getCourses, getSubjects, getUniversities, getcategory, getsemester, get
 import { Await } from 'react-router-dom';
 import { createProduct } from '../../axios/service/adminServices';
 import { colors } from '@mui/material';
+import { addProductValidation } from '../../validation/validation';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 const AddProduct = (props) => {
@@ -42,7 +43,7 @@ const AddProduct = (props) => {
   const [categoryError, setCategoryError] = useState(false);
   const [subcategoryError, setSubcategoryError] = useState(false);
   const [semesterError, setSemesterError] = useState(false);
-
+    const[imageError,setImageError]=useState(false)
   const [images, setImages] = useState([]);
   const [errorMessage, seterrorMessage] = useState('')
   const [success, setsuccess] = useState(false)
@@ -80,11 +81,13 @@ const AddProduct = (props) => {
   useEffect(() => {
     featchData(jwtToken)
     async function featchData(token) {
+      console.log("dfghjkl")
 
       const University = await getUniversities(token);
-
+      console.log("dfghjkl")
       const category = await getcategory(token);
-      console.log(course)
+      console.log(course) 
+      console.log("dfghjkl")
 
       if (University?.statuscode && category.statuscode === '200 OK') {
 
@@ -138,135 +141,7 @@ const AddProduct = (props) => {
     // getCourses(e.target.value)
     // getsemeste(e.target.value)
   }
-  // const validateForm = () => {
-  //   let isValid = true;
-
-  //   // Email validation using regex
-  //   // const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
-  //   if (title.trim() === '') {
-  //     setTitleError("Please provide Title")
-  //     isValid = false;
-  //   }
-  //   else if (!/^[A-Z]/.test(title)) {
-  //     setTitleError('First name must start with a capital letter');
-  //     isValid = false;
-  //   }
-  //   else {
-  //     setTitleError("")
-  //   }
-
-  //   if (description.trim() === '') {
-  //     setDescriptionError("Please provide Description")
-  //     isValid = false;
-  //   }
-  //   else if (!/^[A-Z]/.test(description)) {
-  //     setTitleError('First name must start with a capital letter');
-  //     isValid = false;
-  //   }
-  //   else if (description.length < 30) {
-  //     setDescriptionError('Description must contain atleast 30 characteres');
-  //     isValid = false;
-  //   }
-  //   else {
-  //     setDescriptionError("")
-  //   }
-  //   if (price.trim() === '') {
-  //     setPriceError("Please provide Price")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setPriceError("")
-  //   }
-
-  //   if (discountPresent.trim() === '') {
-  //     setDiscountPresentError("Please provide Discountpresent")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setDiscountPresentError("")
-  //   }
-  //   if (discountedPriceError === '') {
-  //     setDiscountedPriceError("Please provide Discounted Price")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setDiscountedPriceError("")
-  //   }
-  //   if (quantity.trim() === '') {
-  //     setQuantityError("Please provide Quantity")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setQuantityError("")
-  //   }
-  //   if (course.trim() === '') {
-  //     setCourseError("Please provide Course")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setCourseError("")
-  //   }
-  //   if (subject.trim() === '') {
-  //     setSubjcetError("Please provide Subjcet")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setSubjcetError("")
-  //   }
-  //   if (university.trim() === '') {
-  //     setUniversityError("Please provide University")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setUniversityError("")
-  //   }
-  //   if (author.trim() === '') {
-  //     setAuthorError("Please provide Author")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setAuthorError("")
-  //   }
-  //   if (category.trim() === '') {
-  //     setCategoryError("Please provide Category")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setCategoryError("")
-  //   }
-  //   if (subcategory.trim() === '') {
-  //     setSubcategoryError("Please provide Subcaregory")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setSubcategoryError("")
-  //   }
-  //   if (semester.trim() === '') {
-  //     setSemesterError("Please provide Title")
-  //     isValid = false;
-  //   }
-
-  //   else {
-  //     setSemesterError("")
-  //   }
-
-
-
-
-
-
-  //   return isValid;
-  // };
+  
 
 
 
@@ -276,12 +151,16 @@ const AddProduct = (props) => {
 
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleValidation = async (event) => {
+    event.preventDefault();
     // Logic to add a new product with entered details and images
     // Use the form data and images to create a new product
-    console.log('Add new product:', {
-      title,
+    try {
+
+    
+    await addProductValidation.validate(
+      {
+        title,
       description,
       price,
       discountedPrice,
@@ -294,11 +173,16 @@ const AddProduct = (props) => {
       category,
       semester,
       images,
-    });
-    // Call an API or update state as needed
-  };
+      },
+      { abortEarly: false }
 
-  async function addproduct(event) {
+    );
+      
+  
+    // Call an API or update state as needed
+ 
+
+ 
     event.preventDefault();
     // if (validateForm()) {
     try {
@@ -326,6 +210,7 @@ const AddProduct = (props) => {
       console.log("addDetails", addDetails)
 
       if (addDetails.statuScode === '201 CREATED') {
+        props.handleProductUpdated();
         setsuccess(true)
       } else {
         seterrorMessage(addDetails.message)
@@ -337,8 +222,31 @@ const AddProduct = (props) => {
       console.log("error", err)
       seterrorMessage('Internal sever error.')
     }
-    // }
   }
+  catch (error){
+    const errors = {};
+ error.inner.forEach((e) => {
+errors[e.path] = e.message;
+});
+console.log('Validation Errors:', errors);
+console.log("dfghjklxcvbnmxcvbnxcvb")
+setTitleError(errors.title || '');
+setDescriptionError(errors.description || '');
+setPriceError(errors.price || '');
+setDiscountedPriceError(errors.discountedPrice || '');
+setDiscountPresentError(errors.discountPresent || '');
+setQuantityError(errors.quantity|| '');
+setCourseError(errors.course || '');
+setSubjcetError(errors.subcategory || '');
+setUniversityError(errors.university|| '');
+setAuthorError(errors.author || '');
+setCategoryError(errors.category || '');
+setSemesterError(errors.semester || '');
+ setImageError(errors.images || '')
+console.log('Validation Errors:', errors);
+   
+  }
+}
 
   return (
     <div className="add-product-form">
@@ -430,6 +338,7 @@ const AddProduct = (props) => {
           <div className="registration-error">{authorError}</div>
 
         </div>
+        <div className="registration-error">{authorError}</div>
         <div className='flex'>
 
           <label htmlFor="category">Category</label>
@@ -505,6 +414,7 @@ const AddProduct = (props) => {
 
 
         <label htmlFor="productImages">Product Images:</label>
+        <div className="registration-error">{imageError}</div>
         <input
           type="file"
           id="productImages1"
@@ -553,12 +463,13 @@ const AddProduct = (props) => {
 
 
 
-        <button onClick={addproduct}>Add</button>
-        <button onClick={handlCCancel}>Cancel</button>
+        <button onClick={handleValidation}>Add</button>
+        <button onClick={handlCCancel}>Back</button>
       </form >
     </div >
   );
 };
+
 
 export default AddProduct;
 

@@ -20,11 +20,14 @@ const ProductTable = () => {
   const [selectedProductUniversity, setSelectedProductUniversity] = useState(null);
   const [selectedProductAuthor, setSelectedProductAuthor] = useState(null);
   const [selectedProductParentCategory, setSelectedProductParentCategory] = useState(null);
-  const [selectedProductSubCategory, setSelectedProductSubCategory] = useState(null);
+  
   const [selectedProductSemester, setSelectedProductSemester] = useState(null);
   const [deleteSuccesMessage,setDeleteSuccesMessage]=useState(false);
+  const[updateSuccesMessage,setupdateSuccesMessage]=useState(false);
+  const[addSuccesMessage,setaddSuccesMessage]=useState(false);
   const[wrongMessage,setWrongMessage]=useState(false);
-  
+  const [searchQuery, setSearchQuery] = useState("");
+   console[refresh,setRefresh]=useState(false)
    
   const jwtToken = localStorage.getItem("jwt");
   useEffect(() => {
@@ -47,9 +50,13 @@ const ProductTable = () => {
       }
     }
     
-  },[]);
+  },[refresh]);
 
-  const handleUpdate = (id,bookTitle,bookDescription,bookPrice,bookDiscountedPrice,bookDiscountPresent,bookQuantity,bookCourse,bookSubjcet,bookUniversity,bookAuthor,bookParentCategory,bookSubCategory,bookSemester) => {
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleUpdate = (id,bookTitle,bookDescription,bookPrice,bookDiscountedPrice,bookDiscountPresent,bookQuantity,bookCourse,bookSubjcet,bookUniversity,bookAuthor,bookParentCategory,bookSemester,books) => {
     // Logic to handle updating a product with 'id'
     console.log(`Update product with ID: ${id}`);
     setSelectedProductId(id);
@@ -64,15 +71,15 @@ const ProductTable = () => {
      setSelectedProductUniversity(bookUniversity);
      setSelectedProductAuthor(bookAuthor);
      setSelectedProductParentCategory(bookParentCategory);
-     setSelectedProductSubCategory(bookSubCategory);
+   
      setSelectedProductSemester(bookSemester);
     setShowUpdateProduct(true);
     // Implement update functionality
   };
 
 
-    // Logic to handle deleting a product with 'id'
-     async function deleteProduct(id){
+    
+     async function deleteBook(id){
         try{
           console.log(id)
            const deleteResponse=await  deleteProduct(jwtToken,id)
@@ -112,17 +119,47 @@ const ProductTable = () => {
   const handleBack = () => {
     setShowAddProduct(false);
     setShowUpdateProduct(false);
+    setRefresh(!refresh)
   };
+
+  const handleProductUpdated = () => {
+    
+    setShowUpdateProduct(false);
+    setupdateSuccesMessage(true);
+    setTimeout(()=>{
+      setupdateSuccesMessage(false)
+    },2000)
+
+  };
+  const handleProductAdded = () => {
+    
+   setShowAddProduct(false)
+    setaddSuccesMessage(true);
+    setTimeout(()=>{
+      setaddSuccesMessage(false)
+    },2000)
+
+  };
+ 
 
   return (
     <div className="product-table-container">
+       
       {deleteSuccesMessage && <div className='deleteSucces'>Deleted SUccesFully</div>}
+      {updateSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
+      {addSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
       {wrongMessage && <div className='wrongMessage'>NOT FOUND</div>}
       { showAddProduct ? (
-        <AddProduct  handleBack={handleBack} />
+        <AddProduct  handleProductAdded={handleProductAdded} handleBack={handleBack} />
       ) : showUpdateProduct ? (
-        <UpdateProduct productId={selectedProductId} form={setShowUpdateProduct} handleBack={handleBack} />
-      ) : (<table className="product-table">
+        <UpdateProduct productId={selectedProductId} handleProductUpdated={handleProductUpdated} bookTitle={selectedProductTitle} bookDescription={selectedProductDescription} bookPrice={selectedProductPrice} bookDiscountedPrice={selectedProductDiscountedPrice} bookDiscountPresent={selectedProductDiscountPresent} bookQuantity={selectedProductQuantity} bookCourse={selectedProductCourse} bookParentCategory={selectedProductParentCategory} bookSubjcet={selectedProductSubjcet} bookUniversity={selectedProductUniversity}
+        bookAuthor={selectedProductAuthor} bookSemester={selectedProductSemester} handleBack={handleBack} />
+      ) : (
+        <div>
+        <div className="search-bar">
+            <input type="text" placeholder="Search by Book Name" value={searchQuery} onChange={handleSearchInputChange} />
+          </div>
+      <table className="product-table">
         <thead>
           <tr>
           <th>Product ID</th>
@@ -145,7 +182,7 @@ const ProductTable = () => {
           </tr>
         </thead>
         <tbody>
-          {books.map((book) => (
+          {books.filter((book) => book.title.toLowerCase().includes(searchQuery.toLowerCase())).map((book) => (
             <tr key={book.name}>
                 <td>{book.id}</td>
               <td>{book.title}</td>
@@ -164,13 +201,17 @@ const ProductTable = () => {
               <td>{book.university.universityName}</td>
               <td>{book.semester.name}</td> 
               <td>
-                <button onClick={() => handleUpdate (book.id,book.title,book.description,book.price,book.discountedPrice,book.discountPresent,book.quantity,book.author,book.parentCategory.name,book.course.courseName,book.subject.subjectName,book.university.universityName,book.semester.name)}>Update</button>
-                <button onClick={() => deleteProduct(book.id)}>Delete</button>
+                <button onClick={() => handleUpdate (book.id,book.title,book.description,book.price,book.discountedPrice,book.discountPresent,book.quantity,book.author,book.parentCategory.name,book.course.courseName,book.subject.subjectName,book.university.universityName,book.semester.name,books)}>Update</button>
+                <button onClick={() => deleteBook(book.id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
-      </table>)}
+      </table></div>)}
+      {books.filter((book) => book.title.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
+      
+          <div className="no-user-message">No Product Exists</div>
+        )}
       {!showAddProduct && !showUpdateProduct && (
         <button className="add-product-btn" onClick={handleAddProduct}>
           Add Product

@@ -18,6 +18,8 @@ import ProductTableDetails from './Pages/ProductTableDetails';
 import UserLogin from './Components/UserLogin/UserLogin';
 import UserRegister from './Components/UserRegister/UserRegister';
 import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
+import MainCategoryTable  from './Components/Category/MainCategoryTable'
+import CourseCAtegory from './Components/CourseCategory/CourseCAtegory'
 function App() {
   return (
     <div className="App">
@@ -25,9 +27,11 @@ function App() {
         <Routes>
           {/* <Route path='/' element={<OpeningPage/>} /> */}
           <Route path='/' element={<HomePageUser/>}/>
-          <Route path='/ProductDetails' element={<ProductDetails/>}/>
+          <Route path='/ProductDetails/:id' element={<ProductDetails/>}/>
           <Route path='/Products' element={<ProductsPage/>}/>
           <Route path='/AdminLogin' element={<AdminLogin/>}/>
+           <Route path='/Category' element={<MainCategoryTable/>}/>
+           <Route path='/CourseCategory' element={<CourseCAtegory/>}/>
           <Route path='/AdminPage' element={<AdminDashBoard/>}/>
           <Route path='/UserDetails' element={<UserDetails/>}/>
           <Route path='/ProductTable' element={<ProductTableDetails/>}/>

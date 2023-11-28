@@ -5,20 +5,21 @@ import imageCompression from 'browser-image-compression';
 import { getCourses, getSubjects, getUniversities, getcategory, getsemester, getsubcategory } from '../../axios/service/adminServices';
 import { updateProduct } from '../../axios/service/adminServices';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { addProductValidation } from '../../validation/validation';
 const UpdateProduct = (props) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [discountedPrice, setDiscountedPrice] = useState('');
-  const [discountPresent, setDiscountPresent] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [course, setCourse] = useState('');
-  const [subject, setSubject] = useState('');
-  const [university, setUniversity] = useState('');
-  const [author, setAuthor] = useState('');
-  const [category, setCategory] = useState('');
-  const [subcategory, setSubcategory] = useState('');
-  const [semester, setSemester] = useState('');
+  const [title, setTitle] = useState(props.bookTitle);
+  const [description, setDescription] = useState(props.bookDescription);
+  const [price, setPrice] = useState(props.bookPrice);
+  const [discountedPrice, setDiscountedPrice] = useState(props.bookDiscountedPrice);
+  const [discountPresent, setDiscountPresent] = useState(props.bookDiscountPresent);
+  const [quantity, setQuantity] = useState(props.bookQuantity);
+  const [course, setCourse] = useState(props.bookCourse);
+  const [subject, setSubject] = useState(props.bookSubjcet);
+  const [university, setUniversity] = useState(props.bookUniversity);
+  const [author, setAuthor] = useState(props.bookAuthor);
+  const [category, setCategory] = useState(props.bookParentCategory);
+  
+  const [semester, setSemester] = useState(props.bookSemester);
   const [courseOptions, setCourseOptions] = useState([]);
   const [subjectOptions, setSubjectOptions] = useState([]);
   const [universityOptions, setUniversityOptions] = useState([]);
@@ -41,7 +42,7 @@ const UpdateProduct = (props) => {
   const [categoryError, setCategoryError] = useState(false);
   const [subcategoryError, setSubcategoryError] = useState(false);
   const [semesterError, setSemesterError] = useState(false);
-  
+  const[imageError,setImageError]=useState(false)
   const handleImageChange = async (e, index) => {
     const file = e.target.files[0];
   
@@ -76,23 +77,34 @@ const UpdateProduct = (props) => {
     featchData(jwtToken)
     async function featchData(token) {
       console.log(id);
-      const course = await getCourses(token);
+     
       const University = await getUniversities(token);
-      const subcategory = await getsubcategory(token);
+    
       const category = await getcategory(token);
       console.log(course)
 
-      if (course?.statuscode && University?.statuscode && subcategory.statuscode && category.statuscode === '200 OK') {
-        setCourseOptions(course.result);
+      if ( University?.statuscode && category.statuscode === '200 OK') {
+       
         setUniversityOptions(University.result)
         setCategoryOptions(category.result);
         console.log(setCategoryOptions)
-        setSubcategoryOptions(subcategory.result);
+     
       }
     }
 
 
   }, []);
+
+  async function getCourse(category) {
+    console.log("dfghj")
+    const sub = await getCourses(jwtToken, category)
+    console.log(sub);
+    if (sub.statuscode === '200 OK') {
+      setCourseOptions(sub.result);
+    }
+
+
+  }
 
   async function getsubject(course) {
     setCourse(course)
@@ -116,6 +128,14 @@ const UpdateProduct = (props) => {
     props.handleBack();
   }
 
+  const handleCategoryOnChange=(category)=>{
+    setCategory(category)
+    getCourse(category)
+    getsemeste(category)
+    // getCourses(e.target.value)
+    // getsemeste(e.target.value)
+  }
+
   // const handleAddProduct = (e) => {
   //   e.preventDefault();
   //   // Logic to add product with the form data (bookName, subjectName, courseName, etc.)
@@ -131,8 +151,32 @@ const UpdateProduct = (props) => {
   //   console.log('New Product Data:', productData);
   //   // Implement add product functionality
   // };
+  const handleValidation = async (event) => {
 
-  async function updateproduct(event) {
+    event.preventDefault();
+    try{
+      await addProductValidation.validate(
+        {
+          title,
+        description,
+        price,
+        discountedPrice,
+        discountPresent,
+        quantity,
+        course,
+        subject,
+        university,
+        author,
+        category,
+        semester,
+        images,
+        },
+        { abortEarly: false }
+  
+      );
+    
+      event.preventDefault();
+   {
     event.preventDefault();
     // if (validateForm()) {
     try {
@@ -151,7 +195,6 @@ const UpdateProduct = (props) => {
         universitys: university,
         authors: author,
         parentCategory: category,
-        subcategory: subcategory,
         semester: semester,
         imageUrls: images,
       }
@@ -162,6 +205,8 @@ const UpdateProduct = (props) => {
 
       if (updateDetails.statuScode === '200 OK') {
         setsuccess(true)
+         props.handleProductAdded();
+        //  props.message(true);
         setTimeout(()=>{
           setsuccess(false)
         },3000)
@@ -175,8 +220,33 @@ const UpdateProduct = (props) => {
       console.log("error", err)
       seterrorMessage('Internal Server Error.')
     }
+  }
     // }
   }
+  catch (error){
+    const errors = {};
+ error.inner.forEach((e) => {
+errors[e.path] = e.message;
+});
+console.log('Validation Errors:', errors);
+console.log("dfghjklxcvbnmxcvbnxcvb")
+setTitleError(errors.title || '');
+setDescriptionError(errors.description || '');
+setPriceError(errors.price || '');
+setDiscountedPriceError(errors.discountedPrice || '');
+setDiscountPresentError(errors.discountPresent || '');
+setQuantityError(errors.quantity|| '');
+setCourseError(errors.course || '');
+setSubjcetError(errors.subcategory || '');
+setUniversityError(errors.university|| '');
+setAuthorError(errors.author || '');
+setCategoryError(errors.category || '');
+setSemesterError(errors.semester || '');
+ setImageError(errors.images || '')
+console.log('Validation Errors:', errors);
+   
+  }
+}
 
   return (
     <div className="add-product-form">
@@ -269,6 +339,18 @@ const UpdateProduct = (props) => {
 
         </div>
         <div className='flex'>
+        
+          <div className="registration-error">{universityError}</div>
+          <label htmlFor="category">Category</label>
+          <select id="category" name="category" value={category} onChange={(e) => handleCategoryOnChange(e.target.value)} required>
+            <option value="">Select Category</option>
+            {categoryOptions.map(category => (
+              <option key={category.id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+          <div className="registration-error">{categoryError}</div>
           <label htmlFor="course">Course</label>
           <select id="course" name="course" value={course} onChange={(e) => getsubject(e.target.value)} required>
             <option value="">Select Course</option>
@@ -279,17 +361,7 @@ const UpdateProduct = (props) => {
             ))}
           </select>
           <div className="registration-error">{courseError}</div>
-          <label htmlFor="subjcet">Subjcet</label>
-          <select id="subjcet" name="subjcet" value={subject} onChange={(e) => setSubject(e.target.value)} required>
-            <option value="">Select Subjcet</option>
-            {subjectOptions.map(subject => (
-              <option key={subject.id} value={subject.subjectName}>
-                {subject.subjectName}
-              </option>
-            ))}
-
-          </select>
-          <div className="registration-error">{subjcetError}</div>
+          
 
           {/* Add similar dropdowns for subject, university, category, subcategory, semester */}
 
@@ -305,32 +377,25 @@ const UpdateProduct = (props) => {
             ))}
           </select>
           <div className="registration-error">{universityError}</div>
-          <label htmlFor="category">Category</label>
-          <select id="category" name="category" value={category} onChange={(e) => getsemeste(e.target.value)} required>
-            <option value="">Select Category</option>
-            {categoryOptions.map(category => (
-              <option key={category.id} value={category.name}>
-                {category.name}
+          <label htmlFor="subjcet">Subjcet</label>
+          <select id="subjcet" name="subjcet" value={subject} onChange={(e) => setSubject(e.target.value)} required>
+            <option value="">Select Subjcet</option>
+            {subjectOptions.map(subject => (
+              <option key={subject.id} value={subject.subjectName}>
+                {subject.subjectName}
               </option>
             ))}
+
           </select>
-          <div className="registration-error">{categoryError}</div>
+          <div className="registration-error">{subjcetError}</div>
+         
 
           {/* Add similar dropdowns for subject, university, category, subcategory, semester */}
 
         </div>
         <div className='flex'>
 
-          <label htmlFor="subcategory">Subcategory</label>
-          <select id="subcategory" name="subcategory" value={subcategory} onChange={(e) => setSubcategory(e.target.value)} required>
-            <option value="">Select Subcategory</option>
-            {subcategoryOptions.map(subcategory => (
-              <option key={subcategory.id} value={subcategory.name}>
-                {subcategory.name}
-              </option>
-            ))}
-          </select>
-          <div className="registration-error">{subcategoryError}</div>
+      
           <label htmlFor="semester">Semester</label>
           <select id="semester" name="semester" value={semester} onChange={(e) => setSemester(e.target.value)} required>
             <option value="">Select Semester</option>
@@ -349,6 +414,7 @@ const UpdateProduct = (props) => {
 
 
         <label htmlFor="productImages">Product Images:</label>
+        <div className="registration-error">{imageError}</div>
         <input
           type="file"
           id="productImages1"
@@ -397,8 +463,8 @@ const UpdateProduct = (props) => {
 
 
 
-        <button onClick={updateproduct}>Update</button>
-        <button onClick={handlCCancel}>Cancel</button>
+        <button onClick={handleValidation}>Update</button>
+        <button onClick={handlCCancel}>Back</button>
       </form >
     </div >
   );

@@ -13,6 +13,7 @@ const UserLogin = () => {
   const [signinemailError, setSigninEmailError] = useState("");
   const [signinpasswordError, setSigninPasswordError] = useState("");
   const[signinError,setSigninError]=useState(false);
+  const[blockedMessage,setBlockedMessage]=useState(false)
   const [Error, setError] = useState("");
   const navigate =useNavigate();
   const dispatch = useDispatch();
@@ -75,15 +76,21 @@ const UserLogin = () => {
           email: email,
           password: password,
         });
-  
-        if (response.data.message === "Sign in succecsfully") {
+          if(response.data.message==="USER IS BLOCKED")
+          {
+                   setBlockedMessage(true);
+                   setTimeout(()=>{
+                    setBlockedMessage(false)
+                   },3000)
+          }
+       else if (response.data.message === "Sign in succecsfully") {
           console.log(response.data);
           console.log("sldjfkb");
           localStorage.setItem("jwt", response.data.jwt);
           if(response.data.role === "USER")
           {
             dispatch(setUser({email,id:response.data.id,path:'/Home',firstName:response.data.firstName,lastName:response.data.lastName,mobile:response.data.mobile}))
-            navigate('/Home')
+            navigate('/')
           }
           
 
@@ -110,6 +117,7 @@ const UserLogin = () => {
       <form className="login-form" >
       {signinError  && <div className="registration-error">Email does not Exists.Please Register</div>}
       {Error && <div className="registration-error">Oops!! Something Went Wrong</div>}
+      {blockedMessage && <div className="registration-error">You are Blocked By the Admin</div>}
         <h1>Login</h1>
         <div className="input-group">
           <input

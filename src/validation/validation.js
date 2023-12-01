@@ -25,11 +25,11 @@ export const addProductValidation=Yup.object().shape({
         discountedPrice:Yup.string().required('DiscountedPrice is Required').matches(/^[0-9]+$/, 'DiscountedPrice must contain only numbers'),
         discountPresent: Yup.string().required('Discount Perset is Required'),
         quantity: Yup.string().required('Quantity is Required').matches(/^[0-9]+$/, 'Quantity must contain only numbers'),
-        courses: Yup.string().required('Course is Required'),
-        subjects: Yup.string().required('Subjcet is Required'),
-        universitys: Yup.string().required('University is Required'),
-        authors:Yup.string().required('Author name is Required').matches(/^[A-Z]/, ' Must start with a capital letter'),
-        parentCategory: Yup.string().required('Category is Required'),
+        course: Yup.string().required('Course is Required'),
+        subject: Yup.string().required('Subjcet is Required'),
+        university: Yup.string().required('University is Required'),
+        author:Yup.string().required('Author name is Required').matches(/^[A-Z]/, ' Must start with a capital letter'),
+        category: Yup.string().required('Category is Required'),
         semester: Yup.string().required('Semester is Required'),
         images: Yup.array()
         .min(5, 'At least Five images are required')

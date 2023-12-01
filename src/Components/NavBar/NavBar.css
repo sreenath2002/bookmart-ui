@@ -1,28 +1,16 @@
 /* NavBar.css */
 .user-name {
-    font-size: 30px;
-    font-weight: bold;
+
     color: #333; /* Change the color as needed */
   }
   
-  .nav-link {
-    font-size: 30px; /* Increase the font size of the links */
-    margin-right: 15px; /* Adjust the spacing between links */
-  }
-
-
-  .custom-navbar {
-    height: 100px; /* Set the height of the Navbar */
-    position: fixed;
-    z-index: 4;
-  }
-
-
   .logo {
     font-size: 30px;
   }
+ 
 
-  .nav-container {
-    position: fixed;
-    
-  }
+
+
+
+
+

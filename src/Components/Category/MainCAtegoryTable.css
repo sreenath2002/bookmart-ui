@@ -3,6 +3,7 @@
 .table-container {
     max-width: 100%;
     overflow-x: auto;
+    /* margin-top: 70%; */
   }
   
   .user-table {
@@ -25,6 +26,10 @@
     background-color: #f9f9f9;
   }
   
+
+  .erroor{
+    color: red;
+  }
   .user-table button {
     padding-left: .3%;
     margin-right: .3%;/* Adjusted button padding */
@@ -35,15 +40,7 @@
     cursor: pointer;
   }
   
-  .user-table .block-btn {
-    background-color: #ff6347; /* Red color for block button */
-    color: #fff;
-  }
   
-  .user-table .unblock-btn {
-    background-color: #32cd32; /* Green color for unblock button */
-    color: #fff;
-  }
   
   .add-btn {
     margin-top: 20px;

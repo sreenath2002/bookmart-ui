@@ -5,6 +5,8 @@ import './UserLogin.css'; // Import CSS file for custom styles
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { useEffect } from 'react';
 import { setUser } from '../../redux/slices/userSlice';
 import axios from 'axios';
 const UserLogin = () => {
@@ -17,6 +19,7 @@ const UserLogin = () => {
   const [Error, setError] = useState("");
   const navigate =useNavigate();
   const dispatch = useDispatch();
+  const path = useSelector((state) => state.user.path);
   // const handleLogin = (e) => {
   //   e.preventDefault();
   //   // Your login logic here
@@ -26,6 +29,22 @@ const UserLogin = () => {
   //   setUsername('');
   //   setPassword('');
   // };
+   
+  useEffect(() => {
+    const jwtToken = localStorage.getItem('jwt');
+    // const path = useSelector((state) => state.user.path);
+    if (jwtToken) {
+   
+        console.log(path);
+      if ( path ==='/Admin') {
+        // Handle back button pressed on /Admin page
+        navigate('/Admin');
+      } else if (path === '/Home') {
+        // Handle back button pressed on /Home page
+        navigate('/');
+      }
+    }
+  }, []);
    
   const validateForm = () => {
     let isValid = true;
@@ -89,7 +108,7 @@ const UserLogin = () => {
           localStorage.setItem("jwt", response.data.jwt);
           if(response.data.role === "USER")
           {
-            dispatch(setUser({email,id:response.data.id,path:'/Home',firstName:response.data.firstName,lastName:response.data.lastName,mobile:response.data.mobile}))
+            dispatch(setUser({email,id:response.data.id,path:'/Home',firstName:response.data.firstName,lastName:response.data.lastName,mobile:response.data.mobile,role:response.data.role}))
             navigate('/')
           }
           
@@ -113,36 +132,54 @@ const UserLogin = () => {
    
 
   return (
-    <div className="login-container">
-      <form className="login-form" >
-      {signinError  && <div className="registration-error">Email does not Exists.Please Register</div>}
-      {Error && <div className="registration-error">Oops!! Something Went Wrong</div>}
-      {blockedMessage && <div className="registration-error">You are Blocked By the Admin</div>}
-        <h1>Login</h1>
-        <div className="input-group">
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Username"
-            required
-          />
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-lg-12">
+          <div className="login-container">
+            <form className="login-form">
+              {signinError && (
+                <div className="alert alert-danger">Email does not exist. Please register.</div>
+              )}
+              {Error && (
+                <div className="alert alert-danger">Oops!! Something Went Wrong</div>
+              )}
+              {blockedMessage && (
+                <div className="alert alert-danger">You are Blocked By the Admin</div>
+              )}
+              <h1>Login</h1>
+              <div className="form-group">
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="form-control"
+                  placeholder="Username"
+                  required
+                />
+                <div className="text-danger">{signinemailError}</div>
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="form-control"
+                  placeholder="Password"
+                  required
+                />
+                <div className="text-danger">{signinpasswordError}</div>
+              </div>
+              <div className='forgot-password'>
+                <Link to="/ForgotPassword" className="forgot-password-link">Forgot Password?</Link>
+              </div>
+              <button onClick={login} className="btn btn-primary btn-block">Login</button>
+              <div className='new-user'>
+                New User? Register <Link to="/UserRegister" className="text-primary">Here</Link>
+              </div>
+            </form>
+          </div>
         </div>
-        <div className="registration-error">{signinemailError}</div>
-        <div className="input-group">
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            required
-          />
-        </div>
-        <div className="registration-error">{signinpasswordError}</div>
-        <div className='forgotpassword'><Link to="/ForgotPassword" className="signin link">Forgot Password ?</Link></div>
-        <button onClick={login}>Login</button>
-        <div className='already have'>New User?Register  <Link to="/UserRegister" className="signin link">Here</Link></div>
-      </form>
+      </div>
     </div>
   );
 };

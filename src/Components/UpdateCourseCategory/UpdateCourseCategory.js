@@ -7,6 +7,8 @@ const UpdateCourseCategory = (props) => {
 
   const[name,setName]=useState(props.name);
    const[category,setCourseCategory]=useState()
+   const[nameError,setNameError]=useState();
+    const[categoryError,setCategoryError]=useState();
    const[categoryOptions,setCategoryOptions]=useState([])
   const [errorMessage, seterrorMessage] = useState('')
   const [errorMessage2, seterrorMessage2] = useState('')
@@ -34,10 +36,31 @@ const UpdateCourseCategory = (props) => {
 
 
   }, []);
+  const validateForm = () => {
+    let isValid = true;
+  
+    // Email validation using regex
+  
+    if (category.trim() === '') {
+      setCategoryError("Please provide Category");
+      isValid = false;
+    } else {
+      setCategoryError("");
+    }
+  
+    if (name.trim() === '') {
+      setNameError("Please provide Course");
+      isValid = false;
+    } else {
+      setNameError("");
+    }
+  
+    return isValid;
+  };
 
   async function categoryUpdate(event){
     event.preventDefault();
-    try{
+   if(validateForm()){ try{
       const updatedcategoryDetails={
           name:name,
           parentCategory:category
@@ -47,7 +70,7 @@ const UpdateCourseCategory = (props) => {
       console.log("rtghjkl")
       console.log("details---",updateDetails)
 
-      if(updateDetails.statuScode=== '200 OK')
+      if(updateDetails.statuscode=== '200 OK')
       {
         setsuccess(true);
         setTimeout(()=>{
@@ -65,6 +88,7 @@ const UpdateCourseCategory = (props) => {
                seterrorMessage2(true);
     }
   }
+}
 
   return (
     <div className="update-user-form-container">
@@ -77,7 +101,7 @@ const UpdateCourseCategory = (props) => {
           <label htmlFor="username">Category Name</label>
           <input type="text" id="username" value={name} name="username" onChange={(e)=>{setName(e.target.value)}} required />
         </div>
-        
+        <div className="registration-error">{nameError}</div>
         <label htmlFor="username">Category Name</label>
         <select id="category" name="category" value={category} onChange={(e) => setCourseCategory(e.target.value)} required>
             <option value="">Select Category</option>
@@ -87,7 +111,7 @@ const UpdateCourseCategory = (props) => {
               </option>
             ))}
           </select>
-        
+          <div className="registration-error">{categoryError}</div>
        
         <button onClick={categoryUpdate}className="update-btn">Update</button>
       </form>

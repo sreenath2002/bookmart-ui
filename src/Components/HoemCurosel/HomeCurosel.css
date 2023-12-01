@@ -1,8 +1,35 @@
-.carousel-item img {
-    max-height: 1000px;
+.carosel-main {
+  background-image: url("/public/Images/istockphoto-1181643451-612x612.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-bottom: 50px;
+ 
+  width: 100%;
+  height: 500px; 
+
+  
+}
+
+.maindiv-nav {
+  margin-top: 130%;
+}
+@media (max-width: 320px){
+  .maindiv-nav {
+    margin-top: 100%;
   }
 
-.custom-carousel {
-    max-width: 35%;
-    padding-top: 200px;
 }
+@media (max-width: 768px){
+  .carosel-main {
+    margin-top:200%; 
+
+  }
+
+}
+
+
+
+
+
+
+

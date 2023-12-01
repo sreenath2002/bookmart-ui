@@ -5,45 +5,36 @@ import './Footer.css'; // Import a CSS file for custom styles
 const Footer = () => {
   return (
     <footer className="footer">
-      <Container fluid>
-        <Row>
-          <Col md={4} sm={6}>
-            <h5>About Us</h5>
-            <p>A brief description of your company and what you offer.</p>
-          </Col>
-          <Col md={4} sm={6}>
-            <h5>Categories</h5>
-            <ul className="list-unstyled">
-              <li>Category 1</li>
-              <li>Category 2</li>
-              <li>Category 3</li>
-              {/* Add more categories as needed */}
-            </ul>
-          </Col>
-          <Col md={4} sm={12}>
-            <h5>Contact Us</h5>
-            <address>
-              Email: example@example.com<br />
-              Phone: +1234567890<br />
-              Address: 123 Street, City, Country<br />
-            </address>
-          </Col>
-        </Row>
-        <hr />
-        <Row>
-          <Col md={6} className="text-center text-md-start">
-            <p>&copy; {new Date().getFullYear()} Your E-commerce. All Rights Reserved</p>
-          </Col>
-          <Col md={6} className="text-center text-md-end">
-            <ul className="list-inline">
-              <li className="list-inline-item"><a href="#terms">Terms of Use</a></li>
-              <li className="list-inline-item"><a href="#privacy">Privacy Policy</a></li>
-              <li className="list-inline-item"><a href="#sitemap">Sitemap</a></li>
-              {/* Add more footer links */}
-            </ul>
-          </Col>
-        </Row>
-      </Container>
+      <div className="footer-content">
+        <div className="footer-logo">
+          <img src="logo.png" alt="Logo" />
+          <h1>FlexFit</h1>
+        </div>
+        <div className="footer-links">
+          <h2>Quick Links</h2>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Shop</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div className="contact-info">
+          <h2>Contact Us</h2>
+          <p>Address: 123 Main Street, Cityville, USA</p>
+          <p>Email: info@company.com</p>
+          <p>Phone: +1 234-567-8901</p>
+        </div>
+        <div className="social-icons">
+          <h2>Follow Us</h2>
+          <a href="#"><i className="fab fa-facebook"></i></a>
+          <a href="#"><i className="fab fa-twitter"></i></a>
+          <a href="#"><i className="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <p>&copy; 2023 Company Name. All Rights Reserved.</p>
+      </div>
     </footer>
   );
 };

@@ -1,28 +1,61 @@
 /* MiddleCards.css */
+
 .custom-card {
-    width: 100%;
+  width: 100%;
+  height: 20vh;
+  margin-bottom: 30px; /* Increase space between cards */
+}
+
+.card-image-container {
+  flex: 0 0 48%;
+  width: 100%; /* Adjust width of image container */
+}
+
+.card-image {
+  width: 100vw; /* Change the width percentage as needed */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.card-content {
+  flex: 1;
+}
+
+
+.card-title {
+  text-align: left;
+  font-size: 30px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: bolder;
+  margin-left: 10%;
+}
+@media (max-width: 320px){
+  .custom-card {
+    width: 50%;
+    margin-left: 43%;
     height: 20vh;
     margin-bottom: 30px; /* Increase space between cards */
   }
-  
-  .card-image-container {
-    flex: 0 0 35%; /* Adjust width of image container */
-    padding-right: px; /* Increase spacing between image and text */
+
+}
+@media (min-width: 768px){
+  .custom-card {
+   
+    width: 110%;
+    
+    height: 20vh;
+    margin-bottom: 30px; /* Increase space between cards */
   }
-  
-  .card-image {
-    width: 100%;
-    height: auto;
+
+}
+@media (max-width: 800px){
+  .maindiv-nav {
+    margin-top:900%;
   }
-  
-  .card-content {
-    flex: 1;
+
+}
+@media (max-width: 900px){
+  .maindiv-nav {
+    margin-top: 200%;
   }
-  
-  .card-title,
-  .card-text {
-    text-align: left;
-    margin-left: 10%;
-  }
-  
-  
+
+}

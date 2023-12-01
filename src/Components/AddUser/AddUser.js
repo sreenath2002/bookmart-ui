@@ -105,7 +105,11 @@ const AddUser = (props) => {
   }
 
   return (
-    <div className="update-user-form-container">
+    <div className="container">
+    <div className="row justify-content-center">
+      <div className="col-lg-12">
+    <div className="register-container">
+        <div className='registerclass'>
       <form className="update-user-form">
         <div className="form-group">
 
@@ -138,9 +142,13 @@ const AddUser = (props) => {
         </div>
         <div className="registration-error">{passwordError}</div>
         <button onClick={handleFormValidation} className="update-btn">Add</button>
-        <button onClick={props.handleBack} className="update-btn">Back</button>
+        <button onClick={props.handleBack} className="back">Back</button>
       </form>
     </div>
+    </div>
+    </div>
+      </div></div>
+  
   );
 };
 

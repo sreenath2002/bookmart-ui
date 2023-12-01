@@ -10,14 +10,35 @@ const AddUser= () => {
   const [errorMessage, seterrorMessage] = useState('')
   const [errorMessage2, seterrorMessage2] = useState('')
   const [success, setsuccess] = useState(false)
-
+   const[categoryError,setCategoryError]=useState(false)
  
 
   const jwtToken = localStorage.getItem("jwt");
+  const validateForm = () => {
+    let isValid = true;
+
+    // Email validation using regex
+    
+    if(name.trim()==='')
+    {
+      setCategoryError("Please provide Category")
+      isValid=false;
+    }
+    
+    else{
+      setCategoryError("")
+    }
+    
+
+    
+    
+
+    return isValid;
+  };
 
   async function categoryadd(event){
     event.preventDefault();
-    try{
+   if( validateForm()) {try{
       const categoryDetails={
         name:name
       }
@@ -26,7 +47,7 @@ const AddUser= () => {
       console.log("rtghjkl")
       console.log("details---",addedCategoryDetails)
 
-      if(addedCategoryDetails.statuScode=== '201 CREATED')
+      if(addedCategoryDetails.statuscode=== '201 CREATED')
       {
         setsuccess(true);
         seterrorMessage2('');
@@ -44,8 +65,12 @@ const AddUser= () => {
 
     } catch(err){
                seterrorMessage2(true);
+               setTimeout(()=>{
+                seterrorMessage2(true);
+              },3000)
     }
   }
+}
 
   return (
     <div className="update-user-form-container">
@@ -57,6 +82,7 @@ const AddUser= () => {
         {errorMessage2 && <div className="registration-error">Ineternal Server Error!</div>}
           <label htmlFor="username">Category Name</label>
           <input type="text" id="username" value={name} name="username" onChange={(e)=>{setCategoryName(e.target.value)}} required />
+         <div  className="registration-error">{categoryError}</div>
         </div>
         
         <button onClick={categoryadd}className="update-btn">Add</button>

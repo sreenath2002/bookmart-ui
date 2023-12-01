@@ -21,9 +21,9 @@ const MainCategoryTable = () => {
   const [refresh, setRefresh] = useState(false);
   const jwtToken = localStorage.getItem("jwt");
 
- 
+  
 
-  useEffect(() => {
+ useEffect(() => {
     
     featchData(jwtToken)
     console.log("fdsj")
@@ -44,6 +44,12 @@ const MainCategoryTable = () => {
     }
     
   },[refresh]);
+
+   
+  if (!jwtToken) {
+    
+    return <div className='erroor'>Please log in to access the Category</div>;
+  }
 
  
 
@@ -147,4 +153,5 @@ const MainCategoryTable = () => {
   );
 };
 
-export default MainCategoryTable;
+
+export default MainCategoryTable

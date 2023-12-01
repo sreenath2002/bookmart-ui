@@ -1,30 +1,26 @@
 /* AdminLoginPage.css */
 
-.admin-login-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5;
-  }
+
   
   .login-container {
+    display: flex;
+    flex-direction: column;
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 40px; /* Increased padding */
-    width: 400px; /* Increased width */
-    max-width: 80%; /* Added max-width for responsiveness */
-    text-align: center;
+    justify-content: center;
+    align-items: center;
   }
   
   .admin-login-heading {
+    margin-bottom: 0;
+    margin-top: 15px;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 2.5em; /* Larger font size for the heading */
-    margin-bottom: 30px; /* Increased margin */
+    /* margin-top: 50%; Increased margin */
   }
   
   .input-group {
-    margin-bottom: 20px; /* Increased margin between input fields */
+     width: 80%;
   }
   
   label {
@@ -34,21 +30,23 @@
   
   input[type='text'],
   input[type='password'] {
-    width: 100%;
+    width: 80%;
     padding: 12px; /* Increased input padding */
     border-radius: 6px; /* Slightly rounded corners */
     border: 1px solid #ccc;
   }
+  .form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+  }
   
-  button {
-    width: 100%;
-    padding: 12px;
-    font-size: 1.2em; /* Increased button font size */
-    background-color: #007bff;
-   
-    border: none;
-    border-radius: 6px;
+  .adminloginbtn {
+    margin-left: 0 !important;
     cursor: pointer;
+    width: 100px;
   }
   
   button:hover {

@@ -8,16 +8,17 @@ import Footer from '../Components/Footer/Footer'
 function HomePageUser() {
   return (
     <div>
+      
        
-        <NavBar/>
        <HomeCurosel/>
+      
       <MiddleCards/> 
       <BookCards/>
-     
+      
       {/* <BookCards/>
       <BookCards/>
-      <BookCards/>
-      <Footer/> */}
+      <BookCards/>*/}
+    
     </div>
   )
 }

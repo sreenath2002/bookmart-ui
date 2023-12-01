@@ -17,6 +17,7 @@ const UpdateProduct = (props) => {
   const [subject, setSubject] = useState(props.bookSubjcet);
   const [university, setUniversity] = useState(props.bookUniversity);
   const [author, setAuthor] = useState(props.bookAuthor);
+  console.log("Author------",author)
   const [category, setCategory] = useState(props.bookParentCategory);
   
   const [semester, setSemester] = useState(props.bookSemester);
@@ -152,7 +153,8 @@ const UpdateProduct = (props) => {
   //   // Implement add product functionality
   // };
   const handleValidation = async (event) => {
-
+    console.log(university)
+    console.log("+++++++++")
     event.preventDefault();
     try{
       await addProductValidation.validate(
@@ -180,6 +182,7 @@ const UpdateProduct = (props) => {
     event.preventDefault();
     // if (validateForm()) {
     try {
+      console.log(title)
 
       const updatedproductDetails = {
 
@@ -239,8 +242,9 @@ setQuantityError(errors.quantity|| '');
 setCourseError(errors.course || '');
 setSubjcetError(errors.subcategory || '');
 setUniversityError(errors.university|| '');
-setAuthorError(errors.author || '');
-setCategoryError(errors.category || '');
+setAuthorError(errors.author|| '');
+setCategoryError(errors.category
+  || '');
 setSemesterError(errors.semester || '');
  setImageError(errors.images || '')
 console.log('Validation Errors:', errors);
@@ -250,9 +254,10 @@ console.log('Validation Errors:', errors);
 
   return (
     <div className="add-product-form">
+      
+      <form className='upadateProduct'>
       <h2>Update Product</h2>
-      <form >
-        {success ? <div style={{ color: "blue" }}>Product Successfully Updated.</div> :
+        {success ? <div className='updateProduct'>Product Successfully Updated.</div> :
           errorMessage ? <div style={{ color: "red" }}>{errorMessage}</div> : ""}
 
 

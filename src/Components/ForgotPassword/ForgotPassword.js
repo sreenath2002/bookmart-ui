@@ -52,7 +52,8 @@ const ForgotPassword = () => {
         const res = await axios.post('http://localhost:8084/api/auth/emailexists', {
           email: enterdEmail,
         });
-        if (res.data.statuscode === '200 OK') {
+        if (res.data.message === 'Success') {
+
           setEmailVerify(false);
         } else {
           setEmailNotExists(true);
@@ -110,7 +111,7 @@ const ForgotPassword = () => {
         {passwordChangedError && <div className="registration-error">{passwordChangedError}</div>}
         {passwordChangedMessage && <div className="registration-success">{passwordChangedMessage}</div>}
 
-        <h1>Forgot Your Password</h1>
+        <h1>Change Your Password</h1>
         {emailVerify && (
           <>
             <div className="input-group">
@@ -123,7 +124,7 @@ const ForgotPassword = () => {
               />
             </div>
             <div className="registration-error">{emailValidationError}</div>
-            <button onClick={emailExists}>Verify</button>
+            <button className='verifybtn'onClick={emailExists}>Verify</button>
           </>
         )}
         {!emailVerify && (
@@ -138,7 +139,7 @@ const ForgotPassword = () => {
               />
             </div>
             <div className="registration-error">{passwordValidationError}</div>
-            <button onClick={changePassword}>Change Password</button>
+            <button className='verifybtn'onClick={changePassword}>Change Password</button>
           </>
         )}
       </form>

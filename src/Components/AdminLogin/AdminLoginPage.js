@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import  { setUser } from '../../redux/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 const AdminLoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,6 +15,17 @@ const AdminLoginPage = () => {
   const [notAcces,setNotAccesMEssage]=useState(false);
    const navigate=useNavigate();
    const dispatch = useDispatch();
+   
+
+   
+   useEffect(() => {
+     const jwtToken = localStorage.getItem('jwt');
+     // const path = useSelector((state) => state.user.path);
+     if (jwtToken) {
+    
+      navigate('/AdminPage');
+     }
+   }, []);
   const validateForm = () => {
     let isValid = true;
 
@@ -96,7 +108,7 @@ const AdminLoginPage = () => {
     <div className="admin-login-page">
       <div className="login-container">
         <h1 className="admin-login-heading">Admin Login</h1>
-        <form>
+        <form className='form'>
           {signinError && (
             <div className="registration-error">
               Email does not exist. Please register.
@@ -130,7 +142,7 @@ const AdminLoginPage = () => {
           </div>
           <div className='forgotpassword'><Link to="/ForgotPassword" className="signin link">Forgot Password ?</Link></div>
           <div className="registration-error">{signinpasswordError}</div>
-          <button onClick={login}>Login</button>
+          <button className='adminloginbtn' onClick={login}>Login</button>
         </form>
       </div>
     </div>

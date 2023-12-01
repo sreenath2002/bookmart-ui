@@ -52,29 +52,29 @@ const NavBar = () => {
   }
 
   return (
-    <Navbar bg="light" expand="xl" width="20%" expanded={expanded}>
-      <Container>
-        <Navbar.Brand href="#home">E-Commerce App</Navbar.Brand>
+    <Navbar className='mainnavbar' bg="light" expand="xl" expanded={expanded} style={{ width: '100%' , position: 'fixed', top: '0', left: '0', right: '0', zIndex: '1000' }} >
+      <Container fluid>
+        <Navbar.Brand href="#home">BookMart</Navbar.Brand>
         <Navbar.Toggle onClick={handleToggle} aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             {/* Add user-related components/icons to the left side */}
             <Nav.Item className="d-flex align-items-center">
-              <Image src="profile.jpg" roundedCircle width={30} height={30} className="me-2" />
+              <Image src="profile.jpg" roundedCircle width={30} height={30} />
              {jwtToken? <span className="user-name">{firstName}{lastName}</span>:<span className="user-name">Welcome User</span>}
             </Nav.Item>
           </Nav>
           <Nav className="ms-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#products">Products</Nav.Link>
-            <Link to="/UserLogin" className="nav-link">SignIn</Link>
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/Products">Products</Nav.Link>
+            { !jwtToken && <Link to="/UserLogin" className="nav-link">SignIn</Link>}
             <Nav.Link href="#cart">Cart</Nav.Link>
             {/* Add more Nav.Link components as needed */}
             <NavDropdown title="More" id="basic-nav-dropdown">
-              {/* Add dropdown items if required */}
+              {/* Add dropdown items if repquired */}
             </NavDropdown>
             {/* Logout button */}
-            <Button variant="outline-danger" onClick={handleLogout}>Logout</Button>
+            {jwtToken && <Button className='btn btn-danger m-0' onClick={handleLogout}>Logout</Button>}
           </Nav>
         </Navbar.Collapse>
       </Container>

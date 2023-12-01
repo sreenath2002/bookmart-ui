@@ -1,20 +1,22 @@
 .product-table-container {
+  
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 15%;
+  
   }
   
   .product-table {
-    width: 90%;
-    max-width: 12000px; /* Adjust max-width according to your layout */
+    width: 100%;
+    /* Adjust max-width according to your layout */
     margin-top: 20px;
     border-collapse: collapse;
   }
   
   .product-table th,
   .product-table td {
-    padding: 12px;
+    border-color: black;
+    padding: 4px;
     font-size: larger; /* Increase the padding to add space between columns */
   }
   

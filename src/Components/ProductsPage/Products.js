@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Card, Button, Dropdown, Form } from 'react-bootstrap';
 import './Products.css'; // Import a CSS file for custom styles
 import { useEffect } from 'react';
-
+import NavBar from '../NavBar/Navbar';
 import { getNewArrivals } from '../../axios/service/productsService';
 const Products = () => {
   // Sample book data (can be fetched from an API or database)
@@ -73,36 +73,13 @@ const Products = () => {
   };
 
   return (
-    <Container fluid className="p-0"> {/* Use fluid and p-0 to make the container full-screen */}
-      <Row className="mt-5">
-        <Col md={3}>
-          {/* Filter options */}
-          <h4>Filters</h4>
-          <Form.Group>
-            <Form.Label>Category</Form.Label>
-            {/* Add options for categories */}
-            {/* ... (existing category checkboxes) */}
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Course</Form.Label>
-            {/* Add options for courses */}
-            {/* ... (existing course checkboxes) */}
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>University</Form.Label>
-            {/* Add options for universities */}
-            {/* ... (university checkboxes) */}
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Semester</Form.Label>
-            {/* Add options for semesters */}
-            {/* ... (semester checkboxes) */}
-          </Form.Group>
-          {/* Add other filter options */}
-        </Col>
-        <Col md={9}>
+    <Container fluid className="p-0 w-50 mt-80">
+      <NavBar/> {/* Use fluid and p-0 80to make the container full-screen */}
+      <Row className="mt-2">
+        
+        <Col md={10}>
           {/* Sort options */}
-          <div className="d-flex justify-content-between align-items-center mb-3">
+          <div className="d-flex justify-content-between w-100 align-items-center mb-3">
             <h4>Sort By Price</h4>
             <Dropdown>
               <Dropdown.Toggle variant="secondary" id="dropdown-basic">
@@ -121,16 +98,17 @@ const Products = () => {
           {/* Display Books */}
           <Row>
             {books.map((book) => (
-              <Col key={book.id} md={4} className="mb-3">
-                <Card>
+              <Col key={book.id} md={5} className="mb-4">
+                <Card className='w-xl'>
                   <Card.Img variant="top" src={book.images[1].imageUrl} />
-                  <Card.Body>
+                  <Card.Body className='p-1 w-'>
                     <Card.Title>{book.title}</Card.Title>
                     <Card.Text>
-                      <p>Course: {book.courseName}</p>
+                      <p>Course: {book.course.courseName} {book.subject.subjectName}</p>
                       <p>University: {book.university.universityName}</p>
-                      <p>Price: ${book.price}</p>
-                      <p>Discounted Price: ${book.discountedPrice}</p>
+                      <p className='price'> ${book.discountedPrice}</p>
+                      <p className='discounted'> <s>${book.price}</s></p>
+                      <p className='discount'>{book.discountPresent} %OFF</p>
                     </Card.Text>
                     <Button variant="primary">Add to Wishlist</Button>
                     <Button variant="success" className="ml-2">Add to Cart</Button>

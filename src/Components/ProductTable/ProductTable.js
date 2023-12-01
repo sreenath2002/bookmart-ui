@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import './ProductTable.css'; // Import your CSS file for styling
 import AddProduct from '../AddProduct/AddProduct';
 import UpdateProduct from '../UpdateProduct/UpdateProduct';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { getProducts, deleteProduct } from '../../axios/service/adminServices';
 const ProductTable = () => {
   const [books, setBooks] = useState([]);
@@ -27,7 +28,8 @@ const ProductTable = () => {
   const[addSuccesMessage,setaddSuccesMessage]=useState(false);
   const[wrongMessage,setWrongMessage]=useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-   console[refresh,setRefresh]=useState(false)
+   const[refresh,setRefresh]=useState(false)
+   const role = useSelector((state) => state.user.role);
    
   const jwtToken = localStorage.getItem("jwt");
   useEffect(() => {
@@ -51,12 +53,20 @@ const ProductTable = () => {
     }
     
   },[refresh]);
+  if (!jwtToken) {
+    
+    return <div className='erooor'>Please log in to access the Product table</div>;
+  }
+  if(role==='USER')
+  {
+    return <div className='erooor'>You can't Acces This page</div>;
+  }
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  const handleUpdate = (id,bookTitle,bookDescription,bookPrice,bookDiscountedPrice,bookDiscountPresent,bookQuantity,bookCourse,bookSubjcet,bookUniversity,bookAuthor,bookParentCategory,bookSemester,books) => {
+  const handleUpdate = (id,bookTitle,bookDescription,bookPrice,bookDiscountedPrice,bookDiscountPresent,bookQuantity,bookAuthor,bookParentCategory,bookCourse,bookSubjcet,bookUniversity,bookSemester,books) => {
     // Logic to handle updating a product with 'id'
     console.log(`Update product with ID: ${id}`);
     setSelectedProductId(id);

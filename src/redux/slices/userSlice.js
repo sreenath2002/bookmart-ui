@@ -7,7 +7,8 @@ const initialState = {
   firstName: '',
   lastName: '',
   path:'',
-  mobile: ''
+  mobile: '',
+  role: ''
   // role:''
 
 };
@@ -24,6 +25,7 @@ const userSlice = createSlice({
       state.firstName=action.payload.firstName;
       state.lastName=action.payload.lastName;
       state.mobile=action.payload.mobile
+      state.role=action.payload.role
       // state.role=action.payload.role;
       console.log('Logged in user email:', action.payload.email);
       console.log('Logged in user id:', action.payload.id);

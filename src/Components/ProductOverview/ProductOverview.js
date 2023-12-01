@@ -3,15 +3,18 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { getProductSelectedProductDetails } from '../../axios/service/productsService';
 import './ProductOverview.css'; // Import a CSS file for custom styles
 import { useEffect } from 'react';
+import { Token } from '@mui/icons-material';
 const ProductOverview = (props) => {
  const[selecteddBookDetails,setNewArrivalBookDetails]=useState([])
 
-
+ const jwtToken = localStorage.getItem("jwt");
  useEffect(() => {
-  async function fetchData(id) {
+  console.log("object")
+  async function fetchData(jwtToken,id) {
     try {
       console.log("-------first start-------")
-      const newArrivalsDetails = await getProductSelectedProductDetails(id);
+      console.log(jwtToken)
+      const newArrivalsDetails = await getProductSelectedProductDetails(jwtToken,id);
       console.log("--------------------------------------------------")
       console.log("-----------byeeeeee--------");
       console.log("ejfsld")
@@ -27,8 +30,8 @@ const ProductOverview = (props) => {
       console.log("Errorrrrrrrrrrrrrrrrrrrrrrr:", err);
     }
   }
-
-  fetchData(props.id); // Call the fetchData function with props.id
+  fetchData(jwtToken,props.id);
+   // Call the fetchData function with props.id
 }, [props.id]);
   // Sample product data
   
@@ -39,7 +42,7 @@ const ProductOverview = (props) => {
         {/* Main product image */}
         <Col md={6}>
         
-          <img src={selecteddBookDetails.images[1].imageUrl       } alt="Main Product" className="main-product-image" />
+          <img src={selecteddBookDetails.images[2].imageUrl } alt="Main Product" className="main-product-image" />
           <Row className="additional-images">
             {/* Additional product images */}
             {selecteddBookDetails.images.map((image, index) => (
@@ -52,16 +55,18 @@ const ProductOverview = (props) => {
         {/* Product details */}
         <Col md={6}>
           <div className="product-details">
-            <h2 className="product-name">{selecteddBookDetails.title}</h2>
+            <h2 className="product-name">Book name :{selecteddBookDetails.title}</h2>
          
-            <p className="product-info">{selecteddBookDetails.course.courseName}</p>
-            <p className="product-info">{selecteddBookDetails.university.universityName}</p>
-            <p className="product-info">{selecteddBookDetails.semester.name}</p>
+            <p className="product-info">Course Name :{selecteddBookDetails.course.courseName}</p>
+            <p className="product-info">University Name :{selecteddBookDetails.university.universityName}</p>
+            <p className="product-info">Semester :{selecteddBookDetails.semester.name}</p>
             <p className="product-info">Author: {selecteddBookDetails.author}</p>
             <p className="product-price">
-              <span className="real-price">{selecteddBookDetails.price}</span>
-              <span className="discounted-price">{selecteddBookDetails.discountedPrice}</span>
-              <span className="discounted-price">{selecteddBookDetails.discountPresent}</span>
+              <span className="real-price">Rs.{selecteddBookDetails.discountedPrice}</span>
+              <br></br>
+              <span className="discounted-price"><s>Rs.{selecteddBookDetails.price}</s></span>
+              <br></br>
+              <span className="discounted-price">{selecteddBookDetails.discountPresent} % OFF</span>
             </p>
             <div className="action-buttons">
               <Button variant="primary" className="add-to-cart-button">
@@ -74,7 +79,7 @@ const ProductOverview = (props) => {
           </div>
           <div className="product-description">
             <h3>Description</h3>
-            <p>{selecteddBookDetails.description}</p>
+            {/* <p>{selecteddBookDetails.description}</p> */}
           </div>
         </Col>
       </Row>

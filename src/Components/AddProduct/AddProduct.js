@@ -156,7 +156,8 @@ const AddProduct = (props) => {
     // Logic to add a new product with entered details and images
     // Use the form data and images to create a new product
     try {
-
+     console.log(author)
+     console.log("+++++++++")
     
     await addProductValidation.validate(
       {
@@ -237,10 +238,13 @@ setDiscountedPriceError(errors.discountedPrice || '');
 setDiscountPresentError(errors.discountPresent || '');
 setQuantityError(errors.quantity|| '');
 setCourseError(errors.course || '');
-setSubjcetError(errors.subcategory || '');
-setUniversityError(errors.university|| '');
-setAuthorError(errors.author || '');
-setCategoryError(errors.category || '');
+setSubjcetError(errors.subject || ''); // Typo in 'subject' spelling
+setUniversityError(errors.university || '');
+setAuthorError(errors.author
+  || '');
+
+setCategoryError(errors.category
+  || '');
 setSemesterError(errors.semester || '');
  setImageError(errors.images || '')
 console.log('Validation Errors:', errors);
@@ -250,9 +254,11 @@ console.log('Validation Errors:', errors);
 
   return (
     <div className="add-product-form">
+      <br></br>
+      
+      <form  className='addProduct'>
       <h2>Add Product</h2>
-      <form >
-        {success ? <div style={{ color: "blue" }}>Product Successfully created.</div> :
+        {success ? <div classname="productadded">Product Successfully created.</div> :
           errorMessage ? <div style={{ color: "red" }}>{errorMessage}</div> : ""}
 
 
@@ -335,7 +341,7 @@ console.log('Validation Errors:', errors);
             onChange={(e) => setAuthor(e.target.value)}
             required
           />
-          <div className="registration-error">{authorError}</div>
+        
 
         </div>
         <div className="registration-error">{authorError}</div>
@@ -358,7 +364,9 @@ console.log('Validation Errors:', errors);
               <option key={course.id} value={course.courseName}>
                 {course.courseName}
               </option>
-            ))}
+              
+            ))
+            }
           </select>
           <div className="registration-error">{courseError}</div>
 
@@ -406,6 +414,7 @@ console.log('Validation Errors:', errors);
             ))}
           </select>
           <div className="registration-error">{semesterError}</div>
+          
 
 
 

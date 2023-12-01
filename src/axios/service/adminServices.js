@@ -25,6 +25,7 @@ export const updateCourse = async (token,updateCourseId,updaetCourseDetails) => 
 
 };
 export const deleteCourse = async (token,deleteCourseId) => {
+    console.log("fghjk")
     const config = {
         headers: {
             Accept: 'application/json',
@@ -33,6 +34,7 @@ export const deleteCourse = async (token,deleteCourseId) => {
         },
     };
     const { data } = await axiosAdminInstance.delete(`/category/deleteCourseCategory/${deleteCourseId}`, config);
+    console.log("erfghjkl")
     return data;
 
 };

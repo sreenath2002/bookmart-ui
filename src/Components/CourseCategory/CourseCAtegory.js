@@ -46,7 +46,13 @@ const CourseCategory= () => {
     
   },[refresh]);
 
+  if (!jwtToken) {
+    
+    return <div className='erooor'>Please log in to access the CourseCategory</div>;
+  }
+
  
+  
 
   async function coursecategoryDelete(id){
     try{
@@ -63,7 +69,7 @@ const CourseCategory= () => {
            setRefresh(!refresh);
         //    setUsers(users.filter((user) => user.id !== id));
        }
-       else{
+       if(deleteResponse.message=="Course not deleted "){
         setWrongMessage1(true);
         setTimeout(()=>{
          setWrongMessage1(false)
@@ -79,7 +85,8 @@ const CourseCategory= () => {
       },3000)
 
     }
- }
+ 
+}
 
   const handleUpdate = (id,name) => {
     setSelectedCategoryId(id);

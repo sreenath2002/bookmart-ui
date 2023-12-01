@@ -1,0 +1,23 @@
+.price{
+    font-size: 35px;
+    font-weight: bold;
+}
+.discounted{
+    font-size: 20px;
+    
+}
+.discount{
+    color: green; /* Change color for discount */
+  font-weight: bold;
+}
+/* Add this CSS to your stylesheet */
+
+  
+ 
+  /* Add this CSS to your stylesheet */
+.card-wrapper {
+    margin-bottom: 20px; 
+   /* Adjust the margin to the desired space between cards */
+  }
+  
+  

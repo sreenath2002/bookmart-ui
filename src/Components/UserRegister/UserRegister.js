@@ -106,8 +106,7 @@ const UserRegister = () => {
     }
 
     const handleOtpEnter = () => {
-        setSendOtp(false)
-        setverifyOtp(true)
+        
        
         otpsend();
        
@@ -261,8 +260,11 @@ const UserRegister = () => {
 
             ).then((res) => {
                 if (res.data.statuscode == "201 CREATED") {
+                    startTimer();
+                    setSendOtp(false)
+                     setverifyOtp(true)
                     setotpSendSucces(true)
-
+                    
                     setTimeout(() => {
                         setotpSendSucces(false);
                     }, 3000);
@@ -317,7 +319,7 @@ const UserRegister = () => {
                         }, 3000);
 
                     }
-                    else {
+                    if(res.data.message=="OTP verification failed") {
                         console.log("akjgsflkgh")
                         setOtpVerifyFaildMEssage(true)
                         setTimeout(() => {
@@ -347,8 +349,12 @@ const UserRegister = () => {
 
 
     return (
-        <div className="login-container">
-            <form className="login-form"  >
+        <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-lg-12">
+        <div className="register-container">
+            <div className='registerclass'>
+            <form className="register-form"  >
                 <br></br>
                 {registrationSuccess && <div className="registration-success">Registered Successfully!</div>}
                 {otpsendSucces && <div className="registration-success">OTP has Send </div>}
@@ -359,7 +365,7 @@ const UserRegister = () => {
                 {emailExistsError && <div className="registration-error">Email already exists</div>}
                 <h1>Register</h1>
 
-                <div className="input-group">
+                <div className="input-groups">
                     <input
                         type="text"
                         value={email}
@@ -371,7 +377,7 @@ const UserRegister = () => {
                 <div className="registration-error">{emailValidationError}</div>
                 {verifyOtp && (
                     <>
-                        <div className="input-group">
+                        <div className="input-groups">
                             <input
                                 type="text"
                                 value={otp}
@@ -386,7 +392,7 @@ const UserRegister = () => {
                             <p>Time remaining: {timer} seconds</p>
                         )}
                         <div className="registration-error">{otpError}</div>
-                        <div className='resend otp' onClick={handleOtpEnter}>Resend OTP</div>
+                        <div className='resendotp' onClick={handleOtpEnter}>Resend OTP</div>
                         <button onClick={otpverify}>Verify OTP</button>
                     </>
                 )}
@@ -397,7 +403,7 @@ const UserRegister = () => {
                 {sendOtp && <button onClick={handleEmailValidation} >Send OTP</button>}
 
                 {showfullForm && (<>
-                    <div className="input-group">
+                    <div className="input-groups">
                         <input
                             type="text"
                             value={firstName}
@@ -407,7 +413,7 @@ const UserRegister = () => {
                         />
                     </div>
                     <div className="registration-error">{firstNameError}</div>
-                    <div className="input-group">
+                    <div className="input-groups">
                         <input
                             type="text"
                             value={lastName}
@@ -417,7 +423,7 @@ const UserRegister = () => {
                         />
                     </div>
                     <div className="registration-error">{secondNameError}</div>
-                    <div className="input-group">
+                    <div className="input-groups">
                         <input
                             type="text"
                             value={mobile}
@@ -427,7 +433,7 @@ const UserRegister = () => {
                         />
                     </div>
                     <div className="registration-error">{mobilenumberError}</div>
-                    <div className="input-group">
+                    <div className="input-groups">
                         <input
                             type="password"
                             value={password}
@@ -439,8 +445,12 @@ const UserRegister = () => {
                     <div className="registration-error">{passwordError}</div>
 
                     <button onClick={handleFormValidation}>Register</button></>)}
-                <div className='already have'>Already have Account?  <Link to="/UserLogin" className="signin link">SignIn</Link></div>
+                <div className='already have'>Already have Account?  <Link to="/UserLogin" className="signinlink ">SignIn</Link></div>
             </form>
+            </div>
+        </div>
+        </div>
+        </div>
         </div>
     );
 };

@@ -1,10 +1,15 @@
 .add-product-form {
-    width: 800px;
-    margin: 0 auto;
-    padding: 30px;
+   
+   
+   
     background-color: #f9f9f9;
+   
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  .addProduct{
+    /* margin-top: 130%; */
+    padding: 20px;
   }
   
   .add-product-form h2 {
@@ -19,6 +24,9 @@
     margin-bottom: 20px;
   }
   
+  .productadded{
+    color: #45a049;
+  }
   .flex label {
     flex: 1 0 28%;
     font-weight: bold;

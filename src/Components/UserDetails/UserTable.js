@@ -1,9 +1,10 @@
 import React, { useState,useEffect } from 'react';
 import './UserTable.css'; // Import your CSS file for styling
 import AddUser from '../AddUser/AddUser';
+import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import UpdateUser from '../UpdateUser/UpdateUser';
 import { getUsers,deleteUser,updateUser, changeStatus } from '../../axios/service/adminServices';
-
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 const UserTable = () => {
   
 
@@ -22,7 +23,7 @@ const UserTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [refresh, setRefresh] = useState(false);
   const jwtToken = localStorage.getItem("jwt");
-
+  const role = useSelector((state) => state.user.role);
  
 
   useEffect(() => {
@@ -47,8 +48,18 @@ const UserTable = () => {
     
   },[refresh]);
 
- 
-
+  if (!jwtToken) {
+    
+    return <div className='erooor'>Please log in to access the UserDetails</div>;
+  }
+  
+  if (role=='USER') {
+    
+    return <div className='erooor'>You can't access this page</div>;
+  }
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
   async function userDelete(id){
     try{
       console.log(id)
@@ -143,6 +154,8 @@ const UserTable = () => {
 
   return (
     <div className="table-container">
+      <div className='adminnavbar'> <AdminNavbar/></div>
+       
       {deleteSuccesMessage && <div className='deleteSucces'>Deleted SUccesFully</div>}
       {/* {updateSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
       {addSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>} */}
@@ -153,6 +166,15 @@ const UserTable = () => {
       ) : showUpdateUser ? (
         <UpdateUser userId={selectedUserId} firstName={selectedUserFirstName} lastName={selectedUserLastName} email={selectedUserEmail} mobile={selectedUserMobile} handleBack={handleBack} />
       ) : (
+         <div>
+          {!showAddUser && !showUpdateUser && (
+        <button onClick={handleAdd} className="add-btn">
+          Add User
+        </button>
+      )}
+           <div className="search-bar">
+            <input type="text" placeholder="Search by Book Name" value={searchQuery} onChange={handleSearchInputChange} />
+          </div>
         <table className="user-table">
           <thead>
             <tr>
@@ -175,25 +197,28 @@ const UserTable = () => {
                 <td>{user.email}</td>
                 <td>{user.mobile}</td>
                 <td>
-                  <button onClick={() => handleUpdate(user.id,user.firstName,user.lastName,user.email,user.mobile)}>Update</button>
+                  <button className='upadtebtn' onClick={() => handleUpdate(user.id,user.firstName,user.lastName,user.email,user.mobile)}>Update</button>
                   <button
                     onClick={() => userChangeStatus(user.id)}
-                    className={user.blocked ? 'block-btn' : 'unblock-btn'}
+                    className={user.status=='UNBLOCK'? 'unblock-btn' : 'block-btn'}
                   >
                     {user.status=='UNBLOCK' ? 'BLOCK' : 'UNBLOCK'}
                   </button>
-                  <button onClick={() => userDelete(user.id)}>Delete</button>
+                  <button className='deletebtn'onClick={() => userDelete(user.id)}>Delete</button>
                 </td>
               </tr>
             ))}
           </tbody>
+          {users.filter((user) => user.firstName.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
+      
+      <div className="no-user-message">No User Exists</div>
+    )}
         </table>
+        </div>
+        
       )}
-      {!showAddUser && !showUpdateUser && (
-        <button onClick={handleAdd} className="add-btn">
-          Add User
-        </button>
-      )}
+     
+     
     </div>
   );
 };

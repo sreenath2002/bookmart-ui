@@ -129,7 +129,7 @@ const CourseCategory= () => {
             </tr>
           </thead>
           <tbody>
-            {categories
+            {categories.filter((category)=>category.showStatus!=='false') 
                 .map((category) => (
               <tr key={category.id}>
                  <td>{category.id}</td>

@@ -10,6 +10,7 @@ const AddUser = (props) => {
   const [lastName, setLastName] = useState()
   const [email, setEmail] = useState();
   const [mobile, setMobile] = useState();
+  const [confirmpassword, setConfirmPassword] = useState('');
   const [password, setPassword] = useState();
   const [errorMessage, seterrorMessage] = useState('')
   const [errorMessage2, seterrorMessage2] = useState('')
@@ -19,6 +20,7 @@ const AddUser = (props) => {
     const [passwordError, setWrongPassword] = useState(false);
     const [firstNameError, setFirstNameError] = useState(false);
     const [secondNameError, setsecondNameError] = useState(false);
+    const [confirmpasswordError, setConfirmPasswordError] = useState(false);
   // const handleSubmit = (e) => {
   //   e.preventDefault();
   //   // Add logic to handle form submission (add new user)
@@ -34,6 +36,12 @@ const AddUser = (props) => {
   const handleFormValidation = async (event) => {
 
     event.preventDefault();
+    if (password !== confirmpassword) {
+      setConfirmPasswordError("Passwords do not match");
+      return;
+    } else {
+      setConfirmPasswordError('');
+    }
     try {
       await registrationValidation.validate(
         {
@@ -103,6 +111,7 @@ const AddUser = (props) => {
     }
 
   }
+  
 
   return (
     <div className="container">
@@ -111,36 +120,48 @@ const AddUser = (props) => {
     <div className="register-container">
         <div className='registerclass'>
       <form className="update-user-form">
-        <div className="form-group">
+        <div className="form-group1">
 
           {success && <div className="registration-success">Added SuccesFully</div>}
           {errorMessage && <div className="registration-error">Email Already Exists</div>}
           {errorMessage2 && <div className="registration-error">Ineternal Server Error!</div>}
           <label htmlFor="username">Firstname</label>
+          
           <input type="text" id="username" value={firstName} name="username" onChange={(e) => { setFirstName(e.target.value) }} required />
-        </div>
-        <div className="registration-error">{firstNameError}</div>
+       
+       {firstNameError && <h6 className="registration-error">{firstNameError}</h6>}
         <div className="form-group">
           <label htmlFor="username">Lastname</label>
           <input type="text" id="username" value={lastName} name="username" onChange={(e) => { setLastName(e.target.value) }} required />
         </div>
-        <div className="registration-error">{secondNameError}</div>
+       {secondNameError && <h6 className="registration-error">{secondNameError}</h6>}
+        </div>
         <div className="form-group">
 
           <label htmlFor="email">Email</label>
           <input type="email" id="email" value={email} name="email" onChange={(e) => { setEmail(e.target.value) }} required />
         </div>
-        <div className="registration-error">{emailValidationError}</div>
+       {emailValidationError&& <h6 className="registration-error">{emailValidationError}</h6>}
         <div className="form-group">
           <label htmlFor="phone">Phone Number</label>
           <input type="tel" id="phone" value={mobile} name="phone" onChange={(e) => { setMobile(e.target.value) }} required />
         </div>
-        <div className="registration-error">{mobilenumberError}</div>
+        {mobilenumberError && <h6 className="registration-error">{mobilenumberError}</h6>}
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input type="password" id="password" name="password" onChange={(e) => { setPassword(e.target.value) }} required />
         </div>
-        <div className="registration-error">{passwordError}</div>
+        {passwordError && <h6 className="registration-error">{passwordError}</h6>}
+        <div className="form-group">
+                        <input
+                            type="password"
+                            value={confirmpassword  }
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Enter Password again"
+                            required
+                        />
+                    </div>
+                    { confirmpasswordError && <h6 className="registration-error">{confirmpasswordError}</h6>}
         <button onClick={handleFormValidation} className="update-btn">Add</button>
         <button onClick={props.handleBack} className="back">Back</button>
       </form>

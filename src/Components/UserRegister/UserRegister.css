@@ -95,10 +95,15 @@ body {
     color:blue;
     cursor: pointer;
 
+
+  }
+  .already-have{
+    margin-left: 50px;
+
   }
 
   .register-container {
-    margin-left: 20px;
+    margin-left: 450px;
   
   }
   @media (max-width: 425px) {

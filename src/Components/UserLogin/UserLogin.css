@@ -2,7 +2,7 @@
 
 .login-container {
   width: 300px; /* Adjust the width as needed */
-  margin: auto; /* Center the container */
+  margin-left: 10px;
   padding: 40px; /* Add padding for better spacing */
   display: flex;
 
@@ -28,7 +28,12 @@ margin-left: 5px;
   font-size: 16px; /* Adjust font size */
 }
 
-  
+  .forgot-password-link{
+    margin-left: 70px;
+  }
+  .new-user{
+    margin-left: 50px;
+  }
 
   .registration-error {
     /* Green background color */

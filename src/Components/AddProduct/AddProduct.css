@@ -1,91 +1,100 @@
-.add-product-form {
+/* CSS for smaller input fields */
+.add-product-form input[type="text"] {
+  width: 80%; /* Adjust the width as needed */
+  margin-right: 5px;
+  padding: 8px;
+  font-size: 14px; /* Adjust the font size */
+}
+
+/* CSS for flex container to display inputs in one line */
+.add-product-form .flex {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+ 
+
+}
+
+.addProduct{
+  margin-top: 60%;
+}
+
+.add-product-form{
+  margin-top: 70%;
+}
+/* CSS for labels */
+.add-product-form label {
+  margin-top: 10px;
+  font-size: 14px; /* Adjust label font size */
+}
+
+/* CSS for select dropdowns */
+.add-product-form select {
+  width: 45%; /* Adjust the width as needed */
+  margin-right: 5px;
+  padding: 8px;
+  font-size: 14px; /* Adjust the font size */
+}
+
+/* CSS for error messages */
+.add-product-form .registration-error {
+  font-size: 12px; /* Adjust the font size */
+  margin-top: 5px; /* Adjust margin top as needed */
+  color: red; /* Error message color */
+}
+
+/* CSS for buttons */
+.add-product-form button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 16px; /* Adjust the font size */
+  cursor: pointer;
+}
+
+/* CSS for selected images */
+.add-product-form .selected-images {
+  margin-top: 10px;
+}
+
+/* Responsive CSS */
+@media screen and (max-width: 320px) {
+  .add-product-form input[type="text"],
+  .add-product-form select {
+    width: 50%;
+    margin-bottom: 10px;
+  }
    
-   
-   
-    background-color: #f9f9f9;
-   
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  }
-  .addProduct{
-    /* margin-top: 130%; */
-    padding: 20px;
-  }
+ 
   
-  .add-product-form h2 {
-    text-align: center;
-    margin-bottom: 30px;
-  }
   
-  .flex {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .productadded{
-    color: #45a049;
-  }
-  .flex label {
-    flex: 1 0 28%;
-    font-weight: bold;
-  }
-  
-  .flex input {
-    flex: 1 0 68%;
+}
+
+@media screen and (max-width: 480px) {
+  .add-product-form {
+    max-width: 100%; /* Adjust the form to full width on smaller screens */
     padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    margin-left: 10px;
   }
-  
-  .selected-images {
-    margin-top: 30px;
+}
+
+@media screen and (min-width: 321px) and (max-width: 786px) {
+  .add-product-form input[type="text"],
+  .add-product-form select {
+    width: 48%; /* Adjust the width for two items in a row */
+    margin-bottom: 10px;
   }
-  
-  .selected-images img {
-    max-width: 120px;
-    margin-right: 20px;
-    margin-bottom: 20px;
+}
+
+@media screen and (min-width: 787px) and (max-width: 1024px) {
+  .add-product-form input[type="text"],
+  .add-product-form select {
+    width: 30%; /* Adjust the width for three items in a row */
+    margin-bottom: 10px;
   }
-  
-  button {
-    padding: 12px 24px;
-    margin-top: 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+}
+
+@media screen and (min-width: 1025px) {
+  .add-product-form input[type="text"],
+  .add-product-form select {
+    width: 45%; /* Reset width for larger screens */
   }
-  
-  button[type="submit"] {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #45a049;
-  }
-  
-  button[type="submit"]:focus {
-    outline: none;
-  }
-  
-  button:last-child {
-    background-color: #f44336;
-    color: white;
-    margin-left: 20px;
-  }
-  
-  button:last-child:hover {
-    background-color: #d32f2f;
-  }
-  .registration-error {
-    /* Green background color */
-   color: red; /* White text color */
-   padding: 10px 15px; /* Padding around the message */
-   border-radius: 5px; /* Rounded corners */
-   margin-bottom: 10px; /* Add some space below the message */
-   text-align: center; /* Center the text */
- }
-  
+}

@@ -68,7 +68,7 @@ const NavBar = () => {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/Products">Products</Nav.Link>
             { !jwtToken && <Link to="/UserLogin" className="nav-link">SignIn</Link>}
-            <Nav.Link href="#cart">Cart</Nav.Link>
+            <Nav.Link href="/cart">Cart</Nav.Link>
             {/* Add more Nav.Link components as needed */}
             <NavDropdown title="More" id="basic-nav-dropdown">
               {/* Add dropdown items if repquired */}

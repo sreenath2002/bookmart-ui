@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import ProductOverview from '../Components/ProductOverview/ProductOverview'
 import NavBar from '../Components/NavBar/Navbar'
 import { useParams } from 'react-router-dom';
+import UserReviewSection from '../Components/ReviewSection/UserReviewSection';
+import Footer from '../Components/Footer/Footer';
 
 function ProductDetails() {
   const jwtToken = localStorage.getItem('jwt');
@@ -23,6 +25,7 @@ function ProductDetails() {
         <br></br>
         
       <ProductOverview id={id}/>
+      <Footer/>
     </div>
   )
 }

@@ -1,88 +1,200 @@
-/* Styles for the New Arrivals heading */
-.newarriwal-heading {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: bolder;
-  
-   /* Adjust heading font size */
-  color: #333; /* Change color if needed */
+/* YourComponent.css */
+
+/* Adjust margin and padding as needed */
+.container {
+  margin-top: 20px;
+  padding: 0 15px;
 }
 
-/* Styles for the scrolling wrapper containing the cards */
+.main {
+  text-align: center;
+}
+
+.newarriwal-heading {
+  margin-top: 30px;
+  font-size: 34px;
+  font-weight: bold;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-style: oblique;
+  text-shadow: #0a0a0a;
+}
+
 .scrolling-wrapper {
   display: flex;
-  justify-content: space-around;
+  overflow-x: auto;
+  padding: 30px;
+  scroll-behavior: smooth;
+  padding: 20px 0; /* Adjust padding as needed */
 }
-
-.mainscroll {
-  display: flex;
-  overflow: scroll;
-}
-
-
-
-/* Styles for the individual cards */
-.book-card {
-  width: 500px; 
-  /* Set the width of each card */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-  border-radius: 8px; /* Round the corners */
-  overflow: hidden; /* Hide overflowing content */
-}
-.cardss{
-  display: flex;
-}
-
-.book-card .card-img-top {
+.scroll-btn {
+  position: absolute;
  
-  height: 100px; /* Set the height of the card image */
-  object-fit: cover; /* Cover the entire space */
-  border-top-left-radius: 8px; /* Rounded corners for image */
-  border-top-right-radius: 8px;
-}
-
-
-
-.book-card .book-name {
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 20px;
+  border: none;
+}
+
+.scroll-btn.left {
+  left: 10px; /* Adjust left button position */
+}
+
+.scroll-btn.right {
+  right: 10px; /* Adjust right button position */
+}
+
+/* Hide scrollbar */
+.scrolling-wrapper::-webkit-scrollbar {
+  display: none;
+}
+/* Define the animation */
+/* Define an animation */
+
+
+
+
+.view-all{
+text-align: right;
+color: cornflowerblue;
+cursor: pointer;
+}
+.view-all:hover {
+  text-decoration: underline;
+}
+
+.book-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: 230px;
+ 
+  /* Adjust card width for smaller size */
+  margin-right: 10px; /* Margin between cards */
+  border: 1px solid #ccc; /* Add border for a neat look */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 5px 10px 5px rgba(221, 217, 217, 0.1); /* Add shadow for depth */
+  transition: transform 0.3s ease-in-out; /* Smooth hover transition */
+}
+.cards-header {
+
+  justify-content: space-between; /* Align to the right end */
+  align-items: flex-start; /* Align to the top */
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.cart-icon,
+.wishlist-icon {
+  /* Add styles for your icons */
+  /* For example: */
+  margin-top: 13px;
+  font-size: 24px;
+  /* Add any other necessary styles */
+}
+
+.book-card:hover {
+  transform: scale(1.05); /* Slight scale-up on hover */
+}
+
+.zoom-image-container {
+  max-width: 50%;
+  max-height: 20vh;
+  overflow: hidden;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.zoom-img {
+  width: 100%;
+  /* Set image height to 150px */
+}
+
+.body_card {
+  padding: 10px;
+  text-align: left;
+}
+
+.book-name {
+  font-size: 16px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+}
+.body_card p{
+  text-align: left;
 }
 
-
-
-
-.book-card .real-price {
-  text-decoration: line-through; /* Strike through the original price */
-  color: #999; 
-  font-size: x-large;/* Change color if needed */
-}
-.book-card .course{
-  font-size: large;
-}
-.book-card .university{
-  font-size: large;
-}
-.book-card .semester{
-  font-size: large;
+.course,
+.university,
+.semester,
+.price,
+.real-price,
+.discount {
+  margin-bottom: 3px;
+  font-size: 14px;
 }
 
-.book-card .discount {
-  color: green; /* Change color for discount */
+.mybutton {
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff; /* Button background color */
+  color: #fff;
+
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.mybutton:hover {
+  background-color: #0056b3; /* Button background color on hover */
+}
+.price {
+  font-size: 16px;
+  color: #0a0a0a;
   font-weight: bold;
 }
 
-
-/* Style for the "Shop Now" button */
-.book-card .btn-primary {
-  width: 60%; /* Make the button full width */
-  margin-top: 10px;
-  margin-right: 30px; /* Add some top margin */
+.real {
+  font-size: 14px;
+  color: #777;
+  margin-left: 4px;
 }
-@media (max-width: 320px){
-  .newarriwal-heading {
-   margin-left: 35%;
 
+.discount {
+  font-size: 14px;
+  color: #43a047;
+  font-weight: bold;
+  margin-left: 4px;
+}
+.discounted-price{
+  font-size: large;
+  color: black;
+}
+
+/* Media query for responsiveness */
+@media screen and (max-width: 768px) {
+  .book-card {
+    width: 150px; /* Adjust card width for smaller screens */
+  }
+
+  .book-name {
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+
+  .course,
+  .university,
+  .semester,
+  .price,
+  .real-price,
+  .discount {
+    font-size: 12px; /* Adjust font size for smaller screens */
   }
 }

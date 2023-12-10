@@ -4,8 +4,9 @@ import './ProductTable.css'; // Import your CSS file for styling
 import AddProduct from '../AddProduct/AddProduct';
 import UpdateProduct from '../UpdateProduct/UpdateProduct';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { getProducts, deleteProduct } from '../../axios/service/adminServices';
-const ProductTable = () => {
+import { getProducts,getProductsByCourse, deleteProduct } from '../../axios/service/adminServices';
+import NavBar from '../NavBar/Navbar';
+const ProductTable = (props) => {
   const [books, setBooks] = useState([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showUpdateProduct, setShowUpdateProduct] = useState(false);
@@ -32,13 +33,14 @@ const ProductTable = () => {
    const role = useSelector((state) => state.user.role);
    
   const jwtToken = localStorage.getItem("jwt");
+  console.log(props.courseName)
   useEffect(() => {
-    
-    featchData(jwtToken)
+   
+   
     console.log("fdsj")
-    async function featchData(token){
+    async function fetchData(token,courseName){
       console.log("-------fist start-------")
-      const products= await getProducts(token);
+      const products= await getProductsByCourse(token,courseName);
       console.log("--------------------------------------------------")
       console.log("-----------hai--------");
       console.log("ejfsld")
@@ -51,6 +53,7 @@ const ProductTable = () => {
         console.log("----books------");
       }
     }
+    fetchData(jwtToken,props.courseName);
     
   },[refresh]);
   if (!jwtToken) {
@@ -154,7 +157,7 @@ const ProductTable = () => {
 
   return (
     <div className="product-table-container">
-       
+       <NavBar/>
       {deleteSuccesMessage && <div className='deleteSucces'>Deleted SUccesFully</div>}
       {updateSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
       {addSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
@@ -192,7 +195,7 @@ const ProductTable = () => {
           </tr>
         </thead>
         <tbody>
-          {books.filter((book) => book.title.toLowerCase().includes(searchQuery.toLowerCase())).map((book) => (
+          {books.filter((book) => book.status!='false' && book.title.toLowerCase().includes(searchQuery.toLowerCase())).map((book) => (
             <tr key={book.name}>
                 <td>{book.id}</td>
               <td>{book.title}</td>

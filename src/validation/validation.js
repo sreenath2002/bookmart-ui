@@ -3,11 +3,11 @@ import * as Yup from 'yup';
 const passwordRule = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
 
 export const registrationValidation = Yup.object().shape({
-  email: Yup.string().email('Invalid email address').required('Email is required!!'),
-  password: Yup.string().min(6, 'Password must be at least 6 characters').matches(passwordRule, 'Please create a stronger password').required('Password is required'),
+  email: Yup.string().required('Email is required!!').email('Invalid email address'),
+  password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters').matches(passwordRule, 'Please create a stronger password'),
   firstName: Yup.string().required('First name is required').matches(/^[A-Z]/, 'First name must start with a capital letter'),
   lastName: Yup.string().required('Last name is required'),
-  mobile: Yup.string().matches(/^\d{10}$/, 'Mobile number must be 10 digits').required('Mobile number is required'),
+  mobile: Yup.string().matches(/^[0-9]/, 'Mobile number must contain only numbers').matches(/^\d{10}$/, 'Mobile number must be 10 digits').required('Mobile number is required'),
  
 });
 
@@ -35,3 +35,11 @@ export const addProductValidation=Yup.object().shape({
         .min(5, 'At least Five images are required')
         .required('Images are Required')
 })
+export const updateUserValidation = Yup.object().shape({
+  email: Yup.string().required('Email is required!!').email('Invalid email address'),
+  
+  firstName: Yup.string().required('First name is required').matches(/^[A-Z]/, 'First name must start with a capital letter'),
+  lastName: Yup.string().required('Last name is required'),
+  mobile: Yup.string().required('Mobile number is required').matches(/^\d{10}$/, 'Mobile number must be 10 digits').matches(/^[0-9]/, 'Mobile number must contain only numbers'),
+ 
+});

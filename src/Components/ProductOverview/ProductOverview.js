@@ -1,72 +1,90 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { getProductSelectedProductDetails } from '../../axios/service/productsService';
-import './ProductOverview.css'; // Import a CSS file for custom styles
-import { useEffect } from 'react';
-import { Token } from '@mui/icons-material';
+import ReactImageZoom from 'react-image-zoom';
+import './ProductOverview.css';
+import UserReviewSection from '../ReviewSection/UserReviewSection';
 const ProductOverview = (props) => {
- const[selecteddBookDetails,setNewArrivalBookDetails]=useState([])
+  const [selecteddBookDetails, setNewArrivalBookDetails] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mainImage, setMainImage] = useState('');
+  const [error, setError] = useState(null);
 
- const jwtToken = localStorage.getItem("jwt");
- useEffect(() => {
-  console.log("object")
-  async function fetchData(jwtToken,id) {
-    try {
-      console.log("-------first start-------")
-      console.log(jwtToken)
-      const newArrivalsDetails = await getProductSelectedProductDetails(jwtToken,id);
-      console.log("--------------------------------------------------")
-      console.log("-----------byeeeeee--------");
-      console.log("ejfsld")
+  const jwtToken = localStorage.getItem("jwt");
+
+  useEffect(() => {
+    async function fetchData(jwtToken, id) {
+      try {
+        const newArrivalsDetails = await getProductSelectedProductDetails(jwtToken, id);
+        if (newArrivalsDetails.statuscode === '200 OK') {
+          setNewArrivalBookDetails(newArrivalsDetails.result);
       
-      if (newArrivalsDetails.statuscode === '200 OK') {
-        console.log("jfsd")
-        console.log(newArrivalsDetails.result)
-        setNewArrivalBookDetails(newArrivalsDetails.result)
-        console.log(newArrivalsDetails.result)
-        console.log("----books------");
+          setIsLoading(false);
+        }
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.log("Errorrrrrrrrrrrrrrrrrrrrrrr:", err);
     }
-  }
-  fetchData(jwtToken,props.id);
-   // Call the fetchData function with props.id
-}, [props.id]);
-  // Sample product data
-  
+    fetchData(jwtToken, props.id);
+  }, [props.id]);
 
-  return (
-    <Container>
-      <Row>
+  useEffect(() => {
+    if (selecteddBookDetails.images && selecteddBookDetails.images.length > 0) {
+      setMainImage(selecteddBookDetails.images[2].imageUrl);
+    }
+  }, [selecteddBookDetails]);
+
+  const handleImageClick = (imageUrl) => {
+    setMainImage(imageUrl);
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Render a loading state while data is fetched
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>; // Render an error message if fetching data fails
+  }
+
+   return (
+    <div className='overview'>
+      <div className="product-row">
         {/* Main product image */}
-        <Col md={6}>
-        
-          <img src={selecteddBookDetails.images[2].imageUrl } alt="Main Product" className="main-product-image" />
-          <Row className="additional-images">
-            {/* Additional product images */}
-            {selecteddBookDetails.images.map((image, index) => (
-              <Col key={index} xs={3}>
-                <img src={image.imageUrl} alt={`Product ${index + 1}`} className="additional-image" />
-              </Col>
-            ))}
-          </Row>
-        </Col>
+        <div md={6} className="d-flex justify-content-center align-items-center">
+          <div>
+          <ReactImageZoom 
+            width={300}
+            height={300}
+            zoomWidth={300 }
+            
+            img={mainImage}
+            alt="Main Product"
+          />
+            <div className="additional-images">
+              {/* Additional product images */}
+              {selecteddBookDetails.images.map((image, index) => (
+                <div key={index} xs={3} onClick={() => handleImageClick(image.imageUrl)}>
+                  <img src={image.imageUrl} alt={`Product ${index + 1}`} className="additional-image" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
         {/* Product details */}
-        <Col md={6}>
-          <div className="product-details">
-            <h2 className="product-name">Book name :{selecteddBookDetails.title}</h2>
-         
-            <p className="product-info">Course Name :{selecteddBookDetails.course.courseName}</p>
-            <p className="product-info">University Name :{selecteddBookDetails.university.universityName}</p>
-            <p className="product-info">Semester :{selecteddBookDetails.semester.name}</p>
-            <p className="product-info">Author: {selecteddBookDetails.author}</p>
-            <p className="product-price">
-              <span className="real-price">Rs.{selecteddBookDetails.discountedPrice}</span>
-              <br></br>
-              <span className="discounted-price"><s>Rs.{selecteddBookDetails.price}</s></span>
-              <br></br>
-              <span className="discounted-price">{selecteddBookDetails.discountPresent} % OFF</span>
+        <div md={6} className="d-flex justify-content-center align-items-center ">
+          <div className="details">
+            <h2 className="name"> {selecteddBookDetails.title}</h2>
+            <p className="info">Course Name: {selecteddBookDetails.course.courseName} {selecteddBookDetails.subject.subjectName}</p>
+            <p className="info">University Name: {selecteddBookDetails.university.universityName}</p>
+            <p className="info">Semester: {selecteddBookDetails.semester.name}</p>
+            <p className="info">Author: {selecteddBookDetails.author}</p>
+            <p className="price">
+              <span className="product-price ">${selecteddBookDetails.discountedPrice}</span>
+              
+              <span className="real-price"><s>${selecteddBookDetails.price}</s></span>
+             
+              <span className="discountedprice">{selecteddBookDetails.discountPresent}% OFF</span>
             </p>
             <div className="action-buttons">
               <Button variant="primary" className="add-to-cart-button">
@@ -76,15 +94,19 @@ const ProductOverview = (props) => {
                 Buy Now
               </Button>
             </div>
+            
+            <p className="product-info">Description</p>
+            <p className='description'>{selecteddBookDetails.description}</p>
+           
           </div>
-          <div className="product-description">
-            <h3>Description</h3>
-            {/* <p>{selecteddBookDetails.description}</p> */}
-          </div>
-        </Col>
-      </Row>
-    </Container>
+         
+        </div>
+       
+      </div>
+      <UserReviewSection/>
+    </div>
   );
 };
 
 export default ProductOverview;
+

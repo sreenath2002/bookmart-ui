@@ -20,6 +20,14 @@ import UserRegister from './Components/UserRegister/UserRegister';
 import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
 import MainCategoryTable  from './Components/Category/MainCategoryTable'
 import CourseCAtegory from './Components/CourseCategory/CourseCAtegory'
+import Cart from './Components/Cart/Cart';
+import UserProfile from './Components/UserProfile/UserProfile';
+import Orders from './Components/Orders/Orders';
+import OrderedProductDetails from './Components/OrderedProductDetails/OrderedProductDetails';
+import UserCart from './Pages/UserCart';
+import Checkout from './Components/CheckoutPage/Checkout';
+import Allproducts from './Pages/Allproduts';
+import CheckoutPage from './Pages/CheckoutPage';
 function App() {
   return (
     <div className="App">
@@ -28,13 +36,18 @@ function App() {
           {/* <Route path='/' element={<OpeningPage/>} /> */}
           <Route path='/' element={<HomePageUser/>}/>
           <Route path='/ProductDetails/:id' element={<ProductDetails/>}/>
-          <Route path='/Products' element={<ProductsPage/>}/>
+          <Route path='/Products' element={<Allproducts/>}/>
           <Route path='/AdminLogin' element={<AdminLogin/>}/>
            <Route path='/Category' element={<MainCategoryTable/>}/>
            <Route path='/CourseCategory' element={<CourseCAtegory/>}/>
+           <Route path='/profile' element={<UserProfile/>}/>
+           <Route path='/orders' element={<Orders/>}/>
+           <Route path='/orderedproductdetails' element={<OrderedProductDetails/>}/>
           <Route path='/AdminPage' element={<AdminDashBoard/>}/>
           <Route path='/UserDetails' element={<UserDetails/>}/>
-          <Route path='/ProductTable' element={<ProductTableDetails/>}/>
+          <Route path='/cart' element={<UserCart/>}/>
+          <Route path='/checkout' element={<CheckoutPage/>}/>
+          <Route path='/ProductTable/:selectedCourse' element={<ProductTableDetails/>}/>
           <Route path='/UserLogin' element={<UserLogin/>}/>
           <Route path='/UserRegister' element={<UserRegister/>}/>
           <Route path='/ForgotPassword' element={<ForgotPassword/>}/>

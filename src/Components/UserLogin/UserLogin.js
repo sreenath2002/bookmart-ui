@@ -95,7 +95,15 @@ const UserLogin = () => {
           email: email,
           password: password,
         });
-          if(response.data.message==="USER IS BLOCKED")
+        if(response.data.message==="USER IS DELETED")
+        {
+                 setSigninError(true);
+                 setTimeout(()=>{
+                  setSigninError(false)
+                 },3000)
+        }
+        
+          else if(response.data.message==="USER IS BLOCKED")
           {
                    setBlockedMessage(true);
                    setTimeout(()=>{
@@ -113,12 +121,7 @@ const UserLogin = () => {
           }
           
 
-        } else {
-          setSigninError(true);
-          setTimeout(() => {
-            setSigninError(false);
-          }, 3000);
-        }
+        } 
       } catch (err) {
         console.error(err);
         setError(true);

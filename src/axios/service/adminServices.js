@@ -160,6 +160,21 @@ export const getProducts = async (token, ) => {
     console.log("yddhsgojchofjdhk")
     return data;
 };
+
+
+export const getProductsByCourse = async (token,courseName ) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.get(`/products/${courseName}`,  config);
+    console.log("yddhsgojchofjdhk")
+    return data;
+};
+
 export const deleteProduct = async (token,deleteProdcuctId ) => {
     console.log("rtyui")
     const config = {

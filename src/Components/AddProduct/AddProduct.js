@@ -273,7 +273,8 @@ console.log('Validation Errors:', errors);
             onChange={(e) => setTitle(e.target.value)}
             required
           />
-          <div className="registration-error">{titleError}</div>
+          {titleError && <div className="registration-error">{titleError}</div>}
+          
           <label htmlFor="description">Description</label>
           <input
             type="text"
@@ -283,7 +284,7 @@ console.log('Validation Errors:', errors);
             onChange={(e) => setDescription(e.target.value)}
             required
           />
-          <div className="registration-error">{descriptionError}</div>
+          {descriptionError && <div className="registration-error">{descriptionError}</div>}
         </div>
         <br />
         <div className='flex'>
@@ -296,7 +297,7 @@ console.log('Validation Errors:', errors);
             onChange={(e) => setPrice(e.target.value)}
             required
           />
-          <div className="registration-error">{priceError}</div>
+         {priceError && <div className="registration-error">{priceError}</div>}
           <label htmlFor="discountedPrice">Discounted Price</label>
           <input
             type="text"
@@ -306,7 +307,7 @@ console.log('Validation Errors:', errors);
             onChange={(e) => setDiscountedPrice(e.target.value)}
             required
           />
-          <div className="registration-error">{discountedPriceError}</div>
+          {discountedPriceError && <div className="registration-error">{discountedPriceError}</div>}
         </div>
         <br />
         <div className='flex'>
@@ -319,7 +320,7 @@ console.log('Validation Errors:', errors);
             onChange={(e) => setDiscountPresent(e.target.value)}
             required
           />
-          <div className="registration-error">{discountPresentError}</div>
+          {discountPresentError && <div className="registration-error">{discountPresentError}</div>}
           <label htmlFor="quantity">Quantity</label>
           <input
             type="text"
@@ -329,7 +330,7 @@ console.log('Validation Errors:', errors);
             onChange={(e) => setQuantity(e.target.value)}
             required
           />
-          <div className="registration-error">{quantityError}</div>
+         {quantityError &&  <div className="registration-error">{quantityError}</div>}
         </div>
         <div className='flex'>
           <label htmlFor="author">Author</label>
@@ -344,7 +345,7 @@ console.log('Validation Errors:', errors);
         
 
         </div>
-        <div className="registration-error">{authorError}</div>
+        {authorError &&<div className="registration-error">{authorError}</div>}
         <div className='flex'>
 
           <label htmlFor="category">Category</label>
@@ -356,7 +357,7 @@ console.log('Validation Errors:', errors);
               </option>
             ))}
           </select>
-          <div className="registration-error">{categoryError}</div>
+          {categoryError && <div className="registration-error">{categoryError}</div>}
           <label htmlFor="course">Course</label>
           <select id="course" name="course" value={course} onChange={(e) => getsubject(e.target.value)} required>
             <option value="">Select Course</option>
@@ -368,7 +369,7 @@ console.log('Validation Errors:', errors);
             ))
             }
           </select>
-          <div className="registration-error">{courseError}</div>
+          {courseError && <div className="registration-error">{courseError}</div>}
 
 
           {/* Add similar dropdowns for subject, university, category, subcategory, semester */}
@@ -385,7 +386,7 @@ console.log('Validation Errors:', errors);
             ))}
 
           </select>
-          <div className="registration-error">{subjcetError}</div>
+         {subjcetError && <div className="registration-error">{subjcetError}</div>}
           <label htmlFor="university">University</label>
           <select id="university" name="university" value={university} onChange={(e) => setUniversity(e.target.value)} required>
             <option value="">Select University</option>
@@ -395,7 +396,7 @@ console.log('Validation Errors:', errors);
               </option>
             ))}
           </select>
-          <div className="registration-error">{universityError}</div>
+         {universityError && <div className="registration-error">{universityError}</div>}
 
 
           {/* Add similar dropdowns for subject, university, category, subcategory, semester */}
@@ -413,7 +414,7 @@ console.log('Validation Errors:', errors);
               </option>
             ))}
           </select>
-          <div className="registration-error">{semesterError}</div>
+         {semesterError && <div className="registration-error">{semesterError}</div>}
           
 
 
@@ -467,12 +468,7 @@ console.log('Validation Errors:', errors);
           </div>
         ))}
 
-
-
-
-
-
-        <button onClick={handleValidation}>Add</button>
+         <button onClick={handleValidation}>Add</button>
         <button onClick={handlCCancel}>Back</button>
       </form >
     </div >

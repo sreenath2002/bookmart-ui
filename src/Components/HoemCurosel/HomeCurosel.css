@@ -1,27 +1,118 @@
 .carosel-main {
-  background-image: url("/public/Images/istockphoto-1181643451-612x612.jpg");
+  background-image: url("/public/Images/jessica-ruscello-OQSCtabGkSY-unsplash.jpg");
   background-size: cover;
+  background-position: center center;
   background-repeat: no-repeat;
+  margin: auto; /* Center horizontally */
   margin-bottom: 50px;
- 
-  width: 100%;
-  height: 500px; 
-
   
+  
+ 
+  width: 70%;
+  height: 70%;
+
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(92, 90, 90, 0.2);
+  overflow: hidden;
+  position: relative;
+}
+
+
+/* Optional: Add a semi-transparent overlay to improve readability of content */
+.carosel-main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* Adjust the transparency as needed */
+}
+/* Book details container */
+.book-details {
+  display: flex;
+  align-items: center;
+  margin-top: 180px;
+  padding: 40px;
+  justify-content: space-evenly;
+}
+.book-details p{
+  text-align: left;
+}
+/* Book image styling */
+.book-image {
+  max-width: 20%; /* Adjust the image size */
+  height: auto;
+  border-radius: 8px; /* Rounded corners for the image */
+}
+
+/* Book info styling */
+.book-info {
+  max-width: 50%; /* Adjust the width */
+  padding: 10px;
+}
+
+/* Book title styling */
+.book-info h3 {
+  
+  margin-bottom: 10px;
+  font-size: 60px;
+  color: rgb(246, 246, 246);
+  font-weight: bold;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* Book description styling */
+.book-info p {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+/* "Show Now" button styling */
+.book-info button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #3498db; /* Button background color */
+  color: #fff; /* Button text color */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.book-info button:hover {
+  background-color: #2980b9; /* Darker color on hover */
+}
+
+/* Adjust carousel indicators' position if needed */
+.carousel-indicators {
+  bottom: -30px;
+}
+
+/* Optional: Left and Right carousel control buttons */
+.carousel-control-prev, .carousel-control-next {
+  background-color: transparent;
+  color: #000;
+  border: none;
+  font-size: 24px;
+}
+
+.carousel-control-prev:hover, .carousel-control-next:hover {
+  color: #555;
 }
 
 .maindiv-nav {
-  margin-top: 130%;
+  margin-top: 170%;
 }
 @media (max-width: 320px){
   .maindiv-nav {
-    margin-top: 100%;
+   
   }
 
 }
 @media (max-width: 768px){
   .carosel-main {
-    margin-top:200%; 
+    margin-top:300%; 
 
   }
 

@@ -1,59 +1,68 @@
 /* TableComponent.css */
 
 .table-container {
-    max-width: 100%;
-    overflow-x: auto;
-    /* margin-top: 150%; */
-  }
-  
-  .user-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .user-table th,
-  .user-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  .user-table th {
-    background-color: #f2f2f2;
-  }
-  
-  .user-table tbody tr:hover {
-    background-color: #f9f9f9;
-  }
-  
-  .user-table button {
-    padding-left: .3%;
-    margin-right: .3%;/* Adjusted button padding */
-    margin-right: 4px;
-    margin-bottom: 10px; /* Increased margin between buttons */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .user-table .block-btn {
-    background-color: #ff6347; /* Red color for block button */
-    color: #fff;
-  }
-  
-  .user-table .unblock-btn {
-    background-color: #32cd32; /* Green color for unblock button */
-    color: #fff;
-  }
-  
-  .add-btn {
-    margin-top: 20px;
-    padding: 8px 12px; /* Adjusted button padding */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .erooor{
-    color: red;
-  }
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td {
+  border: 1px solid #ddd;
+  padding: 12px; /* Increased padding for better readability */
+  text-align: left;
+}
+
+.user-table th {
+  background-color: #f2f2f2;
+}
+
+.user-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.user-table button {
+  padding: 8px 12px;
+  margin-right: 8px; /* Increased margin between buttons */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.user-table button.block-btn {
+  background-color: #ff6347; /* Red color for block button */
+  color: #fff;
+}
+
+.user-table button.unblock-btn {
+  background-color: #32cd32; /* Green color for unblock button */
+  color: #fff;
+}
+
+.add-btn {
+  margin-top: 20px;
+  padding: 10px 16px; /* Adjusted button padding */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #4caf50; /* Green color for add button */
+  color: #fff;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.add-btn:hover,
+.user-table button:hover {
+  opacity: 0.8; /* Reduced opacity on button hover */
+}
+
+.error {
+  color: red;
+  font-weight: bold; /* Emphasize error messages */
+}
+
   

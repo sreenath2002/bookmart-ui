@@ -10,9 +10,7 @@ function UserDetails() {
   }
   return (
     <div className='userdetails'>
-      <br></br>
-      <br></br>
-      <br></br>
+       
 
       {/* <AdminNavbar/> */}
        <UserTable/>

@@ -43,13 +43,24 @@
   .user-table .block-btn {
     background-color: #ff6347; /* Red color for block button */
     color: #fff;
-    margin-left: 50px;
+    padding: 2px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
+  }
+  .user-table td {
+    border: 3px black black; /* Add borders to table cells */
+    padding: 8px;
+  }
+  .search-bar{
+    margin-bottom: 20px;
   }
   
   .user-table .unblock-btn {
     background-color: #32cd32; /* Green color for unblock button */
     color: #fff;
-    margin-left: 50px;
+    padding: 2px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
   }
   
   .add-btn {
@@ -59,11 +70,77 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-bottom: 10px;
   }
   .upadtebtn{
-    margin-left: 50px;
+    
+  padding: 2px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
   .deletebtn{
-    margin-right: 40px;
+    padding: 2px;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+  .buttons{
+    display: flex;
+    justify-content: space-between;
+  }
+  .custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
   }
   
+  .alert-content {
+    text-align: center;
+  }
+  
+  .alert-buttons {
+    margin-top: 15px;
+  }
+  
+  .alert-buttons button {
+    margin: 0 10px;
+    padding: 8px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+  }
+  
+  .alert-buttons button:nth-child(1) {
+    background-color: #ff6347; /* Change background color */
+    color: #fff; /* Change text color */
+  }
+  
+  .alert-buttons button:nth-child(2) {
+    background-color: #f90303; /* Change background color */
+  }
+  
+  @media (max-width:320px) {
+
+    .table-container {
+    width: 100%;
+    margin-top: 70%;
+    margin-left: 32%;
+    
+   
+  }
+
+  }
+  @media (min-width:768px) {
+
+    .table-container {
+    width: 100%;
+    margin-top: 10%;
+    margin-left: 4%;
+    
+   
+  }
+  
+  }

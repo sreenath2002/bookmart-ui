@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './UpdateUser.css'; // Import your CSS file for styling
 import axios from 'axios';
 import { updateUser } from '../../axios/service/adminServices';
-import { registrationValidation } from '../../validation/validation';
+import { updateUserValidation } from '../../validation/validation';
 const UpdateUser = (props) => {
 
   const [firstName, setFirstName] = useState(props.firstName);
@@ -37,10 +37,10 @@ const UpdateUser = (props) => {
     event.preventDefault();
 
     try {
-      await registrationValidation.validate(
+      await updateUserValidation.validate(
         {
           email,
-          password,
+        
           firstName,
           lastName,
           mobile,
@@ -54,7 +54,7 @@ const UpdateUser = (props) => {
       try {
         const updateduserDetails = {
           email: email,
-          password: password,
+         
           firstName: firstName,
           lastName: lastName,
           mobile: mobile
@@ -105,6 +105,7 @@ const UpdateUser = (props) => {
 
   return (
     <div className="update-user-form-container">
+      <div className='container'>
       <form className="update-user-form">
         <div className="form-group">
 
@@ -114,30 +115,32 @@ const UpdateUser = (props) => {
           <label htmlFor="username">Firstname</label>
           <input type="text" id="username" value={firstName} name="username" onChange={(e) => { setFirstName(e.target.value) }} required />
         </div>
-        <div className="registration-error">{firstNameError}</div>
+        {firstNameError && <h6 className="registration-error">{firstNameError}</h6>}
         <div className="form-group">
           <label htmlFor="username">Lastname</label>
           <input type="text" id="username" value={lastName} name="username" onChange={(e) => { setLastName(e.target.value) }} required />
         </div>
-        <div className="registration-error">{secondNameError}</div>
+        {secondNameError && <h6 className="registration-error">{secondNameError}</h6>}
         <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" value={email} name="email" onChange={(e) => { setEmail(e.target.value) }} required />
-        </div>
-        <div className="registration-error">{emailValidationError}</div>
+  <label htmlFor="email">Email</label>
+  <input type="email" id="email" value={email} name="email" readOnly />
+</div>
+
+        {emailValidationError && <h6 className="registration-error">{emailValidationError}</h6>}
         <div className="form-group">
           <label htmlFor="phone">Phone Number</label>
-          <input type="tel" id="phone" value={mobile} name="phone" onChange={(e) => { setMobile(e.target.value) }} required />
+          <input type="tel" id="phone" value={mobile} name="phone" pattern="[0-9]*" onChange={(e) => { setMobile(e.target.value) }} required />
         </div>
-        <div className="registration-error">{mobilenumberError}</div>
-        <div className="form-group">
+       { mobilenumberError && <h6 className="registration-error">{mobilenumberError}</h6>}
+        {/* <div className="form-group">
           <label htmlFor="password">Password</label>
           <input type="password" id="password" name="password" onChange={(e) => { setPassword(e.target.value) }} required />
         </div>
-        <div className="registration-error">{passwordError}</div>
+        {passwordError && <div className="registration-error">{passwordError}</div>} */}
         <button onClick={handleFormValidation} className="update-btn">Update</button>
         <button onClick={props.handleBack} className="update-btn">Back</button>
       </form>
+      </div>
     </div>
   );
 };

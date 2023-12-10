@@ -1,20 +1,73 @@
 import React from 'react';
-import { Carousel } from 'react-bootstrap';
-import NavBar from '../NavBar/Navbar';
-import './HomeCurosel.css'; 
+import { Carousel, Button } from 'react-bootstrap';
+import './HomeCurosel.css'; // Import your CSS file
+
+
 const HomeCurosel = () => {
   return (
     <div className='maindiv-nav'>
-   
- <div className='carosel-main'>
- <NavBar/>
-  <div className='left-div'>
-    dfcghjbknmnbdsmdsf
-  </div>
-  
- </div>
+    
+      <div className='carosel-main'>
+    
+        <Carousel >
+          {/* Book 1 */}
+          <Carousel.Item>
+            <div className='book-details'>
+              <img
+                className='book-image'
+                src='Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg'
+                alt='Book 1'
+              />
+              <div className='book-info'>
+              <h3>Transactions</h3>
+                <p>Author: Author Name</p>
+                <p>Description: Book description goes here.</p>
+                <Button variant='primary'>Show Now</Button>
+              </div>
+            </div>
+          </Carousel.Item>
 
- </div>
+          {/* Book 2 */}
+          <Carousel.Item>
+            <div className='book-details'>
+              <img
+                className='book-image'
+                src='Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg'
+                alt='Book 2'
+              />
+              <div className='book-info'>
+              <h3>Transactions</h3>
+                <p>Author: Author Name</p>
+                <p>Description: Book description goes here.</p>
+                <Button variant='primary'>Show Now</Button>
+              </div>
+            </div>
+          </Carousel.Item>
+
+          {/* Book 3 */}
+          <Carousel.Item>
+            <div className='book-details'>
+              <img
+                className='book-image'
+                src='Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg'
+                alt='Book 3'
+              />
+              <div className='book-info'>
+                <h3>Transactions</h3>
+                <p>Author: Author Name</p>
+                <p>Description: Book description goes here.</p>
+                <Button variant='primary'>Show Now</Button>
+              </div>
+            </div>
+          </Carousel.Item>
+        </Carousel>
+      </div>
+    </div>
+  );
+};
+
+export default HomeCurosel;
+
  
 
 
@@ -129,9 +182,9 @@ const HomeCurosel = () => {
 //     <span class="visually-hidden">Next</span>
 //   </button>
 // </div>
-  )
+//   )
 
-};
+// };
 
-export default HomeCurosel;
+// export default HomeCurosel;
 

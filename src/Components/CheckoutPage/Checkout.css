@@ -1,0 +1,308 @@
+/* Checkout.css */
+
+.checkout-container {
+    display: flex;
+    width: 100%;
+  height: 50%;
+margin-top: 50px;
+  padding: 20px;
+  
+  }
+ 
+  
+  .address-details,
+  .products-details,
+  .payment-options {
+    flex-basis: calc(50% - 20px);
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 17px;
+    margin-top: 10px;
+    width: 200%;
+    box-shadow: 3px 7px 4px rgba(0, 0, 0, 0.1);
+  }
+  .email-enter{
+    display: flex;
+    margin-top: 10px;
+  }
+  .email-enter button{
+   
+    font-size: 10px;
+  }
+  .products-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgb(230, 239, 239);
+  }
+  
+  .product-item img {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+  }
+  
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .quantity-control button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+  }
+  
+  
+  .payment-options div {
+    margin-bottom: 10px;
+  }
+  
+  .payment-options input[type="radio"] {
+    margin-right: 10px;
+  }
+  
+  .payment-options label {
+    cursor: pointer;
+  }
+  
+  .price-details {
+    flex-basis: calc(50% - 20px);
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    height: 26vh;
+    margin-left: 400px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  }
+ 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 999; 
+  }
+  
+  /* Styles for the payment popup */
+  .payment-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    z-index: 1000; /* Place it above the overlay */
+  }
+  
+  
+  .payment-popup h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .payment-options-icons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .payment-options-icons i {
+    font-size: 2rem;
+    cursor: pointer;
+  }
+  
+  .payment-options-text {
+    margin-bottom: 20px;
+  }
+  
+  .payment-options-text label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .payment-options-text input[type="radio"] {
+    margin-right: 5px;
+  }
+  
+  .popup-buttons {
+    display: flex;
+    justify-content: space-around;
+  }
+  .address-change-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    max-width: 90%;
+    width: 400px;
+  }
+  
+  .address-change-popup h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .address-change-popup input[type='text'] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .address-change-popup button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .address-change-popup button:hover {
+    background-color: #45a049;
+  }
+  /* Checkout.css */
+
+/* Existing styles... */
+
+/* Confirmation popup styles */
+.confirmation-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-width: 90%;
+  width: 300px;
+  text-align: center;
+}
+
+.confirmation-popup h2 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.confirmation-buttons button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.confirmation-buttons button:nth-child(1) {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.confirmation-buttons button:nth-child(1):hover {
+  background-color: #45a049;
+}
+
+.confirmation-buttons button:nth-child(2) {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.confirmation-buttons button:nth-child(2):hover {
+  background-color: #d32f2f;
+}
+@keyframes slideInFromBelow {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Apply animation to specific elements */
+.address-details,
+.products-details,
+.email-enter,
+.price-details {
+  animation: slideInFromBelow 1.5s ease-in-out forwards;
+}
+
+
+
+@media (max-width: 768px) {
+  .checkout-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin-top: 300px;
+  }
+  
+  .address-details,
+  .products-details,
+  .price-details {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+  
+  .address-details,
+  .products-details {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .price-details {
+    height: auto;
+  }
+
+  .payment-options-icons,
+  .payment-options-text {
+    text-align: center;
+  }
+
+  .payment-popup,
+  .address-change-popup,
+  .confirmation-popup {
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .confirmation-buttons {
+    flex-direction: column;
+  }
+
+  .confirmation-buttons button {
+    margin: 10px 0;
+  }
+}

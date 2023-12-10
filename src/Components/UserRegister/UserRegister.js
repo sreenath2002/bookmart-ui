@@ -11,6 +11,7 @@ const UserRegister = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmpassword, setConfirmPassword] = useState('');
     const [email, setEmail] = useState('');
     const [mobile, setMobile] = useState('');
     const [otp, setOtp] = useState('');
@@ -25,6 +26,7 @@ const UserRegister = () => {
     const [otpsendSucces, setotpSendSucces] = useState(false);
     const [mobilenumberError, setMobileNumberError] = useState(false);
     const [passwordError, setWrongPassword] = useState(false);
+    const [confirmpasswordError, setConfirmPasswordError] = useState(false);
     const [firstNameError, setFirstNameError] = useState(false);
     const [secondNameError, setsecondNameError] = useState(false);
     const [otpsendFailed, setotpSendFailed] = useState(false)
@@ -180,9 +182,16 @@ const UserRegister = () => {
 
           } 
     }
+    
      
     const handleFormValidation=async (event)=>{
         event.preventDefault();
+        if (password !== confirmpassword) {
+            setConfirmPasswordError("Passwords do not match");
+            return;
+          } else {
+            setConfirmPasswordError('');
+          }
         try {
             await registrationValidation.validate(
               {
@@ -262,6 +271,7 @@ const UserRegister = () => {
                 if (res.data.statuscode == "201 CREATED") {
                     startTimer();
                     setSendOtp(false)
+                    console.log(res.data.result);
                      setverifyOtp(true)
                     setotpSendSucces(true)
                     
@@ -443,9 +453,19 @@ const UserRegister = () => {
                         />
                     </div>
                     <div className="registration-error">{passwordError}</div>
+                    <div className="input-groups">
+                        <input
+                            type="password"
+                            value={confirmpassword  }
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Enter Password again"
+                            required
+                        />
+                    </div>
+                    <div className="registration-error">{confirmpasswordError}</div>
 
                     <button onClick={handleFormValidation}>Register</button></>)}
-                <div className='already have'>Already have Account?  <Link to="/UserLogin" className="signinlink ">SignIn</Link></div>
+                <div className='already-have'>Already have Account?  <Link to="/UserLogin" className="signinlink ">SignIn</Link></div>
             </form>
             </div>
         </div>

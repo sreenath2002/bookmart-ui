@@ -11,6 +11,9 @@ const UserTable = () => {
   const [showAddUser, setShowAddUser] = useState(false);
   const [showUpdateUser, setShowUpdateUser] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const[blockUserId,setBlockUserId]=useState();
+  const[blockUserStatus,setBlockUserStatus]=useState();
+  const[blockUserName,setBlockUserName]=useState();
   const [selectedUserFirstName, setSelectedUserFirstName] = useState(null);
   const [selectedUserLastName, setSelectedUserLastName] = useState(null);
   const [selectedUserEmail, setSelectedUserEmail] = useState(null);
@@ -22,6 +25,7 @@ const UserTable = () => {
   const[users,setUsers]=useState([])
   const [searchQuery, setSearchQuery] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const jwtToken = localStorage.getItem("jwt");
   const role = useSelector((state) => state.user.role);
  
@@ -47,6 +51,31 @@ const UserTable = () => {
     }
     
   },[refresh]);
+
+  const handleBlockUser = (userId,status,nameofUser) => {
+    setBlockUserId(userId);
+    if(status=='UNBLOCK'){
+      setBlockUserStatus('BLOCK')
+    }
+    else{
+      setBlockUserStatus('UNBLOCK')
+    }
+    setBlockUserName(nameofUser)
+    setShowAlert(true);
+    // ...other logic for blocking user
+  };
+
+  const confirmBlockUser = () => {
+   
+    setShowAlert(false);
+    userChangeStatus(blockUserId);
+    // ...logic to block user
+  };
+
+  const cancelBlockUser = () => {
+    setShowAlert(false);
+    // ...other cancel logic if needed
+  };
 
   if (!jwtToken) {
     
@@ -171,7 +200,8 @@ const UserTable = () => {
         <button onClick={handleAdd} className="add-btn">
           Add User
         </button>
-      )}
+        
+      )}<br></br>
            <div className="search-bar">
             <input type="text" placeholder="Search by Book Name" value={searchQuery} onChange={handleSearchInputChange} />
           </div>
@@ -188,7 +218,7 @@ const UserTable = () => {
           </thead>
           <tbody>
             {users
-                .filter((user) => user.role !== "ADMIN" && user.firstName.toLowerCase().includes(searchQuery.toLowerCase())).map((user) => (
+                .filter((user) => user.role !== "ADMIN" && user.showstatus !='false' && user.firstName.toLowerCase().includes(searchQuery.toLowerCase())).map((user) => (
               <tr key={user.id}>
                  <td>{user.id}</td>
 
@@ -197,14 +227,16 @@ const UserTable = () => {
                 <td>{user.email}</td>
                 <td>{user.mobile}</td>
                 <td>
+                  <div className='buttons'>
                   <button className='upadtebtn' onClick={() => handleUpdate(user.id,user.firstName,user.lastName,user.email,user.mobile)}>Update</button>
                   <button
-                    onClick={() => userChangeStatus(user.id)}
+                    onClick={() => handleBlockUser(user.id,user.status,user.firstName)}
                     className={user.status=='UNBLOCK'? 'unblock-btn' : 'block-btn'}
                   >
                     {user.status=='UNBLOCK' ? 'BLOCK' : 'UNBLOCK'}
                   </button>
                   <button className='deletebtn'onClick={() => userDelete(user.id)}>Delete</button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -214,6 +246,17 @@ const UserTable = () => {
       <div className="no-user-message">No User Exists</div>
     )}
         </table>
+        {showAlert && (
+        <div className="custom-alert">
+          <div className="alert-content">
+            <p>Are you sure you want to {blockUserStatus} {blockUserName}?</p>
+            <div className="alert-buttons">
+              <button onClick={confirmBlockUser}>OK</button>
+              <button onClick={cancelBlockUser}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
         </div>
         
       )}

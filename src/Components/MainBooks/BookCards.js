@@ -7,6 +7,8 @@ import { getScienceBooks,getCommerceBooks,getLanguageBooks } from '../../axios/s
 import ProductOverview from '../ProductOverview/ProductOverview';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { addToCart } from '../../axios/service/userService.s';
+import { useSelector } from 'react-redux';
 import ReactImageZoom from 'react-image-zoom';
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +18,8 @@ const BookCards = () => {
   const[scienceBooks,setScienceBooks]=useState([]);
   const[commerceBooks,setCommerceBooks]=useState([]);
   const[languageBooks,setLanguageBooks]=useState([]);
+  const id=useSelector((state)=>state.user.id)
+  const jwtToken = localStorage.getItem("jwt");
 
   // Dummy data for book cards
   const navigate = useNavigate();
@@ -31,7 +35,36 @@ const BookCards = () => {
       scrollingWrapperRef.current.scrollLeft += 200; // Adjust the scroll distance as needed
     }
   };
+ const handleAddToCart=async (bookId)=>{
+  try {
 
+    const productInfo = {
+
+      userId: id,
+      productId : bookId,
+      quantity: 1,
+    
+    }
+    console.log("productDetails===", productInfo)
+    const addtocart = await addToCart(jwtToken, productInfo)
+    console.log("lsdhgck")
+    console.log("addDetails", addtocart)
+
+    if (addtocart.statuscode === '200 OK') {
+     
+      console.log("Added to cart")
+    } else {
+      console.log("Not Added Cart")
+    }
+
+  }
+
+  catch (err) {
+    console.log("error", err)
+   
+  }
+
+ }
   useEffect(() => {
 
     featchData()
@@ -88,7 +121,7 @@ const BookCards = () => {
                     />
                   </div>
                   <div class="cards-header">
-                                  <FaShoppingCart className="cart-icon" />
+                                  <FaShoppingCart className="cart-icon"  onClick={()=>handleAddToCart(newArrivalbook.id)}/>
                                   <FaHeart className="wishlist-icon" />
                                 </div>
 
@@ -141,7 +174,7 @@ const BookCards = () => {
                     />
                   </div>
                   <div class="cards-header">
-                                  <FaShoppingCart className="cart-icon" />
+                                  <FaShoppingCart className="cart-icon" onClick={()=>handleAddToCart(scienceBook.id)} />
                                   <FaHeart className="wishlist-icon" />
                                 </div>
 
@@ -186,7 +219,7 @@ const BookCards = () => {
                     />
                   </div>
                   <div class="cards-header">
-                                  <FaShoppingCart className="cart-icon" />
+                                  <FaShoppingCart className="cart-icon" onClick={()=>handleAddToCart(commerceBook.id)}/>
                                   <FaHeart className="wishlist-icon" />
                                 </div>
                   <div >
@@ -229,7 +262,7 @@ const BookCards = () => {
                     />
                   </div>
                   <div class="cards-header">
-                                  <FaShoppingCart className="cart-icon" />
+                                  <FaShoppingCart className="cart-icon" onClick={()=>handleAddToCart(languageBook.id)}/>
                                   <FaHeart className="wishlist-icon" />
                                 </div>
                   <div >

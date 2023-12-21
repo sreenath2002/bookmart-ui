@@ -9,6 +9,8 @@ import { getCatgoriesFilter, getUniversityFilter, getCoursefilter, getSubjcetFil
 import FilterBox from '../FilterBox/FilterBox';
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import Footer from '../Footer/Footer';
+import { useSelector } from 'react-redux';
+import { addToCart,removeFromCart } from '../../axios/service/userService.s';
 
 const Products = () => {
   // Sample book data (can be fetched from an API or database)
@@ -18,6 +20,7 @@ const Products = () => {
   const [bookSubject, setSubjcets] = useState([]);
   const [bookuniversities, setUniversities] = useState([]);
   const [booksemesters, setSemesters] = useState([]);
+  const id=useSelector((state)=>state.user.id)
   const jwtToken = localStorage.getItem("jwt");
 
   useEffect(() => {
@@ -148,6 +151,36 @@ const Products = () => {
     }
 
   }
+  const handleAddToCart=async (bookId)=>{
+    try {
+  
+      const productInfo = {
+  
+        userId: id,
+        productId : bookId,
+        quantity: 1,
+      
+      }
+      console.log("productDetails===", productInfo)
+      const addtocart = await addToCart(jwtToken, productInfo)
+      console.log("lsdhgck")
+      console.log("addDetails", addtocart)
+  
+      if (addtocart.statuscode === '200 OK') {
+       
+        console.log("Added to cart")
+      } else {
+        console.log("Not Added Cart")
+      }
+  
+    }
+  
+    catch (err) {
+      console.log("error", err)
+     
+    }
+  
+   }
 
   return (
     <Container fluid>
@@ -309,7 +342,7 @@ const Products = () => {
                             <div>
                               <Card.Body className='body_card'>
                                 <div class="card-header">
-                                  <FaShoppingCart className="cart-icon" />
+                                  <FaShoppingCart className="cart-icon" onClick={()=>{handleAddToCart(book.id)}} />
                                   <FaHeart className="wishlist-icon" />
                                 </div>
                                 <Card.Title className="book-name">{book.title}</Card.Title>

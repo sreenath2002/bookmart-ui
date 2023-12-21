@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { useEffect } from 'react';
 import { setUser } from '../../redux/slices/userSlice';
 import axios from 'axios';
+import { LocalLaundryService } from '@mui/icons-material';
 const UserLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -114,6 +115,8 @@ const UserLogin = () => {
           console.log(response.data);
           console.log("sldjfkb");
           localStorage.setItem("jwt", response.data.jwt);
+          localStorage.setItem("id", response.data.id);
+          console.log(response.data.id)
           if(response.data.role === "USER")
           {
             dispatch(setUser({email,id:response.data.id,path:'/Home',firstName:response.data.firstName,lastName:response.data.lastName,mobile:response.data.mobile,role:response.data.role}))

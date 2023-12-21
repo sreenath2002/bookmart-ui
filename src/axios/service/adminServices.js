@@ -148,7 +148,7 @@ export const updateProduct = async (token, updateProductId,updatedproductDetails
     return data;
 };
 
-export const getProducts = async (token, ) => {
+export const getProducts = async (token ) => {
     const config = {
         headers: {
             Accept: 'application/json',
@@ -196,7 +196,9 @@ export const getUsers = async (token) => {
             'Content-Type': 'application/json',
         },
     };
+    
     const { data } = await axiosAdminInstance.get(`/users`, config);
+    console.log(data)
     return data;
 
 };
@@ -226,6 +228,7 @@ export const addUser = async (token, userDetails) => {
     console.log("data",data)
     return data;
 };
+
 export const addCategory = async (token, categoryDetails) => {
     const config = {
         headers: {
@@ -274,6 +277,41 @@ export const deleteCategory = async (token,deletecategoryId) => {
     const { data } = await axiosAdminInstance.delete(`/category/deleteCategory/${deletecategoryId}`, config);
     return data;
 
+};
+
+export const addStock = async (token, stockDetails) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.post('/stockadd',stockDetails, config);
+    return data;
+};
+
+export const updateStock = async (token, stokeId,updatestockDetails) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.put(`/stokupdate/${stokeId}`,updatestockDetails, config);
+    return data;
+};
+export const getAllStoks= async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.get(`/getStocksList`, config);
+    return data;
 };
 
 

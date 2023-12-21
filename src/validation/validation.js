@@ -24,7 +24,7 @@ export const addProductValidation=Yup.object().shape({
      
         discountedPrice:Yup.string().required('DiscountedPrice is Required').matches(/^[0-9]+$/, 'DiscountedPrice must contain only numbers'),
         discountPresent: Yup.string().required('Discount Perset is Required'),
-        quantity: Yup.string().required('Quantity is Required').matches(/^[0-9]+$/, 'Quantity must contain only numbers'),
+       
         course: Yup.string().required('Course is Required'),
         subject: Yup.string().required('Subjcet is Required'),
         university: Yup.string().required('University is Required'),
@@ -42,4 +42,30 @@ export const updateUserValidation = Yup.object().shape({
   lastName: Yup.string().required('Last name is required'),
   mobile: Yup.string().required('Mobile number is required').matches(/^\d{10}$/, 'Mobile number must be 10 digits').matches(/^[0-9]/, 'Mobile number must contain only numbers'),
  
+});
+
+export const changePasswordValidation = Yup.object().shape({
+  oldPassword: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters'),
+  newPassword: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters').matches(passwordRule, 'Please create a stronger password'),
+  retyped: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters').matches(passwordRule, 'Please create a stronger password'),
+});
+export const addressValidation = Yup.object().shape({
+  name: Yup.string()
+    .required('Name is required')
+    .matches(/^[A-Z][a-zA-Z]*$/, 'Name must start with a capital letter'),
+  secondName: Yup.string().required('Second Name is required'),
+  buildingNumber: Yup.number()
+    .typeError('Building number must be a number')
+    .required('Building number is required'),
+  streetAddress: Yup.string().required('Street address is required'),
+  landMark: Yup.string().required('LandMark is required'),
+  country: Yup.string().required('Country is required'),
+  city: Yup.string().required('City is required'),
+  state: Yup.string().required('State is required'),
+  zipcode: Yup.string()
+     
+    .required('Zipcode is required'),
+  phonenumber: Yup.string()
+    .matches(/^[0-9]{10}$/, 'Invalid Phone Number') 
+    .required('Phone number is required'),
 });

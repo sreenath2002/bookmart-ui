@@ -1,8 +1,8 @@
 /* TableComponent.css */
 
 .table-container {
-    max-width: 100%;
-    overflow-x: auto;
+    width: 100vw;
+
    
   }
   .adminnavbar
@@ -13,7 +13,7 @@
   }
   
   .user-table {
-    width: 100%;
+    width: 100vw;
     border-collapse: collapse;
     /* margin-bottom: 175%; */
    

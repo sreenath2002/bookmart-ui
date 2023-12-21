@@ -37,7 +37,7 @@ const CardComponent = () => {
     getCourse('PG');
   }
    function handleShowProductTable(){
-    navigate(`/ProductTable/${selectedCourse}`)
+    navigate(`/ProductTable/all`)
 
    }
 
@@ -52,7 +52,7 @@ const CardComponent = () => {
             <img src="Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg" alt="Small Image 1" className="card-image" />
             <p>Users</p>
           </div>
-          <div className="small-card" onClick={handleCategoryShow}>
+          <div className="small-card" onClick={handleShowProductTable}>
             <img src="Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg" alt="Small Image 2" className="card-image" />
             <p>Products</p>
           </div>
@@ -62,7 +62,7 @@ const CardComponent = () => {
             <img src="Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg" alt="Small Image 1" className="card-image" />
             <p>Users</p>
           </div>
-          <div className="small-card" onClick={handleCategoryShow}>
+          <div className="small-card" onClick={handleShowProductTable}>
             <img src="Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg" alt="Small Image 2" className="card-image" />
             <p>Products</p>
           </div>

@@ -10,18 +10,30 @@
 .cart-items {
   flex-grow: 1;
   padding-right: 20px;
+  
 
 }
+.cart-items p{
+  text-align: left;
+  
+}
+.productdetails{
+  font-size: 12px;
+}
+.title{
+  font-size: 15px;
+}
+
 
 .cart-item {
   display: flex;
   align-items: center;
-  width: 200%;
- 
+  width: 150%;
+  background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 19px;
-  box-shadow: 3px 7px 6px rgba(1, 0, 0, 0.1);
+  box-shadow: 13px 17px 6px rgba(1, 0, 0, 0.1);
   margin-bottom: 20px;
 }
 
@@ -45,12 +57,20 @@
 }
 
 .quantity-control button {
-  padding: 5px 10px;
+
   border: none;
-  background-color: #f0f0f0;
+background-color: green;
   cursor: pointer;
 }
-
+.discountperscent{
+  font-size: .9rem;
+  color: #4caf50;
+}
+.btn1{
+  font-weight: bolder;
+  color: black;
+  font-size: 1rem;
+}
 .cart-summary {
   flex-basis: 300px;
   height: 40vh;
@@ -58,8 +78,9 @@
   margin-bottom: 10px;
   padding: 15px;
   border: 1px solid #ccc;
+  background-color: #f0f0f0;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.1);
 }
 .cart-item  button{
   font-size: 10px;
@@ -67,11 +88,23 @@
 
 .cart-summary h2 {
   margin-bottom: 10px;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+.btns .buy{
+  background-color: #4caf50;
+}
+.btns .remove{
+  background-color: #ff0a0a;
+}
+.summary-line {
+ display: flex; 
+ justify-content: space-between;/* Adjust the vertical space between lines */
+}
+.summary-line{
+  font-size: 1rem;
 }
 
-.cart-summary p {
-  margin: 5px 0;
-}
 
 .cart-summary button {
   width: 100%;
@@ -115,9 +148,10 @@
 }
 
 .popup .close-icon {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  position: relative;
+  top: 0px;
+  right: 0px;
+
   cursor: pointer;
   font-size: 20px;
 }

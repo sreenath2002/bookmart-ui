@@ -1,6 +1,6 @@
 .table-container {
   margin-top: 20px;
-  overflow-x: auto;
+  /* overflow-x: auto; */
 }
 
 .user-table {

@@ -1,9 +1,7 @@
 body {
- margin-top: 0;
-height: 100vh;
-width: 10%;
- overflow: auto; 
-
+  margin: 0;
+  width: 100vw;
+  background-image: linear-gradient(to right, #b3aeae, #bbbbbb);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -11,13 +9,11 @@ width: 10%;
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
+/* 
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities;  */

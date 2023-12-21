@@ -6,7 +6,7 @@ import UpdateProduct from '../UpdateProduct/UpdateProduct';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { getProducts,getProductsByCourse, deleteProduct } from '../../axios/service/adminServices';
 import NavBar from '../NavBar/Navbar';
-const ProductTable = (props) => {
+const ProductTable = () => {
   const [books, setBooks] = useState([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showUpdateProduct, setShowUpdateProduct] = useState(false);
@@ -33,14 +33,14 @@ const ProductTable = (props) => {
    const role = useSelector((state) => state.user.role);
    
   const jwtToken = localStorage.getItem("jwt");
-  console.log(props.courseName)
+
   useEffect(() => {
    
    
     console.log("fdsj")
-    async function fetchData(token,courseName){
+    async function fetchData(token){
       console.log("-------fist start-------")
-      const products= await getProductsByCourse(token,courseName);
+      const products= await getProducts(token);
       console.log("--------------------------------------------------")
       console.log("-----------hai--------");
       console.log("ejfsld")
@@ -53,7 +53,7 @@ const ProductTable = (props) => {
         console.log("----books------");
       }
     }
-    fetchData(jwtToken,props.courseName);
+    fetchData(jwtToken);
     
   },[refresh]);
   if (!jwtToken) {
@@ -157,7 +157,7 @@ const ProductTable = (props) => {
 
   return (
     <div className="product-table-container">
-       <NavBar/>
+       {/* <NavBar/> */}
       {deleteSuccesMessage && <div className='deleteSucces'>Deleted SUccesFully</div>}
       {updateSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
       {addSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
@@ -181,7 +181,7 @@ const ProductTable = (props) => {
             <th>Price</th>
             <th>Discounted Price</th>
             <th>Discount Present</th>
-            <th>Quantity</th>
+        
             <th>Type</th>
             <th>Author</th>
             <th>Product Category</th>
@@ -203,7 +203,7 @@ const ProductTable = (props) => {
                 <td>{book.price}</td>
                 <td>{book.discountedPrice}</td>
                 <td>{book.discountPresent}</td>
-                <td>{book.quantity}</td>
+             
                 <td>{book.type}</td>
                 <td>{book.author}</td>
                <td>{book.parentCategory.name}</td>

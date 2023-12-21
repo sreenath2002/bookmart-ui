@@ -26,6 +26,7 @@ import Orders from './Components/Orders/Orders';
 import OrderedProductDetails from './Components/OrderedProductDetails/OrderedProductDetails';
 import UserCart from './Pages/UserCart';
 import Checkout from './Components/CheckoutPage/Checkout';
+import StockmanagementTable from './Components/StockManageMent/StockmangementTable';
 import Allproducts from './Pages/Allproduts';
 import CheckoutPage from './Pages/CheckoutPage';
 function App() {
@@ -47,11 +48,11 @@ function App() {
           <Route path='/UserDetails' element={<UserDetails/>}/>
           <Route path='/cart' element={<UserCart/>}/>
           <Route path='/checkout' element={<CheckoutPage/>}/>
-          <Route path='/ProductTable/:selectedCourse' element={<ProductTableDetails/>}/>
+          <Route path='/ProductTable/all' element={<ProductTableDetails/>}/>
           <Route path='/UserLogin' element={<UserLogin/>}/>
           <Route path='/UserRegister' element={<UserRegister/>}/>
           <Route path='/ForgotPassword' element={<ForgotPassword/>}/>
-          
+          <Route path='/stockmanagement' element={<StockmanagementTable/>}/>
         </Routes>
       </BrowserRouter> 
     </div>

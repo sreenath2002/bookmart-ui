@@ -1,54 +1,236 @@
 import React, { useState } from 'react';
 import './Checkout.css'; // Import your CSS file for styling
+import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Razorpay from 'razorpay';
+import { useEffect } from 'react';
+import Loader from '../LoaderIcon/Loader';
 
+import { Checkmark } from 'react-checkmark'
+import { getAllCountries ,getAllCities,getAllStates} from '../../axios/service/AddresDetails';
+import { addNewOrder } from '../../axios/service/orderService';
+import { addressValidation } from '../../validation/validation';
+import { userCartDetails, allAddress, removeFromCart, addAddress,getAllPaymentMethods,payMentRequest,shopOrderRequest } from '../../axios/service/userService.s';
 const Checkout = () => {
+  // const id = useSelector((state) => state.user.id)
+  const jwtToken = localStorage.getItem("jwt");
+  const id = localStorage.getItem("id");
+  const location = useLocation();
+  const navigate=useNavigate();
+  const cartItems = location.state?.cartItems || null
   // Sample data for address details
-  const [addressDetails, setAddressDetails] = useState({
-    fullName: 'John Doe',
-    addressLine: '123 Main Street',
-    city: 'City',
-    state: 'State',
-    postalCode: '12345',
-    country: 'Country',
-  });
+  const [addressDetails, setAddressDetails] = useState([]);
+  const[paymentTypes,setPaymentTypes]=useState([]);
+  const [products, setProducts] = useState([]);
+  const [showRemovePopup, setShowRemovePopup] = useState(false);
+  const [showPayemntSucces,setShowPaymentSuccesFullPopup]=useState(false);
+  const[showPayemntFiled ,setshowPayemntFiled]=useState(false);
+  const [loading,setLoading]=useState(false)
+  const[showLoader,setShowLoader]=useState(false)
+  const[orderPlaced,setOrderPlacedMessage]=useState(false);
+  const[orderPlacedFiled,setorderPlacedFiled]=useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [selectedAddresId, setSelectedAddresId] = useState(''); // Initialize with null or default ID
+  const [selectedPaymentId, setSelectedPaymentId] = useState(null);
+  const [refresh, setRefresh] = useState(false)
+  const [addresAddedSucces, setAddresAddedSucces] = useState();
+  const [addresNotAddedMEssage, setAddresNotAddedMessage] = useState();
+  const [errorMessage2, seterrorMessage2] = useState('')
+  const [name, setName] = useState('');
+  const [nameError, setNameError] = useState('');
+
+  const [secondName, setSecondName] = useState('');
+  const [secondNameError2, setSecondNameError2] = useState('');
+
+  const [buildingNumber, setBuildingNumber] = useState('');
+  const [buildingNumberError, setBuildingNumberError] = useState('');
+
+  const [streetAddress, setStreetAddress] = useState('');
+  const [streetAddressError, setStreetAddressError] = useState('');
+
+  const [landMark, setLandMark] = useState('');
+  const [landMarkError, setLandMarkError] = useState('');
+
+  const [city, setCity] = useState('');
+  const [cityError, setCityError] = useState('');
+
+  const [state, setState] = useState('');
+  const [stateError, setStateError] = useState('');
+
+  const [country, setCountry] = useState('');
+  const [countryError, setCountryError] = useState('');
+
+  const [zipcode, setZipcode] = useState('');
+  const [zipcodeError, setZipcodeError] = useState('');
+
+  const [phonenumber, setPhoneNumber] = useState('');
+  const [phonenumberError, setPhoneNumberError] = useState('');
+  const[countries,setCountries]=useState([]);
+  const[citiesOptions,setCitiesOptions]=useState([]);
+
+  const[stateOptions,setStateOptions]=useState([]);
+
+  const[emailError,setMessageSentEmailError]=useState(null);
+  const[addresSelectError,setAddresSelectError]=useState(null);
+  const[messageSentEmail,setMessageSentEmail]=useState(null);
+
+
+  useEffect(() => {
+
+    featchData(jwtToken)
+    console.log("fdsj")
+    async function featchData(token) {
+
+      const cartDetails = await userCartDetails(token, id);
+
+      const address = await allAddress(token, id);
+      const paymentMethods= await getAllPaymentMethods(token);
+      const countries=await getAllCountries();
+
+      console.log(address)
+      console.log("--------------------------------------------------")
+      console.log("-----------hai--------");
+      console.log(cartDetails)
+
+      if (cartDetails.statuscode === '200 OK') {
+        console.log("jfsd")
+        console.log(cartDetails.result)
+        setProducts(cartDetails.result)
+
+
+        console.log("---car-");
+      }
+      if (address.statuscode === '200 OK' && address.result != []) {
+        setAddressDetails(address.result);
+        console.log(addressDetails)
+      }
+      if (paymentMethods.statuscode === '200 OK' && paymentMethods.result != []) {
+       setPaymentTypes(paymentMethods.result);
+        console.log(paymentTypes);
+      }
+      if(countries.msg==="countries and cities retrieved")
+        {
+          setCountries(countries.data);
+          console.log(countries.data)
+        }
+    }
+
+  }, [refresh]);
+
+  const handleGetStates= async(selectedCountry) =>{
+    setCountry(selectedCountry)
+    console.log(selectedCountry)
+   const countynameDetails = {
+    country: selectedCountry
+   }
+
+    const sta = await getAllStates(countynameDetails)
+    console.log("Hiiii")
+    console.log(sta)
+    if (sta.msg === `states in ${selectedCountry} retrieved`) {
+       console.log("haiiiiiiiiiiiiiiiiiiiiiii") 
+      console.log(sta.data)
+      setStateOptions(sta.data.states);
+    }
+
+
+  } 
+  const handleAllCities= async(selectedState) =>{
+    setState(selectedState)
+    console.log(selectedState)
+   const countrystateDetails = {
+    country: country,
+    state:selectedState
+   }
+
+    const cit = await getAllCities(countrystateDetails)
+    console.log("Hiiii")
+    console.log(cit)
+    if (cit.msg === `cities in state ${selectedState} of country ${country} retrieved`) {
+       console.log("haiiiiiiiiiiiiiiiiiiiiiii") 
+      console.log(cit.data)
+      setCitiesOptions(cit.data);
+    }
+
+
+  }
+
   const [showAddressPopup, setShowAddressPopup] = useState(false);
   const handleShowAddressPopup = () => {
     setShowAddressPopup(true);
+    setName('');
+    setSecondName('');
+    setBuildingNumber('');
+    setStreetAddress('')
+    setLandMark('')
+    setCountry('')
+    setState('')
+    setCity('')
+    setZipcode('');
+    setPhoneNumber('');
+   
   };
 
   const handleCloseAddressPopup = () => {
+    
     setShowAddressPopup(false);
   };
+  
+  
 
+  const handlePay = ()=>{
+   
+    {
+      var options = {
+        key: 'rrzp_test_yr1CZZY1d8rgVY',
+        key_secret:"dwW4zFWOOECsvtIyxrZNLnAJ",
+        amount: total,
+        currency:"INR",
+        name:"BookMart",
+        description:"for testing purpose",
+        handler: function(response){
+          alert(response.razorpay_payment_id);
+        },
+        prefill: {
+          name:"Velmurugan",
+          email:"mvel1620r@gmail.com",
+          contact:"7904425033"
+        },
+        notes:{
+          address:"Razorpay Corporate office"
+        },
+        theme: {
+          color:"#3399cc"
+        }
+      };
+      var pay = new window.Razorpay(options);
+      pay.open();
+    }
+  }
+  
+   
+ 
+  
+ 
+  
   const handleAddressChange = (e) => {
     // Implement logic to update the address details
     // You can use e.target.name and e.target.value to get the updated values
     // Update the addressDetails state accordingly
   };
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: 'Product 1',
-      realPrice: 25.99,
-      price: 20.99,
-      discountPercentage: 20,
-      quantity: 1,
-      imageUrl: 'https://via.placeholder.com/150',
-    },
-    // Add more products as needed
-  ]);
-  const [showRemovePopup, setShowRemovePopup] = useState(false);
-  const [selectedProductId, setSelectedProductId] = useState(null);
+
   const handleShowRemovePopup = (id) => {
     setSelectedProductId(id);
     setShowRemovePopup(true);
+
   };
 
   const handleCloseRemovePopup = () => {
     setShowRemovePopup(false);
   };
   const handleConfirmRemove = () => {
-    const updatedProducts = products.filter((product) => product.id !== selectedProductId);
+    const updatedProducts = products.filter((product) => product.shoppingCartId !== selectedProductId);
     setProducts(updatedProducts);
     setShowRemovePopup(false);
     // Show a confirmation message after removing the product if needed
@@ -57,7 +239,10 @@ const Checkout = () => {
 
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
   const handleShowPaymentPopup = () => {
-    setShowPaymentPopup(true);
+    if(validateForm()){
+      setShowPaymentPopup(true);
+    }
+    
   };
 
   const handleClosePaymentPopup = () => {
@@ -67,12 +252,22 @@ const Checkout = () => {
   const [paymentOptions] = useState(['Cash on Delivery', 'GPay', 'Credit Card', 'PayPal']);
 
   // Calculate subtotal, total quantity, and total price
-  const subtotal = products.reduce((acc, product) => acc + product.price * product.quantity, 0);
-  const totalQuantity = products.reduce((acc, product) => acc + product.quantity, 0);
+
+  const subtotal = Array.isArray(products) && products.length > 0
+    ? products.reduce((acc, product) => acc + product.product.discountedPrice * product.quantity, 0)
+    : 0;
+
+  const totalQuantity = Array.isArray(products) && products.length > 0
+    ?products.length 
+    : 0;
+
+
   const total = subtotal;
 
+
+
   const handleRemoveItem = (id) => {
-    const updatedProducts = products.filter((product) => product.id !== id);
+    const updatedProducts = products.filter((product) => product.shoppingCartId !== id);
     setProducts(updatedProducts);
   };
 
@@ -90,111 +285,569 @@ const Checkout = () => {
     setProducts(updatedProducts);
   };
 
+  const handleOrderLine =async (orderId)=>{
+    try{
+      const productIdList = products.map(book => book.product.id);
+      const qty = products.map(book => book.quantity);
+      const price = products.map(book => book.product.discountedPrice);
+      const orderDetails = {
+        productIdList: productIdList,
+        orderId: orderId,
+        qty: qty,
+        price: price
+      };
+
+      const orderLine=await addNewOrder(jwtToken,orderDetails)
+      {
+        if(orderLine.statuscode === '200 OK')
+        {
+          setLoading(false)
+          setOrderPlacedMessage("Your Order Placed")
+          setTimeout(() => {
+            setOrderPlacedMessage(false);
+         setShowLoader(true);
+      
+         
+         setTimeout(() => {
+         
+       
+    
+       
+     setShowLoader(false)
+      navigate('/');
+        }, 4000)
+          }, 3000)
+
+        }
+        else{
+          setLoading(false)
+          setorderPlacedFiled("Internal Server Error")
+          setTimeout(() => {
+            setorderPlacedFiled(false);
+          }, 2000)
+  
+        }
+      }
+    }
+    catch (err) {
+      setLoading(false)
+      setorderPlacedFiled("Internal Server Error")
+      setTimeout(() => {
+        setorderPlacedFiled(false);
+      }, 2000)
+  
+  
+    }
+    
+
+  }
+  const handleShopOrder=async (payId)=>{
+
+    try{
+      const shopOrderDetails={
+        paymentInfoId:payId,
+        addresId:selectedAddresId
+      }
+      const  shop = await shopOrderRequest(jwtToken,id,shopOrderDetails)
+      if(shop.statuscode === '200 OK'){
+        handleOrderLine(shop.result);
+
+      }
+      else{
+        setLoading(false)
+        setorderPlacedFiled("Internal Server Error")
+        setTimeout(() => {
+          setorderPlacedFiled(false);
+          
+        }, 2000)
+
+      }
+  }
+
+  catch (err) {
+    setLoading(false)
+    setorderPlacedFiled("Internal Server Error")
+    setTimeout(() => {
+      setorderPlacedFiled(false);
+    }, 2000)
+
+
+  }
+}
+
+  const handleRemoveFromCart = (id) => {
+
+    setSelectedProductId(id);
+    setShowRemovePopup(true);
+  };
+const handlePaymentRequest = async ()=>{
+  if(selectedPaymentId!=3)
+  {
+
+  
+  try{
+    setShowPaymentPopup(false);
+    setLoading("Proccessing......");
+
+    const payMentDetails={
+      paymentId:selectedPaymentId,
+      amount:total
+    }
+    const pay = await payMentRequest(jwtToken,id, payMentDetails)
+    if (pay.statuscode === '200 OK') {
+      
+     
+      setTimeout(()=>{
+           setLoading(false)
+           setShowPaymentSuccesFullPopup(true);
+           setLoading("Loading.......")
+
+
+           setTimeout(() => {
+            setShowPaymentSuccesFullPopup(false);
+              setLoading(false)
+            
+            
+              handleShopOrder(pay.result);
+           
+        
+          }, 3000);
+      },3000)
+     
+
+
+
+    }
+    else{
+      setshowPayemntFiled("Internal Server Error");
+      setTimeout(() => {
+        setshowPayemntFiled(false);
+      }, 2000)
+    }
+
+  }
+  catch (err) {
+    setshowPayemntFiled("Internal Server Error");
+    setTimeout(() => {
+      setshowPayemntFiled(false);
+    }, 2000)
+  }
+}
+else{
+  handlePay();
+
+}
+
+} 
+  const handleConfirmRemoveItem = async () => {
+    try {
+
+      console.log(selectedProductId)
+      const remove = await removeFromCart(jwtToken, selectedProductId)
+      console.log(remove)
+
+
+      if (remove.statuscode === '200 OK') {
+
+        console.log("Remove from Cart")
+
+        setShowRemovePopup(false)
+        setSelectedProductId(null);
+        setRefresh(!refresh)
+      } else {
+        console.log("Not removed from Cart Cart")
+        setShowRemovePopup(false)
+        setSelectedProductId(null);
+      }
+
+    }
+
+    catch (err) {
+      console.log("error", err)
+
+    }
+
+
+
+    // Set a timeout to hide the message after a certain period
+
+  };
+  const handleAddresFormValidation = async (event) => {
+
+    event.preventDefault();
+
+    try {
+      await addressValidation.validate(
+        {
+          name,
+
+          secondName,
+          buildingNumber,
+          streetAddress,
+          landMark,
+          country,
+          city,
+          state,
+          zipcode,
+          phonenumber
+
+
+        },
+
+        { abortEarly: false }
+      );
+
+
+
+
+      event.preventDefault();
+      try {
+        const addresDetails = {
+
+
+          firstName: name,
+          lastName: secondName,
+          buildingNumber: buildingNumber,
+          streetAddress: streetAddress,
+          landmark: landMark,
+          city: city,
+          state: state,
+          country: country,
+          zipCode: zipcode,
+          mobile: phonenumber,
+          userId: id
+
+        }
+        console.log("updateduserDetails--", addresDetails)
+        const updateDetails = await addAddress(jwtToken, addresDetails)
+        console.log("rtghjkl")
+        console.log("details---", updateDetails)
+
+        if (updateDetails.statuscode == '200 OK') {
+
+          setAddresAddedSucces(true)
+          setTimeout(() => {
+            setAddresAddedSucces(false);
+          }, 2000)
+          setRefresh(!refresh);
+
+
+        }
+
+        else {
+          setAddresNotAddedMessage(true);
+          setTimeout(() => {
+            setAddresNotAddedMessage(false);
+          }, 3000)
+        }
+
+
+      } catch (err) {
+        seterrorMessage2(true);
+        setTimeout(() => {
+          seterrorMessage2(false);
+        }, 3000)
+
+      }
+
+    } catch (error) {
+      const errors = {};
+      error.inner.forEach((e) => {
+        errors[e.path] = e.message;
+      });
+      console.log('Validation Errors:', errors);
+      console.log("dfghjklxcvbnmxcvbnxcvb")
+      setNameError(errors.name || '');
+      console.log(nameError)
+      setSecondNameError2(errors.secondName || '');
+      setBuildingNumberError(errors.buildingNumber || '');
+      setStreetAddressError(errors.streetAddress || '');
+      setLandMarkError(errors.landMark || '')
+      console.log(landMarkError)
+      setCityError(errors.city || '')
+      setCountryError(errors.country || '')
+      setStateError(errors.state || '')
+      setLandMarkError(errors.landMark || '')
+      setZipcodeError(errors.zipcode || '')
+      setLandMarkError(errors.landMark || '')
+      setPhoneNumberError(errors.phonenumber || '')
+      console.log(phonenumberError)
+
+
+
+
+      console.log('Validation Errors:', errors);
+    }
+
+  }
+
+  const validateForm = () => {
+    let isValid = true;
+
+  // Email validation using regex
+  const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+
+  if (!messageSentEmail || messageSentEmail.trim() === '') {
+    setMessageSentEmailError("Please provide email");
+    isValid = false;
+  } else if (!emailRegex.test(messageSentEmail)) {
+    setMessageSentEmailError("Invalid email address");
+    isValid = false;
+  } else {
+    setMessageSentEmailError("");
+  }
+    
+
+    // Password length validation
+     if(selectedAddresId==='')
+    {
+      setAddresSelectError("Please Select Address")
+      isValid=false;
+    }
+   
+    
+    else 
+    {
+      setAddresSelectError("");
+    }
+    
+
+    return isValid;
+  };
+
 
   return (
+
+
     <div className='checkout-container' >
-      {/* Address details section */}
-      <div className='all-details'>
-      <div className="address-details">
-        <h2>Delivery Address</h2>
-        <p>{addressDetails.fullName}{addressDetails.addressLine}{addressDetails.city}, {addressDetails.state} {addressDetails.country} {addressDetails.postalCode}</p>
-              
-      
-        <button onClick={handleShowAddressPopup}>Change</button>
-      </div>
-      {showAddressPopup && <div className="overlay" />}
-      {showAddressPopup && (
-        <div className="address-change-popup">
-          <h2>Change Address</h2>
-          {/* Input fields for changing address */}
-          <input type="text" placeholder="Full Name" name="fullName" onChange={handleAddressChange} />
-          <input type="text" placeholder="Address Line" name="addressLine" onChange={handleAddressChange} />
-          <input type="text" placeholder="City" name="city" onChange={handleAddressChange} />
-          <input type="text" placeholder="State" name="state" onChange={handleAddressChange} />
-          <input type="text" placeholder="Postal Code" name="postalCode" onChange={handleAddressChange} />
-          <input type="text" placeholder="Country" name="country" onChange={handleAddressChange} />
-          {/* Add more fields as needed for address details */}
-          <button onClick={handleCloseAddressPopup}>Close</button>
-          {/* Implement logic to update the address */}
-          {/* Add a button to confirm the address change */}
-        </div>
-      )}
+      {products && products.length > 0 ? (
+        <>
+          {/* Address details section */}
+          <div className='all-details'>
+            <div className="address-details">
+              <h2>Delivery Address</h2>
+              {addresSelectError && <span className='confirmOrder'>{addresSelectError}</span>}
+              {addressDetails && addressDetails.length > 0 && (
+                <>
+                  {addressDetails.map((address) => (
+                    <label key={address.id}>
+                      <input
+                        type="radio"
+                        name="address"
+                        value={address.id}
+                        onChange={() => setSelectedAddresId(address.id)}
+                      />
 
-      {/* Products details section */}
-      <div className="products-details">
-        <h2>Products</h2>
-        {products.map((product) => (
-          <div className="product-item" key={product.id}>
-            <img src={product.imageUrl} alt={product.name} />
-            <div>
-              <p>{product.name}</p>
-             <p> ${product.realPrice}
-             ${product.price}
-              {product.discountPercentage}% off</p>
-              <div className="quantity-control">
-                <button onClick={() => handleDecreaseQuantity(product.id)}>-</button>
-                <span>{product.quantity}</span>
-                <button onClick={() => handleIncreaseQuantity(product.id)}>+</button>
-              </div>
-              <button onClick={() => handleShowRemovePopup(product.id)}>Remove</button>
+                      <span> {address.buildingnumber},
+                        {address.streetAddress},
+                        {address.landmark}, {address.city}, {address.state},
+                        {address.country}, {address.zipCode}</span>
+                    </label>
+                  ))}
+                </>
+              )}
+
+              <button onClick={handleShowAddressPopup}>Change</button>
             </div>
-          </div>
-        ))}
-      </div>
-      {showRemovePopup && <div className="overlay" />}
-      {showRemovePopup && (
-        <div className='confirmation-popup'>
-          <h2>Are you sure you want to remove?</h2>
-          <div className='confirmation-buttons'>
-            <button onClick={handleConfirmRemove}>Yes</button>
-            <button onClick={handleCloseRemovePopup}>No</button>
-          </div>
-        </div>
-      )}
-      <div className='email-enter'>
-        <div>
-        <input type='text' placeholder='Please Type Your Email Id'></input> </div><div><button onClick={handleShowPaymentPopup}>Continue</button></div>
-      </div>
 
-      {/* Payment options section */}
-      
-      </div>
-      {showPaymentPopup && <div className="overlay" />}
-      {showPaymentPopup && (
-  <div className="payment-popup">
-    <h2>Select Payment Method</h2>
-    
-    <div className="payment-options-text">
-      <label htmlFor="cash">
-        <input type="radio" id="cash" name="payment-method" value="cash" />
-        Cash On Delivery
-      </label>
-      
-      <label htmlFor="gpay">
-        <input type="radio" id="gpay" name="payment-method" value="gpay" />
-        GPay
-      </label>
-      
-      <label htmlFor="paypal">
-        <input type="radio" id="paypal" name="payment-method" value="paypal" />
-            PayPal
-      </label>
-    </div>
-    
-    <div className="popup-buttons">
-      <button onClick={handleClosePaymentPopup}>Close</button>
-      <button>Place Order</button>
-    </div>
-  </div>
-)}
+            {showAddressPopup && <div className="overlay" />}
+            {showAddressPopup && (
+              <div className="address-change-popup">
+                {errorMessage2 && <span className="registration-error">Ineternal Server Error</span>}
+                {addresAddedSucces && <span className="succes">Address Added Succesfully</span>}
+                {addresNotAddedMEssage && <span className="registration-error">Not added</span>}
+                <h2>Add Address</h2>
+                {/* Input fields for changing address */}
+                <div>
+                  <input type="text" placeholder="Firstname" name="Firstname" onChange={(e) => { setName(e.target.value) }} />
+                  {/* {nameError && <div className="error1">{nameError}</div>} */}
+                  <input type="text" placeholder="lastName" name="lastName" onChange={(e) => { setSecondName(e.target.value) }} />
+                  <div className='errorsname'>
+                    {nameError && <div className="error1">{nameError}</div>}
+                    {secondNameError2 && <div className="error1">{secondNameError2}</div>}
+                  </div>
+                  <input type="text" placeholder="Building Number" name="Building Number" onChange={(e) => { setBuildingNumber(e.target.value) }} />
+                  {/* {buildingNumberError && <div className="error1">{buildingNumberError}</div>} */}
+                  <input type="text" placeholder="StreetAddres" name="StreetAddres" onChange={(e) => { setStreetAddress(e.target.value) }} />
+                  <div className='errorsname'>
+                    {buildingNumberError && <div className="error1">{buildingNumberError}</div>}
+                    {streetAddressError && <div className="error1">{streetAddressError}</div>}
+                  </div>
+                </div>
+                <input type="text" placeholder="landmark" name="landmark" onChange={(e) => { setLandMark(e.target.value) }} />
+                {/* {landMarkError && <div className="error1">{landMarkError}</div>} */}
+                <select id="country" name="country" value={country} onChange={(e) => { handleGetStates(e.target.value) }} required>
+            <option value="">Select Country</option>
+            {countries.map(name => (
+              <option key={name.country} value={name.country}>
+                {name.country}
+              </option>
+            ))}
+          </select>
+                <div className='errorsname'>
+                  {landMarkError && <div className="error1">{landMarkError}</div>}
+                  {countryError && <div className="error1">{countryError}</div>}
+                </div>
+                <select id="state" name="state" value={state} onChange={(e) => { handleAllCities(e.target.value) }} required>
+            <option value="">Select State</option>
+            {stateOptions.map(state=> (
+              <option key={state.name} value={state.name}>
+                {state.name}
+              </option>
+            ))}
+          </select>
+                {/* {cityError && <div className="error1">{cityError}</div>} */}
+                <select id="city" name="city" value={city} onChange={(e) => { setCity(e.target.value) }} required>
+            <option value="">Select City</option>
+            {citiesOptions.map(city=> (
+              <option key={city} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
+                <div className='errorsname'>
+                  {cityError && <div className="error1">{cityError}</div>}
+                  {stateError && <div className="error1">{stateError}</div>}
+                </div>
+                <input type="text" placeholder="Pincode" name="Pincode" onChange={(e) => { setZipcode(e.target.value) }} />
+                {/* {zipcodeError && <div className="error1">{zipcodeError}</div>} */}
+                <input type="text" placeholder="mobile" name="mobile" onChange={(e) => { setPhoneNumber(e.target.value) }} />
+                <div className='errorsname'>
+                  {zipcodeError && <div className="error1">{zipcodeError}</div>}
+                  {phonenumberError && <div className="error1">{phonenumberError}</div>}
+                </div>
+                <button onClick={handleCloseAddressPopup}>Close</button>
+                 <button onClick={handleAddresFormValidation}>ADD</button>
+                </div>
+                /* Add more fields as needed for address details */
+                // <button onClick={handleCloseAddressPopup}>Close</button>
+                // <button onClick={handleAddresFormValidation}>ADD</button>
+                /* Implement logic to update the address */
+                /* Add a button to confirm the address change */
+             
+            )}
 
-      {/* Price details section */}
-      <div className="price-details">
-        <h2>Price Details</h2>
-        <p>Number of Products: {totalQuantity}</p>
-        <p>Subtotal: ${subtotal}</p>
-        <p>Total: ${total}</p>
-      </div>
+            {/* Products details section */}
+            <div className="products-details">
+              <h2>Products</h2>
+              {products.map((book) => (
+                <div className="product-item" key={book.product.id}>
+                  <img src={book.product.images[1].imageUrl} alt={book.product.title} />
+                  <div>
+                    <p className='title'>{book.product.title}</p>
+                    <p className='info'>{book.product.course.parentCategory.name} | {book.product.course.courseName} {book.product.subject.subjectName} | {book.product.semester.name} | {book.product.university.universityName}</p>
+                    <p> ${book.product.discountedPrice} <span><s className='rel-price'>${book.product.price}</s></span> <span className='dis'>{book.product.discountPresent}% OFF</span></p>
+                    {/* <div className="quantity-control">
+                <button onClick={() => handleDecreaseQuantity(book.shoppingCartId)}>-</button>
+                <span>{book.quantity}</span>
+                <button onClick={() => handleIncreaseQuantity(book.product.id)}>+</button>
+              </div> */}
+                    <button className='rem' onClick={() => handleRemoveFromCart(book.shoppingCartId)}>Remove</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {showRemovePopup && <div className="overlay" />}
+            {showRemovePopup && (
+              <div className='confirmation-popup'>
+                <h2>Are you sure you want to remove?</h2>
+                <div className='confirmation-buttons'>
+                  <button onClick={handleConfirmRemoveItem}>Yes</button>
+                  <button onClick={handleCloseRemovePopup}>No</button>
+                </div>
+              </div>
+            )}
+            {showPayemntFiled && <div className="overlay" />}
+           { showPayemntFiled  && (
+              <div className='paymentSucces'><h4 className='msg'>{showPayemntFiled }</h4></div>
+           )}
+            {loading && <div className="overlay" />}
+            { loading  && (
+              <div className='loading'><h4 className='loadingmsg'>{loading}</h4></div>
+           )}
+            {showLoader && <div className="overlay" />}
+            { showLoader  && (
+             <div
+             className='Loadericon'
+         >
+             <Loader />
+         </div>
+           )}
+           {orderPlaced && <div className="overlay" />}
+            { orderPlaced  && (
+              
+              <div className=' orderPlaced '><h5 className='msg4'>Thanks for Shopping..</h5><h6 className='msg1'>{orderPlaced} </h6> <Checkmark size='25px' color='green' /></div>
+           )}
+           {orderPlacedFiled && <div className="overlay" />}
+           { orderPlacedFiled  && (
+              <div className='orderPlacedfiled'><h4 className='msg3'>{orderPlacedFiled}</h4></div>
+           )}
+            <p className='orderCirformationmail'>Provide the Email id for send the Order Confirmation Mail</p>
+            <div className='email-enter'>
+              
+              <div>
+                <input type='text' placeholder='Email Id' onChange={(e) => { setMessageSentEmail(e.target.value) }}></input> </div><div><button onClick={handleShowPaymentPopup}>Continue</button></div>
+                
+            </div>
+            {emailError && <span className='confirmOrder'>{emailError}</span>}
+
+            {/* Payment options section */}
+
+          </div>
+          {showPaymentPopup && <div className="overlay" />}
+          {showPaymentPopup && (
+            <div className="payment-popup">
+              <h2>Select Payment Method</h2>
+              {paymentTypes && paymentTypes.length > 0 && (
+                <>
+                  {paymentTypes.map((payment) => (
+                    <label key={payment.id}>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value={payment.id}
+                        onChange={() =>setSelectedPaymentId(payment.id)}
+                      />
+
+                      <span> {payment.typeName}
+                        </span>
+                    </label>
+                  ))}
+                </>
+              )}
+
+              <div className="popup-buttons">
+                <button onClick={handleClosePaymentPopup}>Close</button>
+                <button onClick={handlePaymentRequest}>Continue</button>
+              </div>
+            </div>
+          )}
+           {showPayemntSucces && <div className="overlay" />}
+           {showPayemntSucces &&<div className="removed-message">
+      <p>Payment Succes</p>
+    </div>}
+
+          {/* Price details section */}
+          <div className="price-details">
+            <h2>Price Details</h2>
+            <div className='priceDetailsBox'>
+            <p>Number of Products</p>
+            <span>{totalQuantity}</span>
+            </div>
+            <div className='priceDetailsBox'>
+            <p>Subtotal</p>
+            <span>${subtotal}</span>
+            </div>
+            <p>___________________________</p>
+            <div className='priceDetailsBox'>
+            <p>Total</p>
+            <span>${total}</span>
+            </div>
+            
+            
+          </div>
+        </>) : (<><div>CheckOut Is Empty</div></>)
+      }
     </div>
   );
 };

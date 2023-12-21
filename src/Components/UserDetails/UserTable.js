@@ -36,16 +36,17 @@ const UserTable = () => {
     console.log("fdsj")
     async function featchData(token){
       console.log("-------fist start-------")
-      const usersData= await getUsers(token);
+      const allusersData= await getUsers(token);
+      console.log(allusersData.result)
       console.log("--------------------------------------------------")
       console.log("-----------hai--------");
       console.log("ejfsld")
       
-      if(usersData.statuscode ==='200 OK')
+      if(allusersData.statuscode ==='200 OK')
       {
         console.log("jfsd")
-        console.log(usersData.result)
-        setUsers(usersData.result)
+        console.log(allusersData.result)
+        setUsers(allusersData.result)
         console.log("----books------");
       }
     }
@@ -183,7 +184,7 @@ const UserTable = () => {
 
   return (
     <div className="table-container">
-      <div className='adminnavbar'> <AdminNavbar/></div>
+      
        
       {deleteSuccesMessage && <div className='deleteSucces'>Deleted SUccesFully</div>}
       {/* {updateSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
@@ -225,7 +226,7 @@ const UserTable = () => {
                 <td>{user.firstName}</td>
                 <td>{user.lastName}</td>
                 <td>{user.email}</td>
-                <td>{user.mobile}</td>
+                <td>{user.mobileNumber}</td>
                 <td>
                   <div className='buttons'>
                   <button className='upadtebtn' onClick={() => handleUpdate(user.id,user.firstName,user.lastName,user.email,user.mobile)}>Update</button>

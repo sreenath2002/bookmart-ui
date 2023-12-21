@@ -11,3 +11,14 @@ export const axiosAdminInstance = axios.create({
 export const axiosProductInstance = axios.create({
   baseURL: "http://localhost:8084/api/products",
 })
+export const axiosUserInstance = axios.create({
+  baseURL: "http://localhost:8084/api/user",
+})
+export const axiosCountriesCitiesStateInstance = axios.create({
+  baseURL: "https://countriesnow.space/api/v0.1",
+})
+export const axiosOrderInstance = axios.create({
+  baseURL: "http://localhost:8084/api/order",
+})
+
+

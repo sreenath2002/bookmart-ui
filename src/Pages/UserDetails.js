@@ -12,7 +12,7 @@ function UserDetails() {
     <div className='userdetails'>
        
 
-      {/* <AdminNavbar/> */}
+      <AdminNavbar/>
        <UserTable/>
     </div>
   )

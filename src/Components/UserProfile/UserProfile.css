@@ -6,6 +6,7 @@
   align-items: flex-start;
   margin: 20px;
   font-family: Arial, sans-serif;
+ 
 }
 
 .left-section {
@@ -24,31 +25,45 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 /* UserProfile.css */
-
+.succes{
+ color: green;
+}
+.error{
+  color: red;
+  font-size: 10px;
+}
 .add-address {
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
+  background: linear-gradient(to bottom right, #cebbbb, #ffffff);
+  border: 2px solid #d1c8c8;
+  border-radius: 6px;
+  box-shadow: 4px 0 12px rgba(20, 19, 19, 0.1);
  
-  padding: 60px;
+  padding: 20px;
   margin-top: 20px;
 }
 
-.add-address h2 {
-  font-size: 1.5rem;
+.add-address,.edit-details h2 {
+  font-size: 1.3rem;
   margin-bottom: 15px;
+  font-style: oblique;
+  font-weight: bold;
 }
 
-.add-address input[type="text"] {
+.add-address input[type="text"],
+.add-address select
+ {
   width: calc(50% - 20px);
   padding: 8px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
+  margin-left: 2px;
+  border: 1px solid #b48b8b;
+  box-shadow: 15px 20px 16px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
 }
 
 .add-address button {
-  padding: 10px 20px;
-  background-color: #3498db;
+  padding: 5px 10px;
+  background-color: #62a8d6;
   color: white;
   border: none;
   border-radius: 4px;
@@ -104,6 +119,7 @@
   
 }
 .edit-profile-form {
+  
   display: flex;
 
   flex-direction: column;
@@ -127,10 +143,21 @@
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  background-color: #3498db;
+  background-color: #caced1;
   color: #fff;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+.registration-error1{
+  font-size: 12px;
+  color: red;
+  padding: 0;
+  margin-bottom: 0;
+}
+.profileupdatesuccesmessage{
+  color: green;
+  font-size: 12px;
+
 }
 
 .edit-profile-form button:hover {
@@ -150,9 +177,11 @@
 /* Style for Add Address Form */
 
 .edit-details {
-  background-color: #f5f5f5;
+  background: linear-gradient(to bottom right, #cebbbb, #ffffff);
   padding: 15px;
+  position: relative;
   margin: 20px;
+  margin-top: 30px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
@@ -167,13 +196,44 @@
 margin-top: 20px;
 
 }
+.errordiv{
+  display: flex;
+  justify-content: space-evenly;
+}
 
 .user-details p {
   margin-bottom: 10px;
   font-size: 16px;
   color: #555;
 }
+.close-icons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: row-reverse; /* Aligns the icons from right to left */
+  gap: 10px; /* Adjust the gap between icons as needed */
+}
 
+.close-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px;
+  position: absolute;
+  width: 40px;
+  top: 10px;
+  right: 10px;
+}
+
+
+.passwordChange{
+  cursor: pointer;
+  font-size: 13px;
+}
+.passwordChange:hover{
+  text-decoration: underline;
+}
 .address-container {
   display: flex;
   overflow-x: auto;
@@ -189,6 +249,10 @@ margin-top: 20px;
   border-radius: 5px;
   min-width: 200px;
   white-space: nowrap;
+}
+.address-item p{
+  text-align: left;
+  font-size: 10px;
 }
 @keyframes slideInFromBelow {
   0% {
@@ -207,6 +271,63 @@ margin-top: 20px;
 .user-details {
   animation: slideInFromBelow 1.5s ease-in-out forwards;
 }
+/* .add-address {
+  width: 80%;
+  margin: auto;
+  padding: 10px 20px; 
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.add-address h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.add-address input[type='text'],
+.add-address select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.add-address input[type='text']:focus,
+.add-address select:focus {
+  outline: none;
+  border-color: #5c9ed6;
+}
+
+.add-address button {
+  background-color: #5c9ed6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-address button:hover {
+  background-color: #357ebd;
+}
+
+.add-address .errordiv {
+  color: red;
+  font-size: 14px;
+} */
+
+/* @media screen and (max-width: 768px) {
+  .add-address {
+    width: 90%;
+  }
+} */
 
 /* Media query for responsiveness */
 @media (max-width: 768px) {

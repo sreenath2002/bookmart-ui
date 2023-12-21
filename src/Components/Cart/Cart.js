@@ -1,65 +1,124 @@
 import React, { useState } from 'react';
 import './Cart.css'; // Import your CSS file for styling
 import NavBar from '../NavBar/Navbar';
+import { useEffect } from 'react';
+import { userCartDetails,incrementQuantity,decrementQuantity } from '../../axios/service/userService.s';
+import { useSelector } from 'react-redux';
+import Checkout from '../CheckoutPage/Checkout';
+
+import { removeFromCart } from '../../axios/service/userService.s';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
   const [showRemovedMessage, setShowRemovedMessage] = useState(false);
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      productName: 'Product 1',
-      price: 20.99,
-      quantity: 1,
-      imageUrl: 'https://via.placeholder.com/150', // Placeholder image URL
-    },
-    {
-      id: 2,
-      productName: 'Product 2',
-      price: 15.49,
-      quantity: 2,
-      imageUrl: 'https://via.placeholder.com/150', // Placeholder image URL
-    },
-    {
-      id: 5,
-      productName: 'Product 2',
-      price: 15.49,
-      quantity: 2,
-      imageUrl: 'https://via.placeholder.com/150', // Placeholder image URL
-    },
-    {
-      id: 6,
-      productName: 'Product 2',
-      price: 15.49,
-      quantity: 2,
-      imageUrl: 'https://via.placeholder.com/150', // Placeholder image URL
-    },
-    
-    // Add more items to the cart as needed
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+  const[refresh,setRefresh]=useState(false);
+  // const [itemQuantity,setItemQuantity]=useState(1);
 
   const [discount, setDiscount] = useState(0);
   const [gst, setGst] = useState(0);
 
+  const id=useSelector((state)=>state.user.id)
+  const jwtToken = localStorage.getItem("jwt");
+
+  useEffect(() => {
+
+    featchData()
+    console.log("fdsj")
+    async function featchData() {
+      console.log("-------fist start-------")
+      const cartDetails = await userCartDetails(jwtToken,id);
+     
+      console.log("--------------------------------------------------")
+      console.log("-----------hai--------");
+      console.log(cartDetails )
+
+      if (cartDetails.statuscode === '200 OK' && cartDetails.message==='Cart is Retrieved') {
+        console.log("jfsd")
+        console.log(cartDetails.result)
+        setCartItems(cartDetails.result)
+       
+      
+        console.log("---cart------");
+      }
+     
+    }
+
+  }, [refresh]);
+
   const calculateSubtotal = () => {
-    return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    return cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
   };
+ 
+
 
   const subtotal = calculateSubtotal();
   const total = subtotal - discount + gst;
 
-  const handleIncreaseQuantity = (id) => {
-    const updatedCartItems = cartItems.map((item) =>
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    setCartItems(updatedCartItems);
+  const handleIncreaseQuantity = async (id) => {
+    console.log("--------------")
+    try {
+
+      console.log(id)
+   
+      const increment = await incrementQuantity(jwtToken, id)
+      
+      console.log(increment  )
+     
+  
+      if (increment.statuscode === '200 OK') {
+        const updatedCartItems = cartItems.map((item) =>
+        item.shoppingCartId === id && item.quantity > 1 ? { ...item, quantity: item.quantity+1 } : item
+      );
+      setCartItems(updatedCartItems);
+      console.log(cartItems);
+       
+      
+      
+      } else {
+        console.log("Not incremenet")
+       
+      }
+  
+    }
+  
+    catch (err) {
+      console.log("error", err)
+     
+    }
   };
 
-  const handleDecreaseQuantity = (id) => {
-    const updatedCartItems = cartItems.map((item) =>
-      item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-    );
-    setCartItems(updatedCartItems);
-  };
+  const handleDecreaseQuantity = async (id) => {
+    try {
+
+      console.log(selectedItemId)
+      const decrement = await decrementQuantity(jwtToken, id)
+      console.log(decrement )
+     
+  
+      if (decrement.statuscode === '200 OK') {
+        const updatedCartItems = cartItems.map((item) =>
+        item.shoppingCartId === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+      );
+      setCartItems(updatedCartItems);
+      console.log(cartItems);
+       
+      
+      
+      } else {
+        console.log("Not decrement")
+       
+      }
+  
+    }
+  
+    catch (err) {
+      console.log("error", err)
+     
+    }
+
+ 
+  }
 
   const handleRemoveFromCart = (id) => {
   
@@ -76,38 +135,68 @@ const Cart = () => {
     setSelectedItemId(null);
   };
 
-  const handleConfirmRemoveItem = () => {
-    const updatedCartItems = cartItems.filter((item) => item.id !== selectedItemId);
-    setCartItems(updatedCartItems);
-    setShowRemovedMessage(true);
+  const handleConfirmRemoveItem = async () => {
+    try {
+
+      console.log(selectedItemId)
+      const remove = await removeFromCart(jwtToken, selectedItemId)
+      console.log(remove )
+     
+  
+      if (remove .statuscode === '200 OK') {
+       
+        console.log("Remove from Cart")
+        setRefresh(!refresh)
+        setShowRemovedMessage(true);
+        setTimeout(() => {
+          setShowRemovedMessage(false);
+        },2000)
+        setRefresh(!refresh)
+
+        setShowPopup(false);
+        setSelectedItemId(null);
+      } else {
+        console.log("Not removed from Cart Cart")
+        setShowPopup(false);
+        setSelectedItemId(null);
+      }
+  
+    }
+  
+    catch (err) {
+      console.log("error", err)
+     
+    }
+    
+  
 
     // Set a timeout to hide the message after a certain period
-    setTimeout(() => {
-      setShowRemovedMessage(false);
-    },2000)
-    setShowPopup(false);
-    setSelectedItemId(null);
+   
   };
+  
 
   return (
     <div className="cart-container">
-     
+    {cartItems && cartItems.length > 0 ?(
+      <>
       {/* Cart items */}
       <div className="cart-items">
         {cartItems.map((item) => (
           <div className="cart-item" key={item.id}>
-            <img src={item.imageUrl} alt={`Product - ${item.productName}`} />
+            <img src={item.product.images[1].imageUrl} alt={`Product - ${item.product.title}`} />
             <div className="item-details">
-              <p>{item.productName}</p>
-              <p>${item.price}</p>
+              <p className='title'>{item.product.title}</p>
+              <p className='productdetails'>{item.product.course.parentCategory.name} | {item.product.course.courseName} {item.product.subject.subjectName} | {item.product.semester.name} | {item.product.university.universityName}</p>
+              <p>${item.product.discountedPrice} <s className='real-price'>${item.product.price}</s> <span className='discountperscent'>{item.product.discountPresent}% OFF</span></p>
+              
               <div className="quantity-control">
-                <button onClick={() => handleDecreaseQuantity(item.id)}>-</button>
+                <button onClick={() => handleDecreaseQuantity(item.shoppingCartId)}><span className='btn1'>-</span></button>
                 <span>{item.quantity}</span>
-                <button onClick={() => handleIncreaseQuantity(item.id)}>+</button>
+                <button onClick={() => handleIncreaseQuantity(item.shoppingCartId)}><span className='btn1'>+</span></button>
               </div>
               <div className='btns'>
-              <button onClick={() => handleRemoveFromCart(item.id)}>Remove from Cart</button>
-              <button>Buy Only This</button>
+              <button className='remove' onClick={() => handleRemoveFromCart(item.shoppingCartId)}>Remove</button>
+              <button className='buy'>Buy Only This</button>
               </div>
             </div>
           </div>
@@ -128,13 +217,34 @@ const Cart = () => {
 
       {/* Cart summary */}
       <div className="cart-summary">
-        <h2>Cart Summary</h2>
-        <p>Discount: ${discount}</p>
-        <p>GST: ${gst}</p>
-        <p>Subtotal: ${subtotal}</p>
-        <p>Total: ${total}</p>
-        <button>Checkout</button>
+  <h2>Cart Summary</h2>
+  <div className='summary-line'>
+  <p >Discount: </p>
+  <span> ${discount}</span>
+  </div>
+  <div className='summary-line'>
+  <p >GST:</p><span> ${gst}</span>
+  </div>
+  <div className='summary-line'>
+  <p >Subtotal: </p><span> ${subtotal}</span>
+  </div>
+  
+  <p>____________________</p>
+  <div className='summary-line'>
+  <p >Total: </p><span>${total}</span>
+  </div>
+  
+        <Link
+    to={{
+        pathname: '/checkout',
+        state: { cartItems: cartItems }
+    }}
+>
+    <button>Checkout</button>
+</Link>
       </div>
+      </>
+      ) : (<><div>Cart is Empty</div></>)}
     </div>
   );
 };

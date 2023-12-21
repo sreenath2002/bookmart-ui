@@ -8,7 +8,7 @@ function ProductTableDetails() {
 
   return (
     <div>
-      {/* <NavBar/> */}
+      <NavBar/>
       <ProductTable courseName={selectedCourse} /> {/* Pass selectedCourse as a prop */}
     </div>
   );

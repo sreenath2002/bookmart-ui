@@ -166,7 +166,7 @@ const AddProduct = (props) => {
       price,
       discountedPrice,
       discountPresent,
-      quantity,
+     
       course,
       subject,
       university,
@@ -196,7 +196,7 @@ const AddProduct = (props) => {
         userId: id,
         discountedPrice: discountedPrice,
         discountPresent: discountPresent,
-        quantity: quantity,
+      
         courses: course,
         subjects: subject,
         universitys: university,
@@ -236,7 +236,7 @@ setDescriptionError(errors.description || '');
 setPriceError(errors.price || '');
 setDiscountedPriceError(errors.discountedPrice || '');
 setDiscountPresentError(errors.discountPresent || '');
-setQuantityError(errors.quantity|| '');
+
 setCourseError(errors.course || '');
 setSubjcetError(errors.subject || ''); // Typo in 'subject' spelling
 setUniversityError(errors.university || '');
@@ -321,16 +321,7 @@ console.log('Validation Errors:', errors);
             required
           />
           {discountPresentError && <div className="registration-error">{discountPresentError}</div>}
-          <label htmlFor="quantity">Quantity</label>
-          <input
-            type="text"
-            id="quantity"
-            name="quantity"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            required
-          />
-         {quantityError &&  <div className="registration-error">{quantityError}</div>}
+         
         </div>
         <div className='flex'>
           <label htmlFor="author">Author</label>

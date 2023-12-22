@@ -3,7 +3,7 @@ import './Checkout.css'; // Import your CSS file for styling
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import Razorpay from 'razorpay';
+// import Razorpay from 'razorpay';
 import { useEffect } from 'react';
 import Loader from '../LoaderIcon/Loader';
 
@@ -16,6 +16,10 @@ const Checkout = () => {
   // const id = useSelector((state) => state.user.id)
   const jwtToken = localStorage.getItem("jwt");
   const id = localStorage.getItem("id");
+  const mailId=localStorage.getItem("email");
+  const name1=localStorage.getItem("firstName");
+  const name2=localStorage.getItem("lastName");
+  const ph=localStorage.getItem("phone");
   const location = useLocation();
   const navigate=useNavigate();
   const cartItems = location.state?.cartItems || null
@@ -179,35 +183,35 @@ const Checkout = () => {
   
   
 
-  const handlePay = ()=>{
+  // const handlePay = ()=>{
    
-    {
-      var options = {
-        key: 'rrzp_test_yr1CZZY1d8rgVY',
-        key_secret:"dwW4zFWOOECsvtIyxrZNLnAJ",
-        amount: total,
-        currency:"INR",
-        name:"BookMart",
-        description:"for testing purpose",
-        handler: function(response){
-          alert(response.razorpay_payment_id);
-        },
-        prefill: {
-          name:"Velmurugan",
-          email:"mvel1620r@gmail.com",
-          contact:"7904425033"
-        },
-        notes:{
-          address:"Razorpay Corporate office"
-        },
-        theme: {
-          color:"#3399cc"
-        }
-      };
-      var pay = new window.Razorpay(options);
-      pay.open();
-    }
-  }
+  //   {
+  //     var options = {
+  //       key: 'rrzp_test_yr1CZZY1d8rgVY',
+  //       key_secret:"dwW4zFWOOECsvtIyxrZNLnAJ",
+  //       amount: total,
+  //       currency:"INR",
+  //       name:"BookMart",
+  //       description:"for testing purpose",
+  //       handler: function(response){
+  //         alert(response.razorpay_payment_id);
+  //       },
+  //       prefill: {
+  //         name:"Velmurugan",
+  //         email:"mvel1620r@gmail.com",
+  //         contact:"7904425033"
+  //       },
+  //       notes:{
+  //         address:"Razorpay Corporate office"
+  //       },
+  //       theme: {
+  //         color:"#3399cc"
+  //       }
+  //     };
+  //     var pay = new window.Razorpay(options);
+  //     pay.open();
+  //   }
+  // }
   
    
  
@@ -284,9 +288,84 @@ const Checkout = () => {
     );
     setProducts(updatedProducts);
   };
-
+  const handlePay = async () => {
+    try {
+      // Replace 'total' with your actual value for the amount calculation
+      // Replace this with your total amount logic
+  
+      const options = {
+        key: "rzp_test_q5IKCKLn5zzuYl",
+        key_secret: "MZ9c4j6NuME7Ti7v1xTWO6i1",
+        amount: total * 100, // Multiplying by 100 to convert to the smallest currency unit (e.g., paisa for INR)
+        currency: "INR",
+        name: "BookMart",
+        description: "for testing purpose",
+        handler: function (response) {
+          setShowPaymentPopup(false)
+          console.log(response);
+          alert(response.razorpay_payment_id);
+          setTimeout(()=>{
+            setLoading(false)
+          
+            setLoading("Loading.......")
+ 
+ 
+            setTimeout(() => {
+            
+               setLoading(false)
+             
+             
+               handleShopOrder(payamt.result);
+            
+         
+           }, 3000);
+       },3000)
+        },
+        prefill: {
+          name: name1,
+          email: mailId,
+          contact: ph,
+        },
+        notes: {
+          address: "Razorpay Corporate office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+  
+      // Initialize Razorpay
+      const pay = new window.Razorpay(options);
+      pay.open();
+  
+      const payMentDetails = {
+        paymentId: selectedPaymentId, // Replace this with your payment ID logic
+        amount: total, // Replace this with the actual amount logic
+      };
+  
+      // Replace payMentRequest with your actual function for payment request
+      const payamt = await payMentRequest(jwtToken, id, payMentDetails);
+  
+      if (payamt.statuscode != '200 OK') {
+        pay.close();
+        setShowPaymentPopup(false)
+        setshowPayemntFiled("Internal Server Error");
+        setTimeout(() => {
+          setshowPayemntFiled(false);
+        }, 2000);
+      }
+    } catch (error) {
+     
+        setShowPaymentPopup(false)
+        setshowPayemntFiled("Internal Server Error");
+        setTimeout(() => {
+          setshowPayemntFiled(false);
+        }, 2000);
+    }
+  };
   const handleOrderLine =async (orderId)=>{
     try{
+      console.log("helooooooo")
       const productIdList = products.map(book => book.product.id);
       const qty = products.map(book => book.quantity);
       const price = products.map(book => book.product.discountedPrice);
@@ -299,6 +378,7 @@ const Checkout = () => {
 
       const orderLine=await addNewOrder(jwtToken,orderDetails)
       {
+        console.log("helooooooo")
         if(orderLine.statuscode === '200 OK')
         {
           setLoading(false)
@@ -351,6 +431,7 @@ const Checkout = () => {
       const  shop = await shopOrderRequest(jwtToken,id,shopOrderDetails)
       if(shop.statuscode === '200 OK'){
         handleOrderLine(shop.result);
+       
 
       }
       else{
@@ -381,9 +462,10 @@ const Checkout = () => {
     setShowRemovePopup(true);
   };
 const handlePaymentRequest = async ()=>{
-  if(selectedPaymentId!=3)
+  
+  
+  if(selectedPaymentId===1)
   {
-
   
   try{
     setShowPaymentPopup(false);
@@ -432,7 +514,7 @@ const handlePaymentRequest = async ()=>{
       setshowPayemntFiled(false);
     }, 2000)
   }
-}
+  }
 else{
   handlePay();
 
@@ -523,7 +605,7 @@ else{
         console.log("rtghjkl")
         console.log("details---", updateDetails)
 
-        if (updateDetails.statuscode == '200 OK') {
+        if (updateDetails.statuscode === '200 OK') {
 
           setAddresAddedSucces(true)
           setTimeout(() => {
@@ -776,7 +858,7 @@ else{
            {orderPlaced && <div className="overlay" />}
             { orderPlaced  && (
               
-              <div className=' orderPlaced '><h5 className='msg4'>Thanks for Shopping..</h5><h6 className='msg1'>{orderPlaced} </h6> <Checkmark size='25px' color='green' /></div>
+              <div className=' orderPlaced '><h5 className='msg4'>Thanks for Shopping..</h5><h6 className='msg1'>Your Order Placed </h6> <Checkmark size='25px' color='green' /></div>
            )}
            {orderPlacedFiled && <div className="overlay" />}
            { orderPlacedFiled  && (

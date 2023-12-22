@@ -116,6 +116,10 @@ const UserLogin = () => {
           console.log("sldjfkb");
           localStorage.setItem("jwt", response.data.jwt);
           localStorage.setItem("id", response.data.id);
+          localStorage.setItem("email", response.data.email);
+          localStorage.setItem("firstName", response.data.firstName);
+          localStorage.setItem("lastName", response.data.lastName);
+          localStorage.setItem("phone", response.data.mobile);
           console.log(response.data.id)
           if(response.data.role === "USER")
           {

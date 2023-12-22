@@ -1,28 +1,40 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import './Orders.css'; // Import your CSS file for styling
 import NavBar from '../NavBar/Navbar';
 import ProductStatusPopup from '../ProductStatusPopup/ProductStatusPopup';
-
+import { cancelorder,cancelorderReasons,getShoporderId,getOrderLine } from '../../axios/service/userService.s';
 const Orders = () => {
+
+  const[refresh,setRefresh]=useState(false);
     const [showStatusPopup, setShowStatusPopup] = useState(false);
+
+    const[orders,setOrders]=useState([]);
+    const [error, setError] = useState('');
   // Sample order details
-  const orders = [
-    {
-      id: 1,
-      productName: 'Book Title 1',
-      price: '$19.99',
-      imageUrl: 'https://via.placeholder.com/150', // Placeholder image URL
-      status: 'Processing',
-    },
-    {
-      id: 2,
-      productName: 'Book Title 2',
-      price: '$24.99',
-      imageUrl: 'https://via.placeholder.com/150', // Placeholder image URL
-      status: 'Shipped',
-    },
-    // Add more orders as needed
-  ];
+  const jwtToken = localStorage.getItem("jwt");
+  const id = localStorage.getItem("id");
+  useEffect(() => {
+
+    fetchData()
+    console.log("fdsj")
+    async function fetchData() {
+      try {
+        const IdofShoporder = await getShoporderId(jwtToken, id);
+        const orderLines = await getOrderLine(jwtToken, IdofShoporder.result);
+  
+        if (IdofShoporder.statuscode === '200 OK' && orderLines.statuscode === '200 OK') {
+          setOrders(orderLines.result);
+          setError(''); // Clear any previous errors
+        } else {
+          setError('Internal Server Error');
+        }
+      } catch (error) {
+        setError('Error fetching data'); // Catch any unexpected errors
+      }
+    }
+
+  }, [!refresh]);
   const handleImageClick = () => {
     setShowStatusPopup(true);
   };
@@ -65,21 +77,23 @@ const Orders = () => {
 
   return (
     <div className="orders-container">
+
       <NavBar />
+      {error && <div>{error}</div>}
       {orders.map((order) => (
         <div className="order-item" key={order.id}>
           <div className="product-image" onClick={handleImageClick}>
-            <img src={order.imageUrl} alt={`Book - ${order.productName}`} />
+            <img src={order.product.images[0].imageUrl} alt={`Book - ${order.product.title}`} />
           </div>
           <div className="product-details">
             <p>
-              <strong>Book Name:</strong> {order.productName}
+              <strong>Book Name:</strong> {order.product.title}
             </p>
             <p>
               <strong>Price:</strong> {order.price}
             </p>
             <p>
-              <strong>Status:</strong> {order.status}
+              <strong>Status:</strong> {order.orderStatusDetails.status.name}
             </p>
             <button onClick={() => handleCancelOrder(order)}>Cancel Order</button>
           </div>

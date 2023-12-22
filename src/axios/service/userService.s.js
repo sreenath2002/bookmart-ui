@@ -106,6 +106,8 @@ export const userCartDetails = async (token, userId) => {
 
 
 };
+
+
 export const allAddress = async (token, userId) => {
     console.log(userId);
     const config = {
@@ -203,5 +205,60 @@ export const  getAllPaymentMethods = async (token) => {
     };
     const { data } = await axiosUserInstance.get(`/paymenttypes`,config);
     return data;
+
+};
+
+
+export const cancelorderReasons = async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/cancelresons`, config);
+    return data;
+
+
+};
+
+export const cancelorder = async (token,cancelOrderDetails) => {
+   
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.post(`/cancelorder`, cancelOrderDetails, config);
+    return data;
+
+};
+export const getShoporderId = async (token,userId) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/shopOrderId/${userId}`, config);
+    return data;
+
+
+};
+export const getOrderLine = async (token,shoporderId) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/orderline/${shoporderId}`, config);
+    return data;
+
 
 };

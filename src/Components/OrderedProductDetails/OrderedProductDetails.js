@@ -13,13 +13,13 @@ const OrderedProductDetails = ({ order }) => {
     <div className="ordered-product-details" onClick={toggleShowStatus}>
       {/* Display the product image, name, and price */}
       <div className="product-details">
-        <img src={order.imageUrl} alt={`Product - ${order.productName}`} />
+      
         <div className="info">
           <p>
-            <strong>Product Name:</strong> {order.productName}
+            <strong>Product Name:</strong> 
           </p>
           <p>
-            <strong>Price:</strong> {order.price}
+            <strong>Price:</strong> 
           </p>
         </div>
       </div>
@@ -28,12 +28,12 @@ const OrderedProductDetails = ({ order }) => {
       {showStatus && (
         <div className="status-details">
           <p>
-            <strong>Status:</strong> {order.status}
+            <strong>Status:</strong> 
           </p>
           {/* Display delivery address details */}
           <div className="delivery-address">
             <h3>Delivery Address</h3>
-            <p>{order.deliveryAddress}</p>
+           
           </div>
         </div>
       )}

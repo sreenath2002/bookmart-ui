@@ -19,6 +19,18 @@
     align-items: center;
     margin-bottom: 15px;
   }
+  .nameofStatus{
+    font-size: 1.3rem;
+    
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+  }
+  .statusinformation{
+    text-align: left;
+  }
+  .detailinfo{
+    font-size: .8rem;
+  }
   
   .status-list {
     display: flex;
@@ -29,6 +41,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    justify-content: space-between;
   }
   
   .status-icon {

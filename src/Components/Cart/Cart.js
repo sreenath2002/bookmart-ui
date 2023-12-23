@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { userCartDetails,incrementQuantity,decrementQuantity } from '../../axios/service/userService.s';
 import { useSelector } from 'react-redux';
 import Checkout from '../CheckoutPage/Checkout';
+import { useNavigate } from 'react-router-dom';
 
 import { removeFromCart } from '../../axios/service/userService.s';
 import { Link } from 'react-router-dom';
@@ -14,11 +15,11 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const[refresh,setRefresh]=useState(false);
   // const [itemQuantity,setItemQuantity]=useState(1);
-
+  const navigate =useNavigate()
   const [discount, setDiscount] = useState(0);
   const [gst, setGst] = useState(0);
 
-  const id=useSelector((state)=>state.user.id)
+  const id=localStorage.getItem("id")
   const jwtToken = localStorage.getItem("jwt");
 
   useEffect(() => {
@@ -173,7 +174,9 @@ const Cart = () => {
     // Set a timeout to hide the message after a certain period
    
   };
-  
+  const handlesShopOnlythis=(cartid)=>{
+    navigate(`/checkout/${cartid}`);
+  }
 
   return (
     <div className="cart-container">
@@ -196,7 +199,7 @@ const Cart = () => {
               </div>
               <div className='btns'>
               <button className='remove' onClick={() => handleRemoveFromCart(item.shoppingCartId)}>Remove</button>
-              <button className='buy'>Buy Only This</button>
+              <button className='buy' onClick={()=>handlesShopOnlythis(item.shoppingCartId)}>Buy Only This</button>
               </div>
             </div>
           </div>
@@ -236,7 +239,7 @@ const Cart = () => {
   
         <Link
     to={{
-        pathname: '/checkout',
+        pathname: '/checkout/all',
         state: { cartItems: cartItems }
     }}
 >

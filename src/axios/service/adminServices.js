@@ -338,4 +338,50 @@ export const changeStatus = async (token, changeStatusUserId) => {
     }
 };
 
+export const getOrders= async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.get(`/getallorders`, config);
+    return data;
+};
+
+export const statuschange= async (token,changeStatusDetails) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.post(`/statuschange`,changeStatusDetails, config);
+    return data;
+};
+export const  getAllstatusNames= async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.get(`/allstatues`, config);
+    return data;
+};
+export const  getStatusOfTheProduct= async (token,orderId) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.get(`/stauses/${orderId}`, config);
+    return data;
+};
+
 

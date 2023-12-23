@@ -249,7 +249,7 @@ export const getShoporderId = async (token,userId) => {
 
 
 };
-export const getOrderLine = async (token,shoporderId) => {
+export const getOrderLine = async (token,userId) => {
     const config = {
         headers: {
             Accept: 'application/json',
@@ -257,8 +257,76 @@ export const getOrderLine = async (token,shoporderId) => {
             'Content-Type': 'application/json',
         },
     };
-    const { data } = await axiosUserInstance.get(`/orderline/${shoporderId}`, config);
+    const { data } = await axiosUserInstance.get(`/orderline/${userId}`, config);
     return data;
 
 
 };
+export const getCancelOrderResons = async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/cancelresons`, config);
+    return data;
+
+
+};
+export const showStatus = async (token,orderLineId) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/stauses/${orderLineId}`, config);
+    return data;
+
+
+};
+
+export const getspecificCart = async (token,cartId) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/getcart/${cartId}`, config);
+    return data;
+
+
+};
+
+export const setCancelStatus = async (token,orderLineId) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.put(`/setcancelstatus/${orderLineId}`,null, config);
+    return data;
+
+
+};
+export const gettheorderStatus = async (token,orderLineId) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/stauses/${orderLineId}`, config);
+    return data;
+
+
+};
+

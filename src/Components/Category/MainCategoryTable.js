@@ -4,6 +4,7 @@ import './MainCAtegoryTable.css'; // Import your CSS file for styling
 import {  deleteCategory, getcategory } from '../../axios/service/adminServices';
  import UpdateCategory from '../UpdateCategory/UpdateCategory'
  import AddCategory from '../AddCategory/AddCategory'
+import AdminNavbar from '../AdminNavbar/AdminNavbar';
 const MainCategoryTable = () => {
   
 
@@ -107,6 +108,7 @@ const MainCategoryTable = () => {
 
   return (
     <div className="table-container">
+      <AdminNavbar/>
       {deleteSuccesMessage && <div className='deleteSucces'>Deleted SUccesFully</div>}
       {/* {updateSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
       {addSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>} */}

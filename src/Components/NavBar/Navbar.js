@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {useSelector } from 'react-redux/es/hooks/useSelector';
+
+
 const NavBar = () => {
   const [expanded, setExpanded] = useState(false);
  
@@ -51,6 +53,11 @@ const NavBar = () => {
     }
   }
 
+  const handleNavigateToOrders=()=>{
+    console.log("???????????")
+    navigate('/profile');
+  }
+
   return (
     <Navbar className='mainnavbar' bg="light" expand="xl" expanded={expanded} style={{ width: '100%' , position: 'fixed', top: '0', left: '0', right: '0', zIndex: '1000' }} >
       <Container fluid>
@@ -60,7 +67,7 @@ const NavBar = () => {
           <Nav className="me-auto">
             {/* Add user-related components/icons to the left side */}
             <Nav.Item className="d-flex align-items-center">
-              <Image src="profile.jpg" roundedCircle width={30} height={30} />
+              <Image src="profile.jpg" roundedCircle width={30} height={30}  />
              {jwtToken? <span className="user-name">{firstName}{lastName}</span>:<span className="user-name">Welcome User</span>}
             </Nav.Item>
           </Nav>
@@ -71,7 +78,7 @@ const NavBar = () => {
             <Nav.Link href="/cart">Cart</Nav.Link>
             {/* Add more Nav.Link components as needed */}
             <NavDropdown title="More" id="basic-nav-dropdown">
-              {/* Add dropdown items if repquired */}
+            <NavDropdown.Item onClick={handleNavigateToOrders}>Profile</NavDropdown.Item>
             </NavDropdown>
             {/* Logout button */}
             {jwtToken && <Button className='btn btn-danger m-0' onClick={handleLogout}>Logout</Button>}

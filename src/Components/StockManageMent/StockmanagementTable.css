@@ -39,7 +39,12 @@
     padding: 8px;
     text-align: left;
   }
-  
+  .stokaddsucces{
+    color: green;
+  }
+  .stokaddfaild{
+    color: red;
+  }
   .table th {
     background-color: #f0f0f0;
   }

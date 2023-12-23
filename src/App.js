@@ -29,6 +29,7 @@ import Checkout from './Components/CheckoutPage/Checkout';
 import StockmanagementTable from './Components/StockManageMent/StockmangementTable';
 import Allproducts from './Pages/Allproduts';
 import CheckoutPage from './Pages/CheckoutPage';
+import OrderDetailsTable from './Components/OrderDetailsTable/OrderDetailsTable';
 function App() {
   return (
     <div className="App">
@@ -43,11 +44,12 @@ function App() {
            <Route path='/CourseCategory' element={<CourseCAtegory/>}/>
            <Route path='/profile' element={<UserProfile/>}/>
            <Route path='/orders' element={<Orders/>}/>
-           <Route path='/orderedproductdetails' element={<OrderedProductDetails/>}/>
+           <Route path='/ordersdetails' element={<OrderDetailsTable/>}/>
           <Route path='/AdminPage' element={<AdminDashBoard/>}/>
           <Route path='/UserDetails' element={<UserDetails/>}/>
           <Route path='/cart' element={<UserCart/>}/>
-          <Route path='/checkout' element={<CheckoutPage/>}/>
+          <Route path='/checkout/all' element={<CheckoutPage/>}/>
+          <Route path='/checkout/:cartid' element={<CheckoutPage/>}/>
           <Route path='/ProductTable/all' element={<ProductTableDetails/>}/>
           <Route path='/UserLogin' element={<UserLogin/>}/>
           <Route path='/UserRegister' element={<UserRegister/>}/>

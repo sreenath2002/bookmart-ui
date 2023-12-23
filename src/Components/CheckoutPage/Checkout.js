@@ -6,14 +6,16 @@ import { useNavigate } from 'react-router-dom';
 // import Razorpay from 'razorpay';
 import { useEffect } from 'react';
 import Loader from '../LoaderIcon/Loader';
-
+import { useParams } from 'react-router-dom';
 import { Checkmark } from 'react-checkmark'
 import { getAllCountries ,getAllCities,getAllStates} from '../../axios/service/AddresDetails';
 import { addNewOrder } from '../../axios/service/orderService';
 import { addressValidation } from '../../validation/validation';
-import { userCartDetails, allAddress, removeFromCart, addAddress,getAllPaymentMethods,payMentRequest,shopOrderRequest } from '../../axios/service/userService.s';
+import { userCartDetails, allAddress, removeFromCart, addAddress,getAllPaymentMethods,payMentRequest,shopOrderRequest,getspecificCart} from '../../axios/service/userService.s';
 const Checkout = () => {
   // const id = useSelector((state) => state.user.id)
+  const {cartid}  = useParams();
+  console.log({cartid})
   const jwtToken = localStorage.getItem("jwt");
   const id = localStorage.getItem("id");
   const mailId=localStorage.getItem("email");
@@ -23,6 +25,8 @@ const Checkout = () => {
   const location = useLocation();
   const navigate=useNavigate();
   const cartItems = location.state?.cartItems || null
+
+ 
   // Sample data for address details
   const [addressDetails, setAddressDetails] = useState([]);
   const[paymentTypes,setPaymentTypes]=useState([]);
@@ -83,10 +87,28 @@ const Checkout = () => {
   useEffect(() => {
 
     featchData(jwtToken)
-    console.log("fdsj")
+    console.log("fdsj==========")
+    console.log(cartItems);
     async function featchData(token) {
+     try{
+      let  cartDetails;
+      const cartIdValue = parseInt(cartid, 10)
 
-      const cartDetails = await userCartDetails(token, id);
+      console.log("+_=_=_=_=_")
+
+        if (cartIdValue) {
+          console.log("+_=_=_=_=_+++++++++")
+          console.log(cartIdValue)
+          cartDetails = await getspecificCart(token,  cartIdValue);
+         
+        } else {
+          console.log("{}{}{}{]{}{}{]")
+          cartDetails = await userCartDetails(token, id);
+          
+        }
+     
+      
+
 
       const address = await allAddress(token, id);
       const paymentMethods= await getAllPaymentMethods(token);
@@ -95,21 +117,25 @@ const Checkout = () => {
       console.log(address)
       console.log("--------------------------------------------------")
       console.log("-----------hai--------");
+      console.log(cartDetails.result)
+      console.log(cartDetails.statuscode)
       console.log(cartDetails)
+      console.log(cartDetails.result)
 
       if (cartDetails.statuscode === '200 OK') {
         console.log("jfsd")
+      
         console.log(cartDetails.result)
         setProducts(cartDetails.result)
 
 
         console.log("---car-");
       }
-      if (address.statuscode === '200 OK' && address.result != []) {
+      if (address.statuscode === '200 OK' &&  address.result.length > 0) {
         setAddressDetails(address.result);
         console.log(addressDetails)
       }
-      if (paymentMethods.statuscode === '200 OK' && paymentMethods.result != []) {
+      if (paymentMethods.statuscode === '200 OK' && paymentMethods.result.length > 0) {
        setPaymentTypes(paymentMethods.result);
         console.log(paymentTypes);
       }
@@ -119,6 +145,11 @@ const Checkout = () => {
           console.log(countries.data)
         }
     }
+    catch{
+      console.log("error=================================================")
+    }
+  }
+ 
 
   }, [refresh]);
 
@@ -373,7 +404,8 @@ const Checkout = () => {
         productIdList: productIdList,
         orderId: orderId,
         qty: qty,
-        price: price
+        price: price,
+        userId:id
       };
 
       const orderLine=await addNewOrder(jwtToken,orderDetails)
@@ -810,12 +842,14 @@ else{
             )}
 
             {/* Products details section */}
-            <div className="products-details">
+            <div className="products-detailscheckout">
               <h2>Products</h2>
               {products.map((book) => (
-                <div className="product-item" key={book.product.id}>
-                  <img src={book.product.images[1].imageUrl} alt={book.product.title} />
+                <div className="product-itemcheckout" key={book.product.id}>
                   <div>
+                  <img src={book.product.images[1].imageUrl} alt={book.product.title} />
+                  </div>
+                   <div className='infor'>
                     <p className='title'>{book.product.title}</p>
                     <p className='info'>{book.product.course.parentCategory.name} | {book.product.course.courseName} {book.product.subject.subjectName} | {book.product.semester.name} | {book.product.university.universityName}</p>
                     <p> ${book.product.discountedPrice} <span><s className='rel-price'>${book.product.price}</s></span> <span className='dis'>{book.product.discountPresent}% OFF</span></p>

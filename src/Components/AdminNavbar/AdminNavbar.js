@@ -68,6 +68,8 @@ const AdminNavbar = () => {
           </Nav>
           <Nav className="ms-auto">
             <Nav.Link href="/AdminPage">Home</Nav.Link>
+            <Nav.Link href="/stockmanagement">Stock</Nav.Link>
+            <Nav.Link href="/Category">Category</Nav.Link>
             {/* Add more Nav.Link components as needed */}
             <NavDropdown title="More" id="basic-nav-dropdown">
               {/* Add dropdown items if repquired */}

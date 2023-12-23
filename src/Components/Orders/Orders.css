@@ -14,14 +14,49 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 150%;
-    max-width: 600px;
+    width: 180%;
+    max-width: 800px;
    
     margin-bottom: 10px;
     border: 1px solid #ccc;
+    background-color: rgb(221, 239, 255);
     border-radius: 8px;
     padding: 7px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 12px 7px 4px rgba(0, 0, 0, 0.1);
+  }
+  @keyframes slideInFromBelow {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Apply animation to specific elements */
+  .order-item {
+    animation: slideInFromBelow 1.6s ease-in-out forwards;
+  }
+  .orderdetails{
+    font-size: 12px;
+    text-align: left;
+    
+  }
+  .titleofbook{
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .orderstatusdetails{
+    font-size: 14px;
+    text-align: left;
+    margin-top: 5px;
+    cursor: pointer;
+    
+  }
+  .orderstatusdetails:hover{
+    text-decoration: underline;
   }
   
   .product-image img {
@@ -34,6 +69,9 @@
   
   .product-details {
     flex-grow: 1;
+  }
+  .product-details{
+    justify-content: space-between;
   }
   
   .product-details p {
@@ -63,9 +101,21 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     max-width: 80%;
-    width: 300px;
+    width: 400px;
     text-align: center;
   }
+  .cancelledmsg{
+    color: red;
+  }
+  .deliveredmsg{
+    color: green;
+  }
+  .disabled-button {
+    filter: blur(2px); /* Apply blur effect */
+    opacity: 0.6; /* Adjust opacity for disabled effect */
+    /* Add any other styles for a disabled button */
+  }
+  
   
   .modal-content h2 {
     margin-bottom: 15px;

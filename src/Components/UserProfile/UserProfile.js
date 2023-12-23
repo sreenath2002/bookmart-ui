@@ -10,6 +10,8 @@ import { userInfo } from '../../axios/service/userService.s';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
+
+import { useNavigate } from 'react-router-dom';
 const UserProfile = () => {
 
   const id = useSelector((state) => state.user.id)
@@ -83,7 +85,7 @@ const UserProfile = () => {
   const[citiesOptions,setCitiesOptions]=useState([]);
 
   const[stateOptions,setStateOptions]=useState([]);
-
+ const navigate = useNavigate();
   useEffect(() => {
     fetchData(jwtToken);
 
@@ -129,7 +131,9 @@ const UserProfile = () => {
   //    setShowAddAddress(false)
   //    setEditMode(false)
   // }
-
+const handleNavigateToOrders=()=>{
+  navigate('/orders');
+}
 
   const handleGetStates= async(selectedCountry) =>{
     setCountry(selectedCountry)
@@ -518,7 +522,7 @@ const UserProfile = () => {
         </div>
         <div className="user-options">
           <button onClick={() => setShowProducts(!showProducts)}>Show My Products</button>
-          <button onClick={() => setShowOrders(!showOrders)}>My Orders</button>
+          <button onClick={ handleNavigateToOrders}>My Orders</button>
           <button onClick={() => setShowRevenue(!showRevenue)}>My Revenue</button>
         </div>
       </div>}

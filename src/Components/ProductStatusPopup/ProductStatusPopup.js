@@ -1,16 +1,30 @@
 // ProductStatusPopup.js
 import React from 'react';
 import './ProductStatusPopup.css'; // Import CSS file for styling
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBox, faTruck, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { MdErrorOutline } from 'react-icons/md';
+import { RiTruckLine } from 'react-icons/ri';
+import { IoIosCheckmarkCircleOutline, IoIosCloseCircleOutline } from 'react-icons/io';
 
-const ProductStatusPopup = ({ onClose }) => {
-  // Sample status details
-  const statusDetails = [
-    { status: 'Item Packed', date: 'Dec 20, 2023', time: '10:00 AM' },
-    { status: 'Item Shipped', date: 'Dec 21, 2023', time: '9:30 AM' },
-    { status: 'Out for Delivery', date: 'Dec 23, 2023', time: '8:45 AM' },
-    { status: 'Delivered', date: 'Dec 24, 2023', time: '11:15 AM' },
+const ProductStatusPopup = ({ statuses, onClose }) => {
+  const statusIcons = [
+    { status: 'Order Placed', icon: <FontAwesomeIcon icon={faCheckCircle} /> },
+    { id: 'Item Packed', icon: <FontAwesomeIcon icon={faCheckCircle} /> },
+    { status: 'Item Shipped', icon: <FontAwesomeIcon icon={faBox} /> },
+    { status: 'Item Shipped', icon: <FontAwesomeIcon icon={faTruck} /> },
+    { status: 'Out for Delivery', icon: <RiTruckLine /> },
+    { status: 'Delivered', icon: <IoIosCheckmarkCircleOutline /> },
+    { status: 'Order Cancelled', icon: <IoIosCloseCircleOutline /> },
+    { status: 'Unable to Fetch', icon: <MdErrorOutline /> },
+    // Add more statuses and corresponding icons if needed
   ];
+  // Sample status details
 
+  const formatTime = (timeString) => {
+    const time = new Date(`1970-01-01T${timeString}Z`);
+    return time.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+  };
   return (
     <div className="product-status-popup">
       <div className="popup-header">
@@ -18,15 +32,24 @@ const ProductStatusPopup = ({ onClose }) => {
         <button onClick={onClose}>Close</button>
       </div>
       <div className="status-list">
-        {statusDetails.map((detail, index) => (
-          <div key={index} className="status-item">
-            <div className="status-icon">&#x2713;</div>
+        {statuses.map((detail) => (
+          <div key={detail.id} className="status-item">
             <div className="status-info">
-              <p>{detail.status}</p>
-              <p>Date: {detail.date}</p>
-              <p>Time: {detail.time}</p>
+              <p className={detail.status.id === 6 ? 'nameofStatus red-text' : 'nameofStatus'}>
+                {detail.status.name}
+              </p>
+              <div className='statusinformation'>
+                <p>Date: <span className='detailinfo'>{detail.reacheddate.split('T')[0]}</span></p>
+                {detail.status.id !== 1 && (
+                  <>
+                    <p>Time: <span className='detailinfo'>{formatTime(detail.reachedtime)}</span></p>
+                    <p>Location: <span className='detailinfo'>{detail.location}</span></p>
+                  </>
+                )}
+              </div>
             </div>
-            {index !== statusDetails.length - 1 && <div className="line"></div>}
+            {/* Display status icon based on detail.status.id */}
+            <div className="status-icon">{statusIcons[detail.status.id].icon}</div>
           </div>
         ))}
       </div>

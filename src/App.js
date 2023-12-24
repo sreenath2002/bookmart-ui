@@ -30,6 +30,7 @@ import StockmanagementTable from './Components/StockManageMent/StockmangementTab
 import Allproducts from './Pages/Allproduts';
 import CheckoutPage from './Pages/CheckoutPage';
 import OrderDetailsTable from './Components/OrderDetailsTable/OrderDetailsTable';
+import Coupontable from './Components/CouponTable/Coupontable';
 function App() {
   return (
     <div className="App">
@@ -43,6 +44,7 @@ function App() {
            <Route path='/Category' element={<MainCategoryTable/>}/>
            <Route path='/CourseCategory' element={<CourseCAtegory/>}/>
            <Route path='/profile' element={<UserProfile/>}/>
+           <Route path='/coupontable' element={<Coupontable/>}/>
            <Route path='/orders' element={<Orders/>}/>
            <Route path='/ordersdetails' element={<OrderDetailsTable/>}/>
           <Route path='/AdminPage' element={<AdminDashBoard/>}/>

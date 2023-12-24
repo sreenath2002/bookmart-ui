@@ -383,5 +383,38 @@ export const  getStatusOfTheProduct= async (token,orderId) => {
     const { data } = await axiosAdminInstance.get(`/stauses/${orderId}`, config);
     return data;
 };
+export const  getCouponsList= async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.get(`/getCouponsList`, config);
+    return data;
+};
+export const  addNewCoupon= async (token,addCouponDetails) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.post(`/addcupon`,addCouponDetails, config);
+    return data;
+};
+export const updateCoupon= async (token,couponId,updateCouponDetails) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.put(`/updatecupon/${couponId}`,updateCouponDetails,null, config);
+    return data;
+};
 
 

@@ -12,6 +12,18 @@ export const addToCart = async (token, productInfo) => {
     return data;
 
 };
+export const addToWishlist= async (token, productInfo) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.post('/addtowishlist', productInfo, config);
+    return data;
+
+};
 
 export const removeFromCart = async (token, itemId) => {
     const config = {
@@ -22,6 +34,18 @@ export const removeFromCart = async (token, itemId) => {
         },
     };
     const { data } = await axiosUserInstance.delete(`/removefromcart/${itemId}`, config);
+    return data;
+
+};
+export const removeFromWishlist = async (token, itemId) => {         
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.delete(`/removefromwishlist/${itemId}`, config);
     return data;
 
 };
@@ -78,7 +102,7 @@ export const updateAddress = async (token, addresId, addressDetails) => {
 
 };
 
-export const addProfilrImage = async (token, userId) => {
+export const addProfileImage = async (token, addprofileimagedetails,userId) => {
     const config = {
         headers: {
             Accept: 'application/json',
@@ -86,7 +110,7 @@ export const addProfilrImage = async (token, userId) => {
             'Content-Type': 'application/json',
         },
     };
-    const { data } = await axiosUserInstance.put(`/addprofileImage/${userId}`, config);
+    const { data } = await axiosUserInstance.put(`/addprofileImage/${userId}`, addprofileimagedetails,config);
     return data;
 
 };
@@ -102,6 +126,19 @@ export const userCartDetails = async (token, userId) => {
         },
     };
     const { data } = await axiosUserInstance.get(`/usercart/${userId}`, config);
+    return data;
+
+
+};
+export const userWishlistDetails = async (token, userId) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/userwishlist/${userId}`, config);
     return data;
 
 
@@ -289,7 +326,7 @@ export const showStatus = async (token,orderLineId) => {
 
 };
 
-export const getspecificCart = async (token,cartId) => {
+export const getspecificCart = async (token,wishlistId) => {
     const config = {
         headers: {
             Accept: 'application/json',
@@ -297,7 +334,20 @@ export const getspecificCart = async (token,cartId) => {
             'Content-Type': 'application/json',
         },
     };
-    const { data } = await axiosUserInstance.get(`/getcart/${cartId}`, config);
+    const { data } = await axiosUserInstance.get(`/getcart/${wishlistId}`, config);
+    return data;
+
+
+};
+export const getspecificWishlist = async (token,cartId) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/getwishlist/${cartId}`, config);
     return data;
 
 
@@ -329,4 +379,61 @@ export const gettheorderStatus = async (token,orderLineId) => {
 
 
 };
+
+export const getcoupondiscount = async (token,couponId) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/getCouponDiscount/${couponId}`, config);
+    return data;
+
+
+};
+export const getcouponslist = async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/getCouponsList`, config);
+    return data;
+
+
+};
+export const getvalidcouponslist = async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/getValidCouponsList`, config);
+    return data;
+
+
+};
+export const getProductIdFromCart = async (userId) => {
+
+    const { data } = await axiosUserInstance.get(`/productidsfromcart/${userId}`);
+    return data;
+
+
+};
+export const getProductIdFromWishlist= async (userId) => {
+    
+   
+    const { data } = await axiosUserInstance.get(`/productidsfromwishlist/${userId}`);
+    return data;
+
+
+};
+
+
 

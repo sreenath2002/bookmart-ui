@@ -9,9 +9,9 @@ import Loader from '../LoaderIcon/Loader';
 import { useParams } from 'react-router-dom';
 import { Checkmark } from 'react-checkmark'
 import { getAllCountries ,getAllCities,getAllStates} from '../../axios/service/AddresDetails';
-import { addNewOrder } from '../../axios/service/orderService';
+import { addNewOrder,sendorderplacedemail } from '../../axios/service/orderService';
 import { addressValidation } from '../../validation/validation';
-import { userCartDetails, allAddress, removeFromCart, addAddress,getAllPaymentMethods,payMentRequest,shopOrderRequest,getspecificCart} from '../../axios/service/userService.s';
+import { userCartDetails, allAddress, removeFromCart, addAddress,getAllPaymentMethods,payMentRequest,shopOrderRequest,getspecificCart,getcoupondiscount,getcouponslist,getvalidcouponslist} from '../../axios/service/userService.s';
 const Checkout = () => {
   // const id = useSelector((state) => state.user.id)
   const {cartid}  = useParams();
@@ -30,6 +30,7 @@ const Checkout = () => {
   // Sample data for address details
   const [addressDetails, setAddressDetails] = useState([]);
   const[paymentTypes,setPaymentTypes]=useState([]);
+  const[validacouponoptions,setvalidcouponoptions]=useState([]);
   const [products, setProducts] = useState([]);
   const [showRemovePopup, setShowRemovePopup] = useState(false);
   const [showPayemntSucces,setShowPaymentSuccesFullPopup]=useState(false);
@@ -82,7 +83,8 @@ const Checkout = () => {
   const[emailError,setMessageSentEmailError]=useState(null);
   const[addresSelectError,setAddresSelectError]=useState(null);
   const[messageSentEmail,setMessageSentEmail]=useState(null);
-
+  const [selectedCoupondiscount,setSelectedCoupondiscount]=useState();
+  const[couponerror,setCouponError]=useState();
 
   useEffect(() => {
 
@@ -112,6 +114,8 @@ const Checkout = () => {
 
       const address = await allAddress(token, id);
       const paymentMethods= await getAllPaymentMethods(token);
+      const validcoupons=await getvalidcouponslist(token);
+    
       const countries=await getAllCountries();
 
       console.log(address)
@@ -134,6 +138,10 @@ const Checkout = () => {
       if (address.statuscode === '200 OK' &&  address.result.length > 0) {
         setAddressDetails(address.result);
         console.log(addressDetails)
+      }
+      if (validcoupons.statuscode === '200 OK' &&  validcoupons.result.length > 0) {
+        setvalidcouponoptions(validcoupons.result);
+
       }
       if (paymentMethods.statuscode === '200 OK' && paymentMethods.result.length > 0) {
        setPaymentTypes(paymentMethods.result);
@@ -273,6 +281,7 @@ const Checkout = () => {
 
 
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+  const [showCouponPopup, setShowCouponPopup] = useState(false);
   const handleShowPaymentPopup = () => {
     if(validateForm()){
       setShowPaymentPopup(true);
@@ -296,8 +305,9 @@ const Checkout = () => {
     ?products.length 
     : 0;
 
+    const totaldiscountedprice=selectedCoupondiscount ? (selectedCoupondiscount)/100  :0 ;
 
-  const total = subtotal;
+  const total = totaldiscountedprice==0? subtotal : subtotal-(subtotal*totaldiscountedprice);
 
 
 
@@ -407,14 +417,24 @@ const Checkout = () => {
         price: price,
         userId:id
       };
+      const orderPlacedDetails={
+        productIdList: productIdList,
+        qty: qty,
+        price: price,
+        enteredemail:messageSentEmail
 
+      }
+      console.log(orderDetails)
       const orderLine=await addNewOrder(jwtToken,orderDetails)
       {
-        console.log("helooooooo")
+        console.log("helooooooo2323232342423")
         if(orderLine.statuscode === '200 OK')
         {
+          console.log("helooooooo11111")
           setLoading(false)
           setOrderPlacedMessage("Your Order Placed")
+          const emailsent=await sendorderplacedemail(jwtToken,orderPlacedDetails)
+           console.log(emailsent)
           setTimeout(() => {
             setOrderPlacedMessage(false);
          setShowLoader(true);
@@ -432,6 +452,7 @@ const Checkout = () => {
 
         }
         else{
+          console.log("heloooooooDDDDDDDDDD@")
           setLoading(false)
           setorderPlacedFiled("Internal Server Error")
           setTimeout(() => {
@@ -442,6 +463,7 @@ const Checkout = () => {
       }
     }
     catch (err) {
+ 
       setLoading(false)
       setorderPlacedFiled("Internal Server Error")
       setTimeout(() => {
@@ -460,6 +482,7 @@ const Checkout = () => {
         paymentInfoId:payId,
         addresId:selectedAddresId
       }
+      console.log(shopOrderDetails);
       const  shop = await shopOrderRequest(jwtToken,id,shopOrderDetails)
       if(shop.statuscode === '200 OK'){
         handleOrderLine(shop.result);
@@ -730,6 +753,27 @@ else{
   };
 
 
+  const handleCloseCouponPopup=()=>{
+    setShowCouponPopup(false);
+    setSelectedCoupondiscount(0);
+  }
+  const handleOpenCouponPopup=()=>{
+    setShowCouponPopup(true);
+  }
+
+  
+ const handleUseCouponPopup=(id)=>{
+  if(id ===null)
+  {
+    setCountryError(true);
+  }
+  else{
+    setCountryError(false);
+    setShowCouponPopup(false);
+
+  }
+ }
+
   return (
 
 
@@ -938,6 +982,37 @@ else{
               </div>
             </div>
           )}
+           {showCouponPopup && <div className="overlay" />}
+          {showCouponPopup && (
+            <div className="payment-popup">
+              
+              {validacouponoptions && validacouponoptions.length > 0 ? (
+
+                <>
+                <h2>Select Coupon</h2>
+                {couponerror &&<p>Select one Coupon</p>}
+                  {validacouponoptions.map((validcoupon) => (
+                    <label key={validcoupon.id}>
+                      <input
+                        type="radio"
+                      
+                        value={validcoupon.discount}
+                        onChange={() =>setSelectedCoupondiscount(validcoupon.discount)}
+                      />
+
+                      <span> code:{validcoupon.code}                   discount:{validcoupon.discount}%
+                        </span>
+                    </label>
+                  ))}
+                </>
+              ) : (<div>No validcoupons</div>)}
+
+              <div className="popup-buttons">
+                <button onClick={handleCloseCouponPopup}>Cancel</button>
+                {selectedCoupondiscount &&<button onClick={handleUseCouponPopup}>Use</button>}
+              </div>
+            </div>
+          )}
            {showPayemntSucces && <div className="overlay" />}
            {showPayemntSucces &&<div className="removed-message">
       <p>Payment Succes</p>
@@ -951,6 +1026,10 @@ else{
             <span>{totalQuantity}</span>
             </div>
             <div className='priceDetailsBox'>
+            <p>Discount</p>
+            <span>{totaldiscountedprice*100}%</span>
+            </div>
+            <div className='priceDetailsBox'>
             <p>Subtotal</p>
             <span>${subtotal}</span>
             </div>
@@ -958,8 +1037,9 @@ else{
             <div className='priceDetailsBox'>
             <p>Total</p>
             <span>${total}</span>
-            </div>
             
+            </div>
+            <p className="usecouponbutton" onClick={handleOpenCouponPopup}>Add coupon</p>
             
           </div>
         </>) : (<><div>CheckOut Is Empty</div></>)

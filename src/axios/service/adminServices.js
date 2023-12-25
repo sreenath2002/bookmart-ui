@@ -406,6 +406,7 @@ export const  addNewCoupon= async (token,addCouponDetails) => {
     return data;
 };
 export const updateCoupon= async (token,couponId,updateCouponDetails) => {
+    console.log("><><><><><><><")
     const config = {
         headers: {
             Accept: 'application/json',
@@ -413,7 +414,7 @@ export const updateCoupon= async (token,couponId,updateCouponDetails) => {
             'Content-Type': 'application/json',
         },
     };
-    const { data } = await axiosAdminInstance.put(`/updatecupon/${couponId}`,updateCouponDetails,null, config);
+    const { data } = await axiosAdminInstance.put(`/updatecupon/${couponId}`,updateCouponDetails, config);
     return data;
 };
 

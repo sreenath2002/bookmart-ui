@@ -7,10 +7,10 @@ import ReactImageZoom from 'react-image-zoom';
 import { getNewArrivals } from '../../axios/service/productsService';
 import { getCatgoriesFilter, getUniversityFilter, getCoursefilter, getSubjcetFilter, getSemesterFilter } from '../../axios/service/productsService';
 import FilterBox from '../FilterBox/FilterBox';
-import { FaHeart, FaShoppingCart } from 'react-icons/fa';
+import { FaHeart, FaShoppingCart,FaRegHeart  } from 'react-icons/fa';
 import Footer from '../Footer/Footer';
 import { useSelector } from 'react-redux';
-import { addToCart,removeFromCart } from '../../axios/service/userService.s';
+import { addToCart, removeFromCart, addToWishlist, getProductIdFromCart, getProductIdFromWishlist } from '../../axios/service/userService.s';
 
 const Products = () => {
   // Sample book data (can be fetched from an API or database)
@@ -20,8 +20,12 @@ const Products = () => {
   const [bookSubject, setSubjcets] = useState([]);
   const [bookuniversities, setUniversities] = useState([]);
   const [booksemesters, setSemesters] = useState([]);
-  const id=useSelector((state)=>state.user.id)
+  const [wishlistproductIds, setwishlistproductProdutIds] = useState([]);
+  const [cartproductIds, setcartproductProdutIds] = useState([]);
+  const[refresh,setRefresh]=useState(false);
+  const id = useSelector((state) => state.user.id)
   const jwtToken = localStorage.getItem("jwt");
+  const [serverError, setServerError] = useState();
 
   useEffect(() => {
 
@@ -32,7 +36,10 @@ const Products = () => {
       const allbooks = await getNewArrivals();
       const categories = await getCatgoriesFilter();
       const universities = await getUniversityFilter();
-
+      const cartProdutIds = await getProductIdFromCart(id);
+      const wishlistIds = await getProductIdFromWishlist(id);
+      setcartproductProdutIds(cartProdutIds.result)
+      setwishlistproductProdutIds(wishlistIds.result)
       // const universities=await getUniversities(token);
       console.log("--------------------------------------------------")
       console.log("-----------hai--------");
@@ -52,7 +59,7 @@ const Products = () => {
       }
     }
 
-  }, []);
+  }, [!refresh]);
   // State for filters
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('');
@@ -151,36 +158,78 @@ const Products = () => {
     }
 
   }
-  const handleAddToCart=async (bookId)=>{
+  const handleAddToCart = async (bookId) => {
     try {
-  
+
       const productInfo = {
-  
+
         userId: id,
-        productId : bookId,
+        productId: bookId,
         quantity: 1,
-      
+
       }
       console.log("productDetails===", productInfo)
       const addtocart = await addToCart(jwtToken, productInfo)
       console.log("lsdhgck")
       console.log("addDetails", addtocart)
-  
+
       if (addtocart.statuscode === '200 OK') {
-       
+        setRefresh(!refresh)
         console.log("Added to cart")
       } else {
-        console.log("Not Added Cart")
+        setServerError("Internal Server Error")
+        setTimeout(() => {
+          setServerError(false)
+        }, 2000)
       }
-  
+
     }
-  
+
     catch (err) {
-      console.log("error", err)
-     
+      setServerError("Internal Server Error")
+      setTimeout(() => {
+        setServerError(false)
+      }, 2000)
+
     }
-  
-   }
+
+  }
+  const handleAddToWishlist = async (bookId) => {
+    try {
+
+      const productInfo = {
+
+        userId: id,
+        productId: bookId,
+        quantity: 1,
+
+      }
+      console.log("productDetails===", productInfo)
+      const addtowishlist = await addToWishlist(jwtToken, productInfo)
+      console.log("lsdhgck")
+      console.log("addDetails", addtowishlist)
+
+      if (addtowishlist.statuscode === '200 OK') {
+        setRefresh(!refresh)
+        console.log("Added to cart")
+      } else {
+        setServerError("Internal Server Error")
+        setTimeout(() => {
+          setServerError(false)
+        }, 2000)
+      }
+
+    }
+
+    catch (err) {
+      setServerError("Internal Server Error")
+      setTimeout(() => {
+        setServerError(false)
+      }, 2000)
+
+    }
+
+  }
 
   return (
     <Container fluid>
@@ -342,8 +391,19 @@ const Products = () => {
                             <div>
                               <Card.Body className='body_card'>
                                 <div class="card-header">
-                                  <FaShoppingCart className="cart-icon" onClick={()=>{handleAddToCart(book.id)}} />
-                                  <FaHeart className="wishlist-icon" />
+                                  {cartproductIds.includes(book.id) ? (
+
+                                    <FaShoppingCart className="addedcart-icon" />
+                                    // <FaCheck className="check-icon" />
+
+                                  ) : (
+                                    <FaShoppingCart className="cart-icon" onClick={() => handleAddToCart(book.id)} />
+                                  )}
+                                  {wishlistproductIds.includes(book.id) ? (
+                                    <FaHeart className="wishlist-icon-blur" />
+                                  ) : (
+                                    <FaRegHeart className="wishlist-icon" onClick={() => handleAddToWishlist(book.id)} />
+                                  )}
                                 </div>
                                 <Card.Title className="book-name">{book.title}</Card.Title>
                                 <Card.Text>
@@ -353,7 +413,7 @@ const Products = () => {
 
                                   <p className='price'>
                                     <span className='discounted-price'>${book.discountedPrice}</span>
-                                     <s className='real'>${book.price}</s>
+                                    <s className='real'>${book.price}</s>
                                     <span className='discount'>{book.discountPresent}% OFF</span>
                                   </p>
 
@@ -376,6 +436,10 @@ const Products = () => {
 
 
           </Col>
+          {serverError && <div className="overlay" />}
+          {serverError && (
+            <div className='serverError'><h4 className='serverError'>{serverError}</h4></div>
+          )}
         </div>
 
       </Row>

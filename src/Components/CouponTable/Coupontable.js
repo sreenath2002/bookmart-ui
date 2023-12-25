@@ -15,13 +15,14 @@ const Coupontable = () => {
     const [couponDiscount, setCouponDiscount] = useState();
     const jwtToken = localStorage.getItem("jwt");
     const [refresh, setRefresh] = useState(false)
-
+    const[selectedCouponId,setSelectedCouponId]=useState();
     const[couponIdError,setCouponIdError]=useState();
     const[validDateError,setValidDateError]=useState();
     const[expDateError,setExpError]=useState();
     const[discountError,setDiscountError]=useState();
     const[responseSuucesmg,setReponseSucccesMsg]=useState();
     const[responseFalidMsg,setResponseFalidMsg]=useState();
+    const[responseSuucesmg1,setReponseSucccesMsg1]=useState();
     useEffect(() => {
         fetchData(jwtToken);
 
@@ -52,31 +53,36 @@ const Coupontable = () => {
     const validateForm = () => {
         let isValid = true;
     
-        // Email validation using regex
+      
+        const couponRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{4,}$/;
     
         if (couponCode.trim() === '') {
-            couponIdError("Please provide Coupon Code")
-          isValid = false;
+            setCouponIdError("Please provide Coupon Code");
+            isValid = false;
+        } else if (!couponRegex.test(couponCode)) {
+            if (couponCode.length < 4) {
+                setCouponIdError("Coupon Code must be at least 4 characters long");
+            } else {
+                setCouponIdError("Coupon Code must contain both alphabets and numbers");
+            }
+            isValid = false;
         }
-        if (couponStartDate.trim() == '') {
-            setValidDateError("Please Provide date")
-          isValid = false;
-        }
-    
-    
     
         return isValid;
-      };
+    };
+    
 
 
 
     const handleUpdate = (couponId) => {
+        setSelectedCouponId(couponId)
         setShowTable(false)
         setShowUpdateForm(true);
-        console.log(`Updating coupon with ID ${couponId}`);
+     
     };
 
     const handleAddNewCoupon = () => {
+      
         setShowTable(false)
         setShowAddForm(true);
         console.log('Adding a new coupon');
@@ -84,19 +90,94 @@ const Coupontable = () => {
 
     const handleCloseUpdateForm = () => {
         setShowUpdateForm(false);
+        setRefresh(!refresh)
         setShowTable(true)
     };
 
     const handleCloseAddForm = () => {
 
         setShowAddForm(false);
+        setRefresh(!refresh)
         setShowTable(true)
     };
-    const handleUpdateSubmit = () => {
-        setShowUpdateForm(false);
+    const handleUpdateSubmit = async(e) => {
+        e.preventDefault();
+        if(validateForm()){
+
+            try{
+                const updateCouponDetails={
+                    code:couponCode,
+                    startdate:couponStartDate,
+                    exprDate:couponEndDate,
+                    discountRate:couponDiscount
+                }
+                console.log()
+                const couponupdated=await updateCoupon(jwtToken,selectedCouponId,updateCouponDetails)
+                if(couponupdated.statuscode === '200 OK')
+                {
+                    setReponseSucccesMsg(true);
+                    setTimeout(()=>{
+                        setReponseSucccesMsg(false);
+                    },2000);
+                }
+                else{
+                    setResponseFalidMsg(true);
+                    setTimeout(()=>{
+                        setResponseFalidMsg(false);
+                    },2000);
+                }
+
+            }
+            catch{
+                setResponseFalidMsg(true);
+                setTimeout(()=>{
+                    setResponseFalidMsg(false);
+                },2000);
+
+            }
+        }
+        
+        // setShowUpdateForm(false);
     };
-    const handleAddSubmit = () => {
-        setShowAddForm(false);
+    const handleAddSubmit = async(e) => {
+        e.preventDefault();
+        if(validateForm()){
+
+            try{
+                const addCouponDetails={
+                    code:couponCode,
+                    startdate:couponStartDate,
+                    exprDate:couponEndDate,
+                    discountRate:couponDiscount
+                }
+                console.log(addCouponDetails)
+                const couponadded=await addNewCoupon(jwtToken,addCouponDetails)
+                if(couponadded.statuscode === '201 CREATED')
+                {
+                    setReponseSucccesMsg1(true);
+                    setTimeout(()=>{
+                        setReponseSucccesMsg1(false);
+                    },2000);
+                }
+                else{
+                    console.log("09090909090909")
+                    setResponseFalidMsg(true);
+                    setTimeout(()=>{
+                        setResponseFalidMsg(false);
+                    },2000);
+                }
+
+            }
+            catch{
+                console.log("0")
+                setResponseFalidMsg(true);
+                setTimeout(()=>{
+                    setResponseFalidMsg(false);
+                },2000);
+
+            }
+        }
+        // setShowAddForm(false);
     };
 
     return (
@@ -159,15 +240,15 @@ const Coupontable = () => {
                             {responseFalidMsg && <span className='couponerr'>Internal Server Error</span>}
                             {responseSuucesmg && <span className='updatecouponsucces'>Coupon Updated SuccesFully</span>}
                             <label htmlFor="couponId">Coupon ID:</label>
-                            <input type="text" id="couponId" name="couponId" onChange={(e) => { setCouponCode(e.target.value) }} required />
+                            <input type="text" id="couponCode" name="couponCode" onChange={(e) => { setCouponCode(e.target.value) }} required />
                              {couponIdError && <span className='couponerr'>{couponIdError}</span>}
                             <label htmlFor="startDate">Start Date:</label>
-                            <input type="date" id="startDate" name="startDate" onChange={(e) => { setCouponStartDate(e.target.value) }} required />
+                            <input type="date" id="couponStartDate" name="startDate" onChange={(e) => { setCouponStartDate(e.target.value) }} required />
                             {validDateError && <span className='couponerr'>{validDateError}</span>}
                             <label htmlFor="endDate">End Date:</label>
-                            <input type="date" id="endDate" name="endDate" onChange={(e) => { setCouponEndDate(e.target.value) }} required />
+                            <input type="date" id="couponEndDate" name="endDate" onChange={(e) => { setCouponEndDate(e.target.value) }} required />
                              {expDateError && <span className='couponerr'>{expDateError}</span>}
-                            <label htmlFor="discount">Discount:</label>
+                            <label htmlFor="couponDiscount">Discount:</label>
                             <input type="number" id="discount" name="discount" onChange={(e) => { setCouponDiscount(e.target.value) }} required />
                             {discountError && <span className='couponerr'>{discountError}</span>}
                             <button type="submit">Submit</button>
@@ -184,18 +265,18 @@ const Coupontable = () => {
                         <h2>Add Coupon</h2>
                         <form onSubmit={handleAddSubmit}>
                         {responseFalidMsg && <span className='couponerr'>Internal Server Error</span>}
-                            {responseSuucesmg && <span className='updatecouponsucces'>Coupon Updated SuccesFully</span>}
+                            {responseSuucesmg1 && <span className='updatecouponsucces'>Coupon Added SuccesFully</span>}
                             <label htmlFor="couponId">Coupon ID:</label>
-                            <input type="text" id="couponId" name="couponId" onChange={(e) => { setCouponCode(e.target.value) }} required />
+                            <input type="text" id="couponCode" name="couponId" onChange={(e) => { setCouponCode(e.target.value) }} required />
                             {couponIdError && <span className='couponerr'>{couponIdError}</span>}
                             <label htmlFor="startDate">Start Date:</label>
-                            <input type="date" id="startDate" name="startDate" onChange={(e) => { setCouponStartDate(e.target.value) }} required />
+                            <input type="date" id="couponStartDate" name="startDate" onChange={(e) => { setCouponStartDate(e.target.value) }} required />
                             {validDateError && <span className='couponerr'>{validDateError}</span>}
                             <label htmlFor="endDate">End Date:</label>
-                            <input type="date" id="endDate" name="endDate" onChange={(e) => { setCouponEndDate(e.target.value) }} required />
+                            <input type="date" id="couponEndDate" name="endDate" onChange={(e) => { setCouponEndDate(e.target.value) }} required />
                             {expDateError && <span className='couponerr'>{expDateError}</span>}
                             <label htmlFor="discount">Discount:</label>
-                            <input type="number" id="discount" name="discount" onChange={(e) => { setCouponEndDate(e.target.value) }} required />
+                            <input type="number" id="discount"name="discount" onChange={(e) => { setCouponDiscount(e.target.value) }} required />
                             {discountError && <span className='couponerr'>{discountError}</span>}
                             <button type="submit">Submit</button>
                         </form>

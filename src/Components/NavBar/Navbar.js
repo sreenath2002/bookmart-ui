@@ -53,9 +53,13 @@ const NavBar = () => {
     }
   }
 
-  const handleNavigateToOrders=()=>{
+  const handleNavigateToProfile=()=>{
     console.log("???????????")
     navigate('/profile');
+  }
+  const handleNavigateToWishlist=()=>{
+    
+    navigate('/wishlist');
   }
 
   return (
@@ -78,7 +82,8 @@ const NavBar = () => {
             <Nav.Link href="/cart">Cart</Nav.Link>
             {/* Add more Nav.Link components as needed */}
             <NavDropdown title="More" id="basic-nav-dropdown">
-            <NavDropdown.Item onClick={handleNavigateToOrders}>Profile</NavDropdown.Item>
+            <NavDropdown.Item onClick={handleNavigateToProfile}>Profile</NavDropdown.Item>
+            <NavDropdown.Item onClick={handleNavigateToWishlist}>Wishlist</NavDropdown.Item>
             </NavDropdown>
             {/* Logout button */}
             {jwtToken && <Button className='btn btn-danger m-0' onClick={handleLogout}>Logout</Button>}

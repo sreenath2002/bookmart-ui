@@ -31,6 +31,7 @@ import Allproducts from './Pages/Allproduts';
 import CheckoutPage from './Pages/CheckoutPage';
 import OrderDetailsTable from './Components/OrderDetailsTable/OrderDetailsTable';
 import Coupontable from './Components/CouponTable/Coupontable';
+import Wishlist from './Components/Wishlist/Wishlist';
 function App() {
   return (
     <div className="App">
@@ -50,6 +51,7 @@ function App() {
           <Route path='/AdminPage' element={<AdminDashBoard/>}/>
           <Route path='/UserDetails' element={<UserDetails/>}/>
           <Route path='/cart' element={<UserCart/>}/>
+          <Route path='/wishlist' element={<Wishlist/>}/>
           <Route path='/checkout/all' element={<CheckoutPage/>}/>
           <Route path='/checkout/:cartid' element={<CheckoutPage/>}/>
           <Route path='/ProductTable/all' element={<ProductTableDetails/>}/>

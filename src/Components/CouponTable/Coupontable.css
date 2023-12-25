@@ -89,11 +89,21 @@
     margin-bottom: 8px;
     font-weight: bold;
   }
+  .modaladdcoupon,.modalupdatecoupon{
+    width: 100%;
+    background-color: #ccc;
+ 
+    padding: 40px;
+   margin-top: 15px;
+    
+  }
+ 
   
   input[type="text"],
   input[type="date"],
-  input[type="number"],
-  button[type="submit"] {
+  input[type="number"]
+{
+    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 4px;
@@ -110,6 +120,7 @@
     background-color: #008CBA;
     color: white;
     cursor: pointer;
+   
   }
   
   /* Responsive styles */

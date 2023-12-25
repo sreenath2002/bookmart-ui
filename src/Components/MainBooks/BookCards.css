@@ -18,7 +18,16 @@
   font-style: oblique;
   text-shadow: #0a0a0a;
 }
-
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  /* Additional styling for the overlay */
+}
 .scrolling-wrapper {
   display: flex;
   overflow-x: auto;
@@ -83,21 +92,57 @@ cursor: pointer;
   transition: transform 0.3s ease-in-out; /* Smooth hover transition */
 }
 .cards-header {
-
+  display: flex;
+  flex-direction: column;
   justify-content: space-between; /* Align to the right end */
   align-items: flex-start; /* Align to the top */
   position: absolute;
   top: 0;
-  right: 0;
+  right: 8px;
 }
 
-.cart-icon,
+.cart-icon,.addedcart-icon
 .wishlist-icon {
   /* Add styles for your icons */
   /* For example: */
   margin-top: 13px;
   font-size: 24px;
   /* Add any other necessary styles */
+}
+.addedcart-icon,.wishlist-icon-blur{
+  margin-top: 13px;
+  font-size: 24px;
+
+}
+.addedcart-icon{
+  color: #007bff;
+}
+.wishlist-icon-blur{
+  color: red;
+  
+}
+/* .cart-container{
+  margin-top: 0;
+}
+.wishlist-icon-blur{
+     margin-left: 28px;
+     font-size: 24px;
+     margin-bottom: 20px;
+}
+.addedcart-icon{
+  font-size: 25px;
+  margin-bottom: 40px;
+} */
+.wishlist-icon,.wishlist-icon-blur{
+  margin-top: 14px;
+}
+.check-icon {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px; /* Adjust the size of the checkmark icon */
+  color: #3cb371; /* Change the color of the checkmark icon */
 }
 
 .book-card:hover {

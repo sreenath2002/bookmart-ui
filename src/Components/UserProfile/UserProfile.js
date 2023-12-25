@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import NavBar from '../NavBar/Navbar';
 import './UserProfile.css';
 import { useEffect } from 'react';
+import imageCompression from 'browser-image-compression';
 import { updateUser } from '../../axios/service/adminServices';
-import { editProfile, passwordUpdate,addAddress,allAddress } from '../../axios/service/userService.s';
+import { editProfile, passwordUpdate,addAddress,allAddress,addProfileImage } from '../../axios/service/userService.s';
 import { getAllCountries ,getAllCities,getAllStates} from '../../axios/service/AddresDetails';
 import { updateUserValidation, changePasswordValidation, addressValidation } from '../../validation/validation';
 import { userInfo } from '../../axios/service/userService.s';
@@ -86,6 +87,7 @@ const UserProfile = () => {
 
   const[stateOptions,setStateOptions]=useState([]);
  const navigate = useNavigate();
+ const[profileimg,setProfileImg]=useState();
   useEffect(() => {
     fetchData(jwtToken);
 
@@ -104,7 +106,7 @@ const UserProfile = () => {
           setLastName(userData.lastName);
           setEmail(userData.email);
           setPhone(userData.phoneNumber);
-
+          setProfileImg(userData.profileImage);
           console.log("User data:", userData);
         } else {
           console.log("Failed to fetch user data");
@@ -125,7 +127,7 @@ const UserProfile = () => {
         console.error("Error fetching user data:", error);
       }
     }
-  }, [jwtToken,id]);
+  }, [!refresh]);
 
   // const handleRefresh=()=>{
   //    setShowAddAddress(false)
@@ -194,10 +196,50 @@ const handleNavigateToOrders=()=>{
     setPasswordEditMode(true);
   }
 
-  const handleImageChange = (event) => {
-    const image = event.target.files[0];
-    setUserImage(image);
-  };
+  
+const handleImageChange = async (e) => {
+  const file = e.target.files[0];
+
+  if (file) {
+    try {
+      const options = {
+        maxSizeMB: 0.5, // Max size in MB
+        maxWidthOrHeight: 1920, // Maximum width or height of the image
+        useWebWorker: true,
+      };
+
+      // Compress the image
+      const compressedFile = await imageCompression(file, options);
+
+      // Convert the compressed image to Base64
+      const reader = new FileReader();
+      reader.readAsDataURL(compressedFile);
+      reader.onloadend = async () => {
+        const base64data = reader.result;
+
+        // Prepare data with Base64 URL
+        const addprofileimagedetails = {
+          imageUrl: base64data, // Pass the Base64 URL
+        };
+
+        console.log(addprofileimagedetails);
+
+        // Perform the image upload with Base64 data
+        const uploadingprofilrimage = await addProfileImage(jwtToken, addprofileimagedetails,id);
+        setRefresh(!refresh);
+        if (uploadingprofilrimage.statuscode === '200 OK') {
+          
+          setRefresh(!refresh);
+          console.log("Image upload successful");
+        } else {
+          console.log("Image not uploaded");
+        }
+      };
+    } catch (error) {
+      console.error('Image compression error:', error);
+    }
+  }
+};
   const handleSaveChanges = () => {
 
     setEditMode(false);
@@ -258,6 +300,7 @@ const handleNavigateToOrders=()=>{
           setTimeout(() => {
             setUpdateSucces(false);
           }, 3000)
+          setRefresh(!refresh)
           setEmailError('');
           setRefresh(!refresh);
           setFirstNameError('');
@@ -343,6 +386,7 @@ const handleNavigateToOrders=()=>{
             setTimeout(() => {
               setPasswordChangedMessage(false);
             }, 2000)
+            setRefresh(!refresh)
 
 
           }
@@ -448,6 +492,7 @@ const handleNavigateToOrders=()=>{
           setTimeout(() => {
             setAddresAddedSucces(false);
           }, 2000)
+          setRefresh(!refresh)
 
 
         }
@@ -513,8 +558,8 @@ const handleNavigateToOrders=()=>{
               onChange={handleImageChange}
               style={{ display: 'none' }}
             />
-            {userImage ? (
-              <img src={URL.createObjectURL(userImage)} alt="User" className="user-image" />
+            {profileimg ? (
+              <img src={profileimg} alt="User" className="user-image" />
             ) : (
               <div className="add-image-placeholder">+</div>
             )}

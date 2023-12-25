@@ -7,13 +7,14 @@ import { useSelector } from 'react-redux';
 import Checkout from '../CheckoutPage/Checkout';
 import { useNavigate } from 'react-router-dom';
 
-import { removeFromCart } from '../../axios/service/userService.s';
+import { removeFromCart, } from '../../axios/service/userService.s';
 import { Link } from 'react-router-dom';
 
 const Cart = () => {
   const [showRemovedMessage, setShowRemovedMessage] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const[refresh,setRefresh]=useState(false);
+ 
   // const [itemQuantity,setItemQuantity]=useState(1);
   const navigate =useNavigate()
   const [discount, setDiscount] = useState(0);
@@ -29,7 +30,7 @@ const Cart = () => {
     async function featchData() {
       console.log("-------fist start-------")
       const cartDetails = await userCartDetails(jwtToken,id);
-     
+ 
       console.log("--------------------------------------------------")
       console.log("-----------hai--------");
       console.log(cartDetails )
@@ -48,7 +49,7 @@ const Cart = () => {
   }, [refresh]);
 
   const calculateSubtotal = () => {
-    return cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+    return cartItems.reduce((acc, item) => acc + item.product.discountedPrice * item.quantity, 0);
   };
  
 
@@ -140,6 +141,7 @@ const Cart = () => {
     try {
 
       console.log(selectedItemId)
+      console.log("//////////")
       const remove = await removeFromCart(jwtToken, selectedItemId)
       console.log(remove )
      

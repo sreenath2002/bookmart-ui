@@ -359,20 +359,20 @@ const UserRegister = () => {
 
 
     return (
-        <div className="container">
+        <div className="userregistercontainer">
         <div className="row justify-content-center">
           <div className="col-lg-12">
-        <div className="register-container">
-            <div className='registerclass'>
-            <form className="register-form"  >
+        <div className="userregister-container">
+            <div className='userregisterclass'>
+            <form className="userregister-form"  >
                 <br></br>
-                {registrationSuccess && <div className="registration-success">Registered Successfully!</div>}
-                {otpsendSucces && <div className="registration-success">OTP has Send </div>}
-                {otpVerifySuccesMessage && <div className="registration-success">OTP Verified</div>}
-                {otpVerifyFailedMEssage && <div className="registration-error">Invalid OTP</div>}
-                {Error && <div className="registration-error">Oops!! Something Went Wrong</div>}
-                {otpsendFailed && <div className="registration-error">Failed to send otp.Try again</div>}
-                {emailExistsError && <div className="registration-error">Email already exists</div>}
+                {registrationSuccess && <div className="userregister-success">Registered Successfully!</div>}
+                {otpsendSucces && <div className="userregister-success">OTP has Send </div>}
+                {otpVerifySuccesMessage && <div className="userregister-success">OTP Verified</div>}
+                {otpVerifyFailedMEssage && <div className="userregister-error">Invalid OTP</div>}
+                {Error && <div className="userregister-error">Oops!! Something Went Wrong</div>}
+                {otpsendFailed && <div className="userregister-error">Failed to send otp.Try again</div>}
+                {emailExistsError && <div className="userregister-error">Email already exists</div>}
                 <h1>Register</h1>
 
                 <div className="input-groups">
@@ -384,7 +384,7 @@ const UserRegister = () => {
                         required
                     />
                 </div>
-                <div className="registration-error">{emailValidationError}</div>
+                <div className="userregister-error">{emailValidationError}</div>
                 {verifyOtp && (
                     <>
                         <div className="input-groups">
@@ -401,7 +401,7 @@ const UserRegister = () => {
                         ) : (
                             <p>Time remaining: {timer} seconds</p>
                         )}
-                        <div className="registration-error">{otpError}</div>
+                        <div className="userregister-error">{otpError}</div>
                         <div className='resendotp' onClick={handleOtpEnter}>Resend OTP</div>
                         <button onClick={otpverify}>Verify OTP</button>
                     </>
@@ -422,7 +422,7 @@ const UserRegister = () => {
                             required
                         />
                     </div>
-                    <div className="registration-error">{firstNameError}</div>
+                    <div className="userregister-error">{firstNameError}</div>
                     <div className="input-groups">
                         <input
                             type="text"
@@ -432,7 +432,7 @@ const UserRegister = () => {
                             required
                         />
                     </div>
-                    <div className="registration-error">{secondNameError}</div>
+                    <div className="userregister-error">{secondNameError}</div>
                     <div className="input-groups">
                         <input
                             type="text"
@@ -442,7 +442,7 @@ const UserRegister = () => {
                             required
                         />
                     </div>
-                    <div className="registration-error">{mobilenumberError}</div>
+                    <div className="userregister-error">{mobilenumberError}</div>
                     <div className="input-groups">
                         <input
                             type="password"
@@ -452,7 +452,7 @@ const UserRegister = () => {
                             required
                         />
                     </div>
-                    <div className="registration-error">{passwordError}</div>
+                    <div className="userregister-error">{passwordError}</div>
                     <div className="input-groups">
                         <input
                             type="password"
@@ -462,10 +462,10 @@ const UserRegister = () => {
                             required
                         />
                     </div>
-                    <div className="registration-error">{confirmpasswordError}</div>
+                    <div className="userregister-error">{confirmpasswordError}</div>
 
                     <button onClick={handleFormValidation}>Register</button></>)}
-                <div className='already-have'>Already have Account?  <Link to="/UserLogin" className="signinlink ">SignIn</Link></div>
+                <div className='userregisteralready-have'>Already have Account?  <Link to="/UserLogin" className="userregistersigninlink ">SignIn</Link></div>
             </form>
             </div>
         </div>

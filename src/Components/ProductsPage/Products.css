@@ -1,13 +1,14 @@
 /* CSS for Product Page - Square Cards and Attractive Dropdown */
 .product-page {
-  margin-top: 370px;
+  
   padding: 20px;
   font-family: Arial, sans-serif;
   background-image: url('/public/Images/marialaura-gionfriddo-50G3FvyQxX0-unsplash.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  min-height: 600px; /* Adjust the height to your preference */
+  min-height: 600px;
+  width:100vw ; /* Adjust the height to your preference */
 }
 
 
@@ -16,14 +17,19 @@
 .dropdown-container {
   display: flex;
   flex-wrap: wrap;
-  
+  margin-top:  42px;
   gap: 10px;
   justify-content: center;
 }
 
 /* Styles for individual dropdowns */
-.dropdown {
+.dropdown,.dropdown1 {
   position: relative;
+}
+.removeflitericon{
+  font-size: 2rem;
+  color: white;
+  cursor: pointer ;
 }
 .overlay {
   position: fixed;
@@ -46,6 +52,19 @@
   background-color: #f5f5f5;
   text-align: center;
   font-size: large;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+.dropdown1 span {
+  display: block;
+  padding: 9px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 7px;
+  background-color: #21b31b;
+  text-align: center;
+  font-size: medium;
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
@@ -85,13 +104,7 @@
 
 
 /* Styles for book list */
-.booklist {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  /* margin-top: 5px; */
-  justify-content: center;
-}
+
 
 /* Updated CSS for Book Details Alignment */
 .book-card {
@@ -126,6 +139,9 @@
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 5px;
+}
+.setCards{
+ margin-left: 30px;
 }
 
 .course,
@@ -164,6 +180,14 @@
   align-items: center;
   margin-bottom: 10px;
 }
+.booklist {
+  display: flex;
+  margin-left: 30px;
+  overflow-x: auto;
+ 
+  scroll-behavior: smooth;
+  padding: 20px 0; /* Adjust padding as needed */
+}
 
 .cart-icon,
 .wishlist-icon {
@@ -180,6 +204,10 @@
 .cart-icon:hover,
 .wishlist-icon:hover {
   color: #3498db;
+}
+.nobooks{
+  font-size: x-large;
+  color: #f5f5f5;
 }
 
 

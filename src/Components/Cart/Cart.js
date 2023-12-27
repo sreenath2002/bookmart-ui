@@ -28,6 +28,11 @@ const Cart = () => {
     featchData()
     console.log("fdsj")
     async function featchData() {
+
+      if(!jwtToken)
+      {
+        return(<div>Please Login</div>)
+      }
       console.log("-------fist start-------")
       const cartDetails = await userCartDetails(jwtToken,id);
  
@@ -179,10 +184,16 @@ const Cart = () => {
   const handlesShopOnlythis=(cartid)=>{
     navigate(`/checkout/${cartid}`);
   }
+  if(!jwtToken)
+  {
+    return(<div>
+      Please Login
+    </div>)
+  }
 
   return (
     <div className="cart-container">
-    {cartItems && cartItems.length > 0 ?(
+    { !jwtToken? (<><div>Please Login</div></>) :cartItems && cartItems.length > 0 ?(
       <>
       {/* Cart items */}
       <div className="cart-items">
@@ -249,7 +260,7 @@ const Cart = () => {
 </Link>
       </div>
       </>
-      ) : (<><div>Cart is Empty</div></>)}
+      )  : (<><div>Cart is Empty</div></>)}
     </div>
   );
 };

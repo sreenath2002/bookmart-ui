@@ -7,11 +7,11 @@ import ReactImageZoom from 'react-image-zoom';
 import { getNewArrivals } from '../../axios/service/productsService';
 import { getCatgoriesFilter, getUniversityFilter, getCoursefilter, getSubjcetFilter, getSemesterFilter } from '../../axios/service/productsService';
 import FilterBox from '../FilterBox/FilterBox';
-import { FaHeart, FaShoppingCart,FaRegHeart  } from 'react-icons/fa';
+import { FaHeart, FaShoppingCart, FaRegHeart,FaTimes } from 'react-icons/fa';
 import Footer from '../Footer/Footer';
 import { useSelector } from 'react-redux';
 import { addToCart, removeFromCart, addToWishlist, getProductIdFromCart, getProductIdFromWishlist } from '../../axios/service/userService.s';
-
+import { useNavigate } from 'react-router-dom';
 const Products = () => {
   // Sample book data (can be fetched from an API or database)
   const [books, setBooks] = useState([])
@@ -22,11 +22,11 @@ const Products = () => {
   const [booksemesters, setSemesters] = useState([]);
   const [wishlistproductIds, setwishlistproductProdutIds] = useState([]);
   const [cartproductIds, setcartproductProdutIds] = useState([]);
-  const[refresh,setRefresh]=useState(false);
+  const [refresh, setRefresh] = useState(false);
   const id = useSelector((state) => state.user.id)
   const jwtToken = localStorage.getItem("jwt");
   const [serverError, setServerError] = useState();
-
+  const navigate = useNavigate();
   useEffect(() => {
 
     featchData()
@@ -37,7 +37,9 @@ const Products = () => {
       const categories = await getCatgoriesFilter();
       const universities = await getUniversityFilter();
       const cartProdutIds = await getProductIdFromCart(id);
+      console.log(cartProdutIds);
       const wishlistIds = await getProductIdFromWishlist(id);
+
       setcartproductProdutIds(cartProdutIds.result)
       setwishlistproductProdutIds(wishlistIds.result)
       // const universities=await getUniversities(token);
@@ -66,30 +68,15 @@ const Products = () => {
   const [selectedUniversity, setSelectedUniversity] = useState('');
   const [selectedSemester, setSelectedSemester] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
-
+  const[showRemoveFilter,setShowRemoveFilter]=useState('');
   // State for sorting
   const [sortOrder, setSortOrder] = useState('');
 
   // Apply filters based on selections
-  const filteredBooks = books.filter(book => {
-    return (
-      (selectedCategory === '' || book.category === selectedCategory) &&
-      (selectedCourse === '' || book.courseName === selectedCourse) &&
-      (selectedUniversity === '' || book.universityName === selectedUniversity) &&
-      (selectedSemester === '' || book.semester === selectedSemester) &&
-      (selectedSubject === '' || book.subject === selectedSubject)
-    );
-  });
+
 
   // Apply sorting based on price
-  const sortedBooks = [...filteredBooks].sort((a, b) => {
-    if (sortOrder === 'lowToHigh') {
-      return a.price - b.price;
-    } else if (sortOrder === 'highToLow') {
-      return b.price - a.price;
-    }
-    return 0;
-  });
+
 
   // Handle filter and sort changes
   const handleCategoryChange = (e) => {
@@ -146,90 +133,123 @@ const Products = () => {
 
 
   };
-  if (books.length === 0) {
-    return <p>No books available</p>; // Render a message if there are no books
-  }
+  
   const booksInSetsOfFour = [];
-  for (let i = 0; i < books.length; i += 4) {
-    if (books[i].status != 'false') {
-      booksInSetsOfFour.push(books.slice(i, i + 4));
+  for (let i = 0; i < books.length; i += 7) {
+    {
+      booksInSetsOfFour.push(books.slice(i, i + 7));
       console.log(booksInSetsOfFour);
       console.log("66666666")
     }
 
   }
   const handleAddToCart = async (bookId) => {
-    try {
+    if (jwtToken) {
+      try {
 
-      const productInfo = {
+        const productInfo = {
 
-        userId: id,
-        productId: bookId,
-        quantity: 1,
+          userId: id,
+          productId: bookId,
+          quantity: 1,
+
+        }
+        console.log("productDetails===", productInfo)
+        const addtocart = await addToCart(jwtToken, productInfo)
+        console.log("lsdhgck")
+        console.log("addDetails", addtocart)
+
+        if (addtocart.statuscode === '200 OK') {
+          setRefresh(!refresh)
+          console.log("Added to cart")
+        } else {
+          setServerError("Internal Server Error")
+          setTimeout(() => {
+            setServerError(false)
+          }, 2000)
+        }
 
       }
-      console.log("productDetails===", productInfo)
-      const addtocart = await addToCart(jwtToken, productInfo)
-      console.log("lsdhgck")
-      console.log("addDetails", addtocart)
 
-      if (addtocart.statuscode === '200 OK') {
-        setRefresh(!refresh)
-        console.log("Added to cart")
-      } else {
+      catch (err) {
         setServerError("Internal Server Error")
         setTimeout(() => {
           setServerError(false)
         }, 2000)
+
       }
-
     }
-
-    catch (err) {
-      setServerError("Internal Server Error")
-      setTimeout(() => {
-        setServerError(false)
-      }, 2000)
-
+    else {
+      navigate('/UserLogin')
     }
 
   }
   const handleAddToWishlist = async (bookId) => {
-    try {
+    if (jwtToken) {
 
-      const productInfo = {
 
-        userId: id,
-        productId: bookId,
-        quantity: 1,
+      try {
+
+        const productInfo = {
+
+          userId: id,
+          productId: bookId,
+          quantity: 1,
+
+        }
+        console.log("productDetails===", productInfo)
+        const addtowishlist = await addToWishlist(jwtToken, productInfo)
+        console.log("lsdhgck")
+        console.log("addDetails", addtowishlist)
+
+        if (addtowishlist.statuscode === '200 OK') {
+          setRefresh(!refresh)
+          console.log("Added to cart")
+        } else {
+          setServerError("Internal Server Error")
+          setTimeout(() => {
+            setServerError(false)
+          }, 2000)
+        }
 
       }
-      console.log("productDetails===", productInfo)
-      const addtowishlist = await addToWishlist(jwtToken, productInfo)
-      console.log("lsdhgck")
-      console.log("addDetails", addtowishlist)
 
-      if (addtowishlist.statuscode === '200 OK') {
-        setRefresh(!refresh)
-        console.log("Added to cart")
-      } else {
+      catch (err) {
         setServerError("Internal Server Error")
         setTimeout(() => {
           setServerError(false)
         }, 2000)
+
       }
-
     }
-
-    catch (err) {
-      setServerError("Internal Server Error")
-      setTimeout(() => {
-        setServerError(false)
-      }, 2000)
-
+    else {
+      navigate('/UserLogin')
     }
 
   }
+  const filterProducts=(categoryofbook,courseofbook,subjcetofbook,semesterofbook,universityofbook)=>{
+    const filteredBooks = books.filter(book => (book.parentCategory
+      .name === categoryofbook) && (book.course.courseName === courseofbook) && (book.subject.subjectName === subjcetofbook) && (book.semester.name === semesterofbook) &&
+      (book.university.universityName === universityofbook));
+
+      setBooks(filteredBooks)
+      if(filteredBooks.length !=0)
+      {
+        setShowRemoveFilter(true)
+      }
+     
+    }
+    const handleRemoveFilter=()=>{
+     
+      setRefresh(!refresh)
+      setShowRemoveFilter(false)
+      setSelectedCategory('')
+      setSelectedCourse('')
+      setSelectedSemester('')
+      setSelectedSubject('')
+      setSelectedUniversity('')
+    }
+
 
   return (
     <Container fluid>
@@ -242,6 +262,15 @@ const Products = () => {
           <div class="dropdown">
             <span>Category</span>
             <div class="dropdown-content">
+              <label key="all">
+                <input
+                  type="radio"
+                  name="category"
+                  value="All"
+                  onChange={() => handleSubjcet('All')}
+                />
+                All
+              </label>
               {bookcategories.map((category) => (
                 <label key={category.id}>
                   <input
@@ -260,12 +289,13 @@ const Products = () => {
           <div class="dropdown">
             <span>Course</span>
             <div class="dropdown-content">
+
               {selectedCategory ? (
                 bookcourses.filter((course) => course.showStatus != 'false').map((course) => (
                   <label key={course.id}>
                     <input
                       type="radio"
-                      name="category"
+                      name="course"
                       value={course.courseName}
                       onChange={() => handleSubjcet(course.courseName)}
                     />
@@ -287,7 +317,7 @@ const Products = () => {
                   <label key={Subjcet.id}>
                     <input
                       type="radio"
-                      name="category"
+                      name="subjcet"
                       value={Subjcet.subjectName}
                       onChange={() => setSelectedSubject(Subjcet.subjectName)}
                     />
@@ -305,7 +335,7 @@ const Products = () => {
                   <label key={semester.id}>
                     <input
                       type="radio"
-                      name="category"
+                      name="semester"
                       value={semester.name}
                       onChange={() => setSelectedSemester(semester.name)}
                     />
@@ -318,12 +348,21 @@ const Products = () => {
           <div class="dropdown">
             <span>University</span>
             <div class="dropdown-content">
+              <label key="all">
+                <input
+                  type="radio"
+                  name="university"
+                  value="All"
+                  onChange={() => handleSubjcet('All')}
+                />
+                All
+              </label>
               <div class="dropdown-content">
                 {bookuniversities.map((university) => (
                   <label key={university.id}>
                     <input
                       type="radio"
-                      name="category"
+                      name="university"
                       value={university.name}
                       onChange={() => setSelectedUniversity(university.universityName)}
                     />
@@ -336,11 +375,11 @@ const Products = () => {
             </div>
           </div>
 
-          <div class="dropdown">
-            <span>Discount Range</span>
-            <div class="dropdown-content">
+          <div class="dropdown1" onClick={() => filterProducts(selectedCategory, selectedCourse, selectedSubject, selectedSemester, selectedUniversity)}>
+            <span>Filter</span>
+            {/* <div class="dropdown-content">
               <label>
-                <input type="radio" name="category" value="lowToHigh" onclick="handleSortChange('lowToHigh')" />
+                <input type="radio" name="discountrange" value="lowToHigh" onclick="handleSortChange('lowToHigh')" />
                 10%-15%
               </label>
               <label>
@@ -348,25 +387,26 @@ const Products = () => {
                 15%-30%
               </label>
 
-            </div>
+            </div> */}
           </div>
           {/* <!-- Price Range --> */}
-          <div class="dropdown">
-            <span>Price Range</span>
-            <div class="dropdown-content">
+         {showRemoveFilter && <div class="dropdown" >
+            {/* <span>Remove Filter</span> */}
+            <FaTimes className='removeflitericon' onClick={handleRemoveFilter} />
+            {/* <div class="dropdown-content">
               <label>
-                <input type="radio" name="category" value="lowToHigh" onclick="handleSortChange('lowToHigh')" />
+                <input type="radio" name="pricerange" value="lowToHigh" onclick="handleSortChange('lowToHigh')" />
                 Rs.99-Rs.299
               </label>
               <label>
                 <input type="radio" name="category" value="highToLow" onclick="handleSortChange('highToLow')" />
                 Rs.299-Rs.599
               </label>
-            </div>
-          </div>
+            </div> */}
+          </div>}
         </div>
 
-
+       {books.length >0 ?(
         <div className='setCards'>
 
           <Col md={10} >
@@ -391,7 +431,7 @@ const Products = () => {
                             <div>
                               <Card.Body className='body_card'>
                                 <div class="card-header">
-                                  {cartproductIds.includes(book.id) ? (
+                                  {jwtToken && cartproductIds && cartproductIds.includes(book.id) ? (
 
                                     <FaShoppingCart className="addedcart-icon" />
                                     // <FaCheck className="check-icon" />
@@ -399,7 +439,7 @@ const Products = () => {
                                   ) : (
                                     <FaShoppingCart className="cart-icon" onClick={() => handleAddToCart(book.id)} />
                                   )}
-                                  {wishlistproductIds.includes(book.id) ? (
+                                  {jwtToken && wishlistproductIds && wishlistproductIds.includes(book.id) ? (
                                     <FaHeart className="wishlist-icon-blur" />
                                   ) : (
                                     <FaRegHeart className="wishlist-icon" onClick={() => handleAddToWishlist(book.id)} />
@@ -420,7 +460,7 @@ const Products = () => {
 
 
                                 </Card.Text>
-                                {/* <Button className='mybutton' variant="primary"></Button> */}
+
                               </Card.Body>
                             </div>
                           </div>
@@ -440,7 +480,7 @@ const Products = () => {
           {serverError && (
             <div className='serverError'><h4 className='serverError'>{serverError}</h4></div>
           )}
-        </div>
+        </div>) : <p className='nobooks'>No Books Available</p>}
 
       </Row>
 

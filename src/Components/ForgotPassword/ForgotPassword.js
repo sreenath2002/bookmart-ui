@@ -104,8 +104,8 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form">
+    <div className="forgotpassword-container">
+      <form className="forgotpassword-form">
         {/* Display error messages */}
         {emailNotExists && <div className="registration-error">Email does not exist. Please register.</div>}
         {passwordChangedError && <div className="registration-error">{passwordChangedError}</div>}
@@ -114,7 +114,7 @@ const ForgotPassword = () => {
         <h1>Change Your Password</h1>
         {emailVerify && (
           <>
-            <div className="input-group">
+            <div className="forgotpasswordinput-group">
               <input
                 type="text"
                 value={enterdEmail}
@@ -129,7 +129,7 @@ const ForgotPassword = () => {
         )}
         {!emailVerify && (
           <>
-            <div className="input-group">
+            <div className="forgotpasswordinput-group">
               <input
                 type="password"
                 value={newPassword}
@@ -139,7 +139,7 @@ const ForgotPassword = () => {
               />
             </div>
             <div className="registration-error">{passwordValidationError}</div>
-            <button className='verifybtn'onClick={changePassword}>Change Password</button>
+            <button className='forgotpasswordverifybtn'onClick={changePassword}>Change Password</button>
           </>
         )}
       </form>

@@ -9,6 +9,184 @@
 .main {
   text-align: center;
 }
+/* Enhanced CSS Styles */
+.samllDiscounddiv {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px;
+  background-color: #faf7f7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.smalldiscountdiv2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.smalldiscountdiv3 {
+  flex: 1 1 50%;
+  text-align: center;
+}
+
+.smalldiscountdiv3 h3 {
+  margin: 0;
+  color: #333;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.smalldiscountdiv3 h2 {
+  margin: 5px 0;
+  color: #ff6600;
+  font-size: 40px;
+}
+
+.smalldiscountdiv4 {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.smalldiscountdiv5,
+.smalldiscountdiv6 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.imgdetail {
+  position: relative;
+  overflow: hidden;
+}
+
+.imgdetail img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+
+.imgdetail:hover img {
+  transform: scale(1.1);
+}
+
+.imgdetail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.imgdetail:hover::before {
+  opacity: 1;
+}
+.shopnowdiscount{
+  background-color: #0051ff;
+}
+
+.imgdetail h5 {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #0051ff;
+  font-size: 18px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.imgdetail:hover h5 {
+  opacity: 1;
+}
+/* CSS for Buy One, Get One Free section */
+.buyOneGetOneDiv {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bogoDetails {
+  text-align: center;
+}
+
+.bogoDetails h3 {
+  margin: 0;
+  color: #333;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.bogoDetails h4 {
+  margin: 5px 0;
+  color: #ff6600;
+  font-size: 20px;
+}
+
+.bogoImages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.imgdetail {
+  text-align: center;
+  max-width: 150px;
+}
+
+.imgdetail img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.imgdetail:hover img {
+  transform: scale(1.05);
+}
+
+.imgText {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 8px 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.imgdetail:hover .imgText {
+  opacity: 1;
+}
+
+.imgText h5 {
+  margin: 0;
+  color: #fff;
+  font-size: 14px;
+}
+
+.shopButton {
+  display: block;
+  margin-top: 5px;
+  padding: 5px 10px;
+  color: #fff;
+  background-color: #ff6600;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  text-decoration: none;
+}
+
 
 .newarriwal-heading {
   margin-top: 30px;
@@ -29,6 +207,7 @@
   /* Additional styling for the overlay */
 }
 .scrolling-wrapper {
+  border-color: #0a0a0a;
   display: flex;
   overflow-x: auto;
   padding: 30px;
@@ -38,13 +217,13 @@
 .scroll-btn {
   position: absolute;
  
-  transform: translateY(-50%);
+  transform: translateY(-550%);
   width: 40px;
   height: 40px;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(16, 32, 248, 0.7);
   border-radius: 50%;
   cursor: pointer;
-  z-index: 1;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,7 +236,8 @@
 }
 
 .scroll-btn.right {
-  right: 10px; /* Adjust right button position */
+  right: 10px;
+  margin-bottom: 20px; /* Adjust right button position */
 }
 
 /* Hide scrollbar */

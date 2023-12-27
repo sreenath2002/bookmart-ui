@@ -42,6 +42,7 @@ const BookCards = () => {
     }
   };
   const handleAddToCart = async (bookId) => {
+    if(jwtToken){
     try {
 
       const productInfo = {
@@ -75,9 +76,14 @@ const BookCards = () => {
       }, 2000)
 
     }
+  }
+  else{
+    navigate('/UserLogin')
+  }
 
   }
   const handleAddToWishlist = async (bookId) => {
+    if(jwtToken){
     try {
 
       const productInfo = {
@@ -111,6 +117,10 @@ const BookCards = () => {
       }, 2000)
 
     }
+  }
+  else{
+    navigate('/UserLogin')
+  }
 
   }
   useEffect(() => {
@@ -126,7 +136,10 @@ const BookCards = () => {
       const cartProdutIds = await getProductIdFromCart(id);
       const wishlistIds = await getProductIdFromWishlist(id);
       setcartproductProdutIds(cartProdutIds.result)
+      console.log(cartproductIds)
+     
       setwishlistproductProdutIds(wishlistIds.result)
+      console.log(wishlistproductIds)
       console.log("--------------------------------------------------")
       console.log("-----------hai--------");
       console.log("ejfsld")
@@ -174,7 +187,7 @@ const BookCards = () => {
                     />
                   </div>
                   <div class="cards-header">
-                    {cartproductIds.includes(newArrivalbook.id) ? (
+                    {jwtToken && cartproductIds != null && cartproductIds.includes(newArrivalbook.id) ? (
                       
                       <FaShoppingCart className="addedcart-icon" />
                       // <FaCheck className="check-icon" />
@@ -182,7 +195,7 @@ const BookCards = () => {
                     ) : (
                       <FaShoppingCart className="cart-icon" onClick={() => handleAddToCart(newArrivalbook.id)} />
                     )}
-                    {wishlistproductIds.includes(newArrivalbook.id) ? (
+                    {jwtToken && wishlistproductIds != null && wishlistproductIds.includes(newArrivalbook.id) ? (
                       <FaHeart className="wishlist-icon-blur"  />
                     ) : (
                       <FaRegHeart className="wishlist-icon" onClick={() => handleAddToWishlist(newArrivalbook.id)} />
@@ -220,6 +233,47 @@ const BookCards = () => {
           </button>
         </Col>
       </Row>
+      <div className='samllDiscounddiv'>
+        <div className='smalldiscountdiv2'>
+          <div className='smalldiscountdiv3'>
+            <h3>Save Upto </h3>
+            <h2>50% offf</h2>
+          </div>
+          <div className='smalldiscountdiv4'>
+            <div className='smalldiscountdiv5'>
+              <div className='imgdetail'>
+              <img  src="Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg"/>
+              <div className='shopnowdiscount'>
+              <a href="#" class="shopButton">Shop Now</a>
+              </div>
+              
+              </div>
+              <div className='imgdetail'>
+              <img  src="Images/51rPW25OQAL._AC_UF894,1000_QL80_.jpg"/>
+              <div className='shopnowdiscount'>
+              <a href="#" class="shopButton">Shop Now</a>
+              </div>
+              </div>
+            </div>
+            <div className='smalldiscountdiv5'>
+              <div className='imgdetail'>
+              <img  src="Images/51VCsjmphbL._AC_UF894,1000_QL80_.jpg"/>
+              <div className='shopnowdiscount'>
+              <a href="#" class="shopButton">Shop Now</a>
+              </div>
+              
+              </div>
+              <div className='imgdetail'>
+              <img  src="Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg"/>
+              <div className='shopnowdiscount'>
+              <a href="#" class="shopButton">Shop Now</a>
+              </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
       <Row className="justify-content-center">
         <Col xs={12}>
           <h2 className='newarriwal-heading'>Science </h2>
@@ -238,14 +292,14 @@ const BookCards = () => {
                     />
                   </div>
                   <div class="cards-header">
-                  {cartproductIds.includes(scienceBook.id) ? (
+                  {jwtToken && cartproductIds != null &&cartproductIds.includes(scienceBook.id) ? (
                      
                       <FaShoppingCart className="addedcart-icon" />
                   
                     ) : (
                       <FaShoppingCart className="cart-icon" onClick={() => handleAddToCart(scienceBook.id)} />
                     )}
-                    {wishlistproductIds.includes(scienceBook.id) ? (
+                    {jwtToken && wishlistproductIds != null && wishlistproductIds.includes(scienceBook.id) ? (
                       <FaHeart className="wishlist-icon-blur"  />
                     ) : (
                       <FaRegHeart className="wishlist-icon" onClick={() => handleAddToWishlist(scienceBook.id)} />
@@ -273,6 +327,12 @@ const BookCards = () => {
               </Card>
             ))}
           </div>
+          <button className="scroll-btn left" onClick={scrollLeft}>
+            &lt;
+          </button>
+          <button className="scroll-btn right" onClick={scrollRight}>
+            &gt;
+          </button>
         </Col>
       </Row>
       <Row className="justify-content-center">
@@ -293,14 +353,14 @@ const BookCards = () => {
                     />
                   </div>
                   <div class="cards-header">
-                  {cartproductIds.includes(commerceBook.id) ? (
+                  {jwtToken && cartproductIds != null && cartproductIds.includes(commerceBook.id) ? (
                       
                       <FaShoppingCart className="addedcart-icon" />
                  
                     ) : (
                       <FaShoppingCart className="cart-icon" onClick={() => handleAddToCart(commerceBook.id)} />
                     )}
-                    {wishlistproductIds.includes(commerceBook.id) ? (
+                    {jwtToken && wishlistproductIds != null && wishlistproductIds.includes(commerceBook.id) ? (
                       <FaHeart className="wishlist-icon-blur"  />
                     ) : (
                       <FaRegHeart className="wishlist-icon" onClick={() => handleAddToWishlist(commerceBook.id)} />
@@ -327,6 +387,12 @@ const BookCards = () => {
               </Card>
             ))}
           </div>
+          <button className="scroll-btn left" onClick={scrollLeft}>
+            &lt;
+          </button>
+          <button className="scroll-btn right" onClick={scrollRight}>
+            &gt;
+          </button>
         </Col>
       </Row>
       <Row className="justify-content-center">
@@ -346,14 +412,14 @@ const BookCards = () => {
                     />
                   </div>
                   <div class="cards-header">
-                  {cartproductIds.includes(languageBook.id) ? (
+                  {jwtToken && cartproductIds != null &&cartproductIds.includes(languageBook.id) ? (
                    
                      <FaShoppingCart className="addedcart-icon" />
                   
                     ) : (
                       <FaShoppingCart className="cart-icon" onClick={() => handleAddToCart(languageBook.id)} />
                     )}
-                    {wishlistproductIds.includes(languageBook.id) ? (
+                    {jwtToken && wishlistproductIds != null && wishlistproductIds.includes(languageBook.id) ? (
                       <FaHeart className="wishlist-icon-blur"  />
                     ) : (
                       <FaRegHeart className="wishlist-icon" onClick={() => handleAddToWishlist(languageBook.id)} />
@@ -380,12 +446,43 @@ const BookCards = () => {
               </Card>
             ))}
           </div>
+          <button className="scroll-btn left" onClick={scrollLeft}>
+            &lt;
+          </button>
+          <button className="scroll-btn right" onClick={scrollRight}>
+            &gt;
+          </button>
         </Col>
         {serverError && <div className="overlay" />}
         {serverError && (
           <div className='serverError'><h4 className='serverError'>{serverError}</h4></div>
         )}
       </Row>
+      <div class="buyOneGetOneDiv">
+  <div class="bogoDetails">
+    <h3>Buy One, Get One Free!</h3>
+    <h4>Limited Time Offer</h4>
+  </div>
+  <div class="bogoImages">
+    <div class="imgdetail">
+      <img src="Images/51VCsjmphbL._AC_UF894,1000_QL80_.jpg" alt="Product 1" />
+      <a href="#" class="shopButton">Shop Now</a>
+    </div>
+    <div class="imgdetail">
+      <img src="Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg" alt="Product 2" />
+      <a href="#" class="shopButton">Shop Now</a>
+    </div>
+    <div class="imgdetail">
+      <img src="Images/51VCsjmphbL._AC_UF894,1000_QL80_.jpg" alt="Product 1" />
+      <a href="#" class="shopButton">Shop Now</a>
+    </div>
+    <div class="imgdetail">
+      <img src="Images/51VCsjmphbL._AC_UF894,1000_QL80_.jpg" alt="Product 1" />
+      <a href="#" class="shopButton">Shop Now</a>
+    </div>
+  </div>
+</div>
+
     </Container>
 
   );

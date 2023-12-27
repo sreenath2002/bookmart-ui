@@ -25,6 +25,10 @@ const Wishlist = () => {
     featchData()
     console.log("fdsj")
     async function featchData() {
+      if(!jwtToken)
+      {
+        return(<div>Please Login</div>)
+      }
       console.log("-------fist start-------")
       const wishlistDetails = await userWishlistDetails(jwtToken,id);
      
@@ -149,7 +153,7 @@ const Wishlist = () => {
   return (
     <div className="wishlist-container">
         <NavBar/>
-    {wishlistItems && wishlistItems.length > 0 ?(
+    {!jwtToken ? (<div>Please Login</div>) :wishlistItems && wishlistItems.length > 0 ?(
       <>
       {/* Cart items */}
       <div className="wishlist-items">

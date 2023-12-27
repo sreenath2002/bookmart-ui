@@ -106,9 +106,9 @@ const AdminLoginPage = () => {
 
   return (
     <div className="admin-login-page">
-      <div className="login-container">
+      <div className="adminlogin-container">
         <h1 className="admin-login-heading">Admin Login</h1>
-        <form className='form'>
+        <form className='adminform'>
           {signinError && (
             <div className="registration-error">
               Email does not exist. Please register.
@@ -119,7 +119,7 @@ const AdminLoginPage = () => {
               You are Not Admin!
             </div>
           )}
-          <div className="input-group">
+          <div className="admininput-group">
             <label htmlFor="username">Username</label>
             <input
               type="text"
@@ -130,7 +130,7 @@ const AdminLoginPage = () => {
             />
           </div>
           <div className="registration-error">{signinemailError}</div>
-          <div className="input-group">
+          <div className="admininput-group">
             <label htmlFor="password">Password</label>
             <input
               type="password"
@@ -140,7 +140,7 @@ const AdminLoginPage = () => {
               required
             />
           </div>
-          <div className='forgotpassword'><Link to="/ForgotPassword" className="signin link">Forgot Password ?</Link></div>
+          <div className='adminforgotpassword'><Link to="/ForgotPassword" className="signin link">Forgot Password ?</Link></div>
           <div className="registration-error">{signinpasswordError}</div>
           <button className='adminloginbtn' onClick={login}>Login</button>
         </form>

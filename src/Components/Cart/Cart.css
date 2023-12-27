@@ -8,6 +8,7 @@
 }
 
 .cart-items {
+  margin-top: 50px;
   flex-grow: 1;
   padding-right: 20px;
   
@@ -75,7 +76,7 @@ background-color: green;
   flex-basis: 300px;
   height: 40vh;
   margin-left: 400px;
-  margin-bottom: 10px;
+  margin-top: 50px;
   padding: 15px;
   border: 1px solid #ccc;
   background-color: #f0f0f0;

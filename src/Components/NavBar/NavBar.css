@@ -7,7 +7,13 @@
   .logo {
     font-size: 30px;
   }
- 
+  .Navbar.Brand {
+    font-family: 'Arial', sans-serif; /* Replace with your preferred font */
+    font-size: 24px; /* Adjust the font size */
+    font-weight: bold; /* Optionally adjust the font weight */
+    color: #af6868; /* Change the color */
+    /* Add more styles as needed */
+  }
 
 
 

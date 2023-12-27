@@ -1,100 +1,76 @@
-/* CSS for smaller input fields */
-.add-product-form input[type="text"] {
-  width: 80%; /* Adjust the width as needed */
-  margin-right: 5px;
-  padding: 8px;
-  font-size: 14px; /* Adjust the font size */
+/* CSS for styling the form */
+.add-product-form {
+  margin: 20px;
+  padding: 20px;
+  background-color: #f9f9f9; /* Attractive background color */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adding a subtle shadow */
 }
 
-/* CSS for flex container to display inputs in one line */
-.add-product-form .flex {
+.add-product-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.flex {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
- 
-
+  margin-bottom: 15px;
 }
 
-.addProduct{
-  margin-top: 60%;
+label {
+  flex: 1 1 30%; /* Adjust width of labels */
+  margin-right: 10px;
+  text-align: left;
+  padding-top: 5px;
+  color: #555;
 }
 
-.add-product-form{
-  margin-top: 70%;
-}
-/* CSS for labels */
-.add-product-form label {
-  margin-top: 10px;
-  font-size: 14px; /* Adjust label font size */
-}
-
-/* CSS for select dropdowns */
-.add-product-form select {
-  width: 45%; /* Adjust the width as needed */
-  margin-right: 5px;
+input[type='text'],
+select {
+  flex: 1 1 65%; /* Adjust width of input/select fields */
   padding: 8px;
-  font-size: 14px; /* Adjust the font size */
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-/* CSS for error messages */
-.add-product-form .registration-error {
-  font-size: 12px; /* Adjust the font size */
-  margin-top: 5px; /* Adjust margin top as needed */
-  color: red; /* Error message color */
+input[type='file'] {
+  margin-top: 5px;
 }
 
-/* CSS for buttons */
-.add-product-form button {
-  margin-top: 15px;
+.registration-error {
+  color: red;
+  margin-top: 5px;
+}
+
+button {
   padding: 10px 20px;
-  font-size: 16px; /* Adjust the font size */
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #3498db;
+  color: white;
   cursor: pointer;
 }
 
-/* CSS for selected images */
-.add-product-form .selected-images {
+button:hover {
+  background-color: #2980b9;
+}
+
+.selected-images {
   margin-top: 10px;
 }
 
-/* Responsive CSS */
-@media screen and (max-width: 320px) {
-  .add-product-form input[type="text"],
-  .add-product-form select {
-    width: 50%;
+/* Media query for responsive design */
+@media screen and (max-width: 768px) {
+  .flex {
+    display: block;
+  }
+  label,
+  input[type='text'],
+  select {
+    width: 100%;
     margin-bottom: 10px;
-  }
-   
- 
-  
-  
-}
-
-@media screen and (max-width: 480px) {
-  .add-product-form {
-    max-width: 100%; /* Adjust the form to full width on smaller screens */
-    padding: 10px;
-  }
-}
-
-@media screen and (min-width: 321px) and (max-width: 786px) {
-  .add-product-form input[type="text"],
-  .add-product-form select {
-    width: 48%; /* Adjust the width for two items in a row */
-    margin-bottom: 10px;
-  }
-}
-
-@media screen and (min-width: 787px) and (max-width: 1024px) {
-  .add-product-form input[type="text"],
-  .add-product-form select {
-    width: 30%; /* Adjust the width for three items in a row */
-    margin-bottom: 10px;
-  }
-}
-
-@media screen and (min-width: 1025px) {
-  .add-product-form input[type="text"],
-  .add-product-form select {
-    width: 45%; /* Reset width for larger screens */
   }
 }

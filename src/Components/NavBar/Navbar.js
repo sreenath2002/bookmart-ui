@@ -54,12 +54,35 @@ const NavBar = () => {
   }
 
   const handleNavigateToProfile=()=>{
-    console.log("???????????")
-    navigate('/profile');
-  }
-  const handleNavigateToWishlist=()=>{
+    if(!jwtToken)
+    {
+      navigate('/UserLogin')
+    }
+    else{
+      navigate('/profile');
+    }
     
-    navigate('/wishlist');
+  }
+
+  const handleNavigateToWishlist=()=>{
+    if(!jwtToken)
+    {
+      navigate('/UserLogin')
+    }
+    else{
+      navigate('/wishlist');
+    }
+   
+  }
+  const handleNavigateToCart=()=>{
+    if(!jwtToken)
+    {
+      navigate('/UserLogin')
+    }
+    else{
+      navigate('/cart');
+    }
+   
   }
 
   return (
@@ -79,7 +102,7 @@ const NavBar = () => {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/Products">Products</Nav.Link>
             { !jwtToken && <Link to="/UserLogin" className="nav-link">SignIn</Link>}
-            <Nav.Link href="/cart">Cart</Nav.Link>
+            <Nav.Link onClick={handleNavigateToCart} >Cart</Nav.Link>
             {/* Add more Nav.Link components as needed */}
             <NavDropdown title="More" id="basic-nav-dropdown">
             <NavDropdown.Item onClick={handleNavigateToProfile}>Profile</NavDropdown.Item>

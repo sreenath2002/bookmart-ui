@@ -1,63 +1,76 @@
-/* AdminLoginPage.css */
+/* CSS for styling the admin login form */
+.admin-login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5; /* Attractive background color */
+}
 
+.adminlogin-container {
+  width: 350px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-  
-  .login-container {
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .admin-login-heading {
-    margin-bottom: 0;
-    margin-top: 15px;
-    font-weight: bold;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 2.5em; /* Larger font size for the heading */
-    /* margin-top: 50%; Increased margin */
-  }
-  
-  .input-group {
-     width: 80%;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 10px; /* Increased margin for labels */
-  }
-  
-  input[type='text'],
-  input[type='password'] {
-    width: 80%;
-    padding: 12px; /* Increased input padding */
-    border-radius: 6px; /* Slightly rounded corners */
-    border: 1px solid #ccc;
-  }
-  .form{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-  }
-  
-  .adminloginbtn {
-    margin-left: 0 !important;
-    cursor: pointer;
-    width: 100px;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  .registration-error {
-    /* Green background color */
-   color: red; /* White text color */
-   padding: 10px 15px; /* Padding around the message */
-   border-radius: 5px; /* Rounded corners */
-   margin-bottom: 10px; /* Add some space below the message */
-   text-align: center; /* Center the text */
- }
-  
+.admin-login-heading {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.adminform {
+  display: flex;
+  flex-direction: column;
+}
+
+.admininput-group {
+  margin-bottom: 15px;
+}
+
+label {
+  margin-bottom: 5px;
+  color: #333;
+}
+
+input[type='text'],
+input[type='password'] {
+  padding: 8px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.adminforgotpassword {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.adminforgotpassword .signin {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.adminforgotpassword .signin:hover {
+  text-decoration: underline;
+}
+
+.registration-error {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.adminloginbtn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+}
+
+.adminloginbtn:hover {
+  background-color: #2980b9;
+}

@@ -142,11 +142,11 @@ const UserLogin = () => {
    
 
   return (
-    <div className="container">
+    <div className="logincontainer">
       <div className="row justify-content-center">
         <div className="col-lg-12">
-          <div className="login-container">
-            <form className="login-form">
+          <div className="userlogin-container">
+            <form className="userlogin-form">
               {signinError && (
                 <div className="alert alert-danger">Email does not exist. Please register.</div>
               )}
@@ -157,7 +157,7 @@ const UserLogin = () => {
                 <div className="alert alert-danger">You are Blocked By the Admin</div>
               )}
               <h1>Login</h1>
-              <div className="form-group">
+              <div className="userform-group">
                 <input
                   type="text"
                   value={email}
@@ -166,7 +166,7 @@ const UserLogin = () => {
                   placeholder="Username"
                   required
                 />
-                <div className="text-danger">{signinemailError}</div>
+                <div className="usertext-danger">{signinemailError}</div>
               </div>
               <div className="form-group">
                 <input
@@ -179,11 +179,11 @@ const UserLogin = () => {
                 />
                 <div className="text-danger">{signinpasswordError}</div>
               </div>
-              <div className='forgot-password'>
-                <Link to="/ForgotPassword" className="forgot-password-link">Forgot Password?</Link>
+              <div className='userforgot-password'>
+                <Link to="/ForgotPassword" className="userforgot-password-link">Forgot Password?</Link>
               </div>
               <button onClick={login} className="btn btn-primary btn-block">Login</button>
-              <div className='new-user'>
+              <div className='usernew-user'>
                 New User? Register <Link to="/UserRegister" className="text-primary">Here</Link>
               </div>
             </form>

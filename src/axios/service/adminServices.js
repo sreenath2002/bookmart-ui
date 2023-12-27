@@ -417,5 +417,51 @@ export const updateCoupon= async (token,couponId,updateCouponDetails) => {
     const { data } = await axiosAdminInstance.put(`/updatecupon/${couponId}`,updateCouponDetails, config);
     return data;
 };
+export const deleteCoupon= async (token,couponId) => {
+    console.log("><><><><><><><")
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.delete(`/delete/deletecoupon/${couponId}`, config);
+    return data;
+};
+export const  getUsersCount= async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.get(`/userscount`, config);
+    return data;
+};
+
+export const  getProductCount= async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.get(`/productcount`, config);
+    return data;
+};
+export const  getOrderCount= async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.get(`/orderscount`, config);
+    return data;
+};
 
 

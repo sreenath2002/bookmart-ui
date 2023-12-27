@@ -70,6 +70,7 @@ const AdminNavbar = () => {
             <Nav.Link href="/AdminPage">Home</Nav.Link>
             <Nav.Link href="/stockmanagement">Stock</Nav.Link>
             <Nav.Link href="/Category">Category</Nav.Link>
+            <Nav.Link href="/coupontable">Coupons</Nav.Link>
             {/* Add more Nav.Link components as needed */}
             <NavDropdown title="More" id="basic-nav-dropdown">
               {/* Add dropdown items if repquired */}

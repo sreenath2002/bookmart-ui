@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import './Coupontable.css'
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 
-import { getCouponsList, addNewCoupon, updateCoupon } from '../../axios/service/adminServices';
+import { getCouponsList, addNewCoupon, updateCoupon,deleteCoupon } from '../../axios/service/adminServices';
 const Coupontable = () => {
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [showAddForm, setShowAddForm] = useState(false);
@@ -23,6 +23,7 @@ const Coupontable = () => {
     const[responseSuucesmg,setReponseSucccesMsg]=useState();
     const[responseFalidMsg,setResponseFalidMsg]=useState();
     const[responseSuucesmg1,setReponseSucccesMsg1]=useState();
+    const[responseSuucesmg2,setReponseSucccesMsg2]=useState();
     useEffect(() => {
         fetchData(jwtToken);
 
@@ -139,6 +140,46 @@ const Coupontable = () => {
         
         // setShowUpdateForm(false);
     };
+
+    const handleDelete = async(deleteId) => {
+      
+        
+
+            try{
+                
+                console.log(deleteId)
+              
+                const coupondeleted=await deleteCoupon(jwtToken,deleteId)
+                console.log(deleteId)
+                if(coupondeleted.statuscode === '200 OK')
+                {
+                    setReponseSucccesMsg2(true);
+                    setTimeout(()=>{
+                        setReponseSucccesMsg2(false);
+                    },2000);
+                    setRefresh(!refresh);
+                }
+                else{
+                    console.log("mmm")
+                    setResponseFalidMsg(true);
+                    setTimeout(()=>{
+                        setResponseFalidMsg(false);
+                    },2000);
+                }
+
+            }
+            catch{
+                console.log("m22")
+                setResponseFalidMsg(true);
+                setTimeout(()=>{
+                    setResponseFalidMsg(false);
+                },2000);
+
+            }
+      
+        
+        // setShowUpdateForm(false);
+    };
     const handleAddSubmit = async(e) => {
         e.preventDefault();
         if(validateForm()){
@@ -189,6 +230,8 @@ const Coupontable = () => {
                 <button className='addcouponbtn' onClick={handleAddNewCoupon}>Add New Coupon</button>
 
                 <table>
+                {responseFalidMsg && <span className='couponerr'>Internal Server Error</span>}
+                {responseSuucesmg2 && <span className='updatecouponsucces'>Coupon Deleted SuccesFully</span>}
                     <thead>
                         <tr>
                             <th>Coupon Code</th>
@@ -215,6 +258,9 @@ const Coupontable = () => {
                                         {coupon.is_activeState && (
                                             <button className='updatecouponbtn' onClick={() => handleUpdate(coupon.id)}>Update</button>
                                         )}
+                                       
+                                            <button className='deletecouponbtn' onClick={() => handleDelete(coupon.id)}>Delete</button>
+                                      
                                     </td>
                                 </tr>
                             ))

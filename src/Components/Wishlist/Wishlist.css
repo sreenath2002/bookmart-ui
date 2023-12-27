@@ -10,7 +10,7 @@
   .wishlist-items {
     flex-grow: 1;
     padding-right: 20px;
-   
+    margin-top: 50px;
     
   
   }
@@ -29,7 +29,7 @@
   .wishlist-item {
     display: flex;
     align-items: center;
-    width: 120%;
+    width: 80%;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 5px;

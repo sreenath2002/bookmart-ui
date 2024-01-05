@@ -215,6 +215,7 @@ const BookCards = () => {
                           <s className='real'>${newArrivalbook.price}</s>
                           <span className='discount'>{newArrivalbook.discountPresent}% OFF</span>
                         </p>
+                       
                       </Card.Text>
 
                       <Button className='mybutton' variant="primary" onClick={() => handleShopNow(newArrivalbook.id)}>Shop Now</Button>

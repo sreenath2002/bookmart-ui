@@ -131,7 +131,68 @@
   font-family: Arial, sans-serif;
   margin-top: 20px;
   margin: 30px;
+  width: 70%;
 }
+.smallsubdiv{
+  display: flex;
+  justify-content: space-between;
+}
+.ratingsdiv {
+  text-align: center;
+  padding: 60px;
+  font-family: 'Arial', sans-serif;
+
+  
+}
+
+.circle-rating {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #eecd9c,white);
+  color: rgb(14, 13, 13);
+  line-height: 120px;
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+  border: 3px solid #ffcc66;
+  position: relative;
+  overflow: hidden;
+  animation: pulse 2s infinite alternate;
+}
+.valuerating{
+  font-size: 3rem;
+  text-align: center;
+  margin-top: 18px;
+}
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.2);
+  }
+}
+
+.circle-rating h3 {
+  margin: 0;
+}
+
+.ratingsdiv span {
+  color: #666;
+  display: block;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.ratingsdiv h5 {
+  color: #888;
+  margin-top: 10px;
+}
+
+
 
 h2 {
   font-size: 24px;
@@ -185,9 +246,9 @@ h2 {
   background-size: 15px;
 }
 
-.add-review button {
-  padding: 10px 20px;
-  background-color: #007bff;
+.userreviewbtn {
+
+  background-color: #91c2f7;
   color: white;
   border: none;
   border-radius: 5px;
@@ -195,9 +256,9 @@ h2 {
   transition: background-color 0.3s ease;
 }
 
-.add-review button:hover {
+/* .add-review button:hover {
   background-color: #0056b3;
-}
+} */
 
 /* Media query for responsiveness */
 @media (max-width: 768px) {
@@ -214,10 +275,7 @@ h2 {
 }
 /* Media query for responsiveness */
 @media (max-width: 768px) {
-  .overview{
-    margin-top: 190%;
-   
-  }
+  
   .product-row {
     flex-direction: column;
     gap: 30px;

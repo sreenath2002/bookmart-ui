@@ -4,19 +4,22 @@ import './UserProfile.css';
 import { useEffect } from 'react';
 import imageCompression from 'browser-image-compression';
 import { updateUser } from '../../axios/service/adminServices';
-import { editProfile, passwordUpdate,addAddress,allAddress,addProfileImage } from '../../axios/service/userService.s';
+import { editProfile, passwordUpdate,addAddress,allAddress,addProfileImage,getwalletamt } from '../../axios/service/userService.s';
 import { getAllCountries ,getAllCities,getAllStates} from '../../axios/service/AddresDetails';
 import { updateUserValidation, changePasswordValidation, addressValidation } from '../../validation/validation';
 import { userInfo } from '../../axios/service/userService.s';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
-
+import WalletIcon from '../WalletIcon/WalletIcon';
 import { useNavigate } from 'react-router-dom';
+import { MdAccountBalanceWallet } from 'react-icons/md';
+import { AiFillDollarCircle, AiOutlineCloseCircle } from 'react-icons/ai';
+import { connect } from 'formik';
 const UserProfile = () => {
 
   const id = useSelector((state) => state.user.id)
-
+  const[walletamount,setWalletAmount]=useState(0);
   const jwtToken = localStorage.getItem("jwt");
   const [userImage, setUserImage] = useState(null);
   const [showProducts, setShowProducts] = useState(false);
@@ -88,6 +91,8 @@ const UserProfile = () => {
   const[stateOptions,setStateOptions]=useState([]);
  const navigate = useNavigate();
  const[profileimg,setProfileImg]=useState();
+
+ const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     fetchData(jwtToken);
 
@@ -123,6 +128,7 @@ const UserProfile = () => {
           setCountries(countries.data);
           console.log(countries.data)
         }
+        
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -136,6 +142,26 @@ const UserProfile = () => {
 const handleNavigateToOrders=()=>{
   navigate('/orders');
 }
+
+const handleIconClick = async() => {
+  console.log("haiiiiii")
+  const amountofwallet=await getwalletamt(jwtToken,id);
+  console.log("ha222")
+  if(amountofwallet.statuscode==='200 OK' && amountofwallet.message==='Wallet Amount')
+  {
+    console.log("hai")
+    setWalletAmount(amountofwallet.result)
+  }
+  else{
+    setWalletAmount(0)
+    
+  }
+  setShowModal(true);
+ 
+};
+const handleCloseClick = () => {
+  setShowModal(false);
+};
 
   const handleGetStates= async(selectedCountry) =>{
     setCountry(selectedCountry)
@@ -753,6 +779,25 @@ const handleImageChange = async (e) => {
           <>
             {/* User Details section */}
             <div className="user-details">
+            <div onClick={handleIconClick} className="wallet-icon" style={{ textAlign: 'right' }}>
+        <MdAccountBalanceWallet size={30} color="blue" style={{ verticalAlign: 'middle' }} />
+      </div>
+            
+      {showModal && (
+        <div className={`walletmodal ${showModal ? 'slide-in' : 'slide-out'}`}>
+          <div className="walletmodal-content">
+            <div style={{ marginBottom: '20px' }}>
+            <h2>Wallet Information  <AiFillDollarCircle size={40} color="gold" /></h2>
+             
+              <h1 className='walletamount'>{walletamount}</h1>
+             
+            </div>
+           
+          
+            <button onClick={handleCloseClick}>Close</button>
+          </div>
+        </div>
+      )}
               <h2>User Details</h2>
               <p>
                 <strong>Name:</strong> {firstName} {lastName}

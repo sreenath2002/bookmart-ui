@@ -465,5 +465,19 @@ export const getallreviews = async (token, productId) => {
 
 };
 
+export const getwalletamt = async (token,userId) => {
+   
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/walletamt/${userId}`, config);
+    return data;
+
+};
+
 
 

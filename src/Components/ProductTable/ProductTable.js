@@ -4,10 +4,11 @@ import './ProductTable.css'; // Import your CSS file for styling
 import AddProduct from '../AddProduct/AddProduct';
 import UpdateProduct from '../UpdateProduct/UpdateProduct';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { getProducts,getProductsByCourse, deleteProduct } from '../../axios/service/adminServices';
+import { getProducts, getProductsByCourse, deleteProduct } from '../../axios/service/adminServices';
 import NavBar from '../NavBar/Navbar';
 const ProductTable = () => {
   const [books, setBooks] = useState([]);
+  const[books2,setBooks2]=useState([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showUpdateProduct, setShowUpdateProduct] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
@@ -22,46 +23,48 @@ const ProductTable = () => {
   const [selectedProductUniversity, setSelectedProductUniversity] = useState(null);
   const [selectedProductAuthor, setSelectedProductAuthor] = useState(null);
   const [selectedProductParentCategory, setSelectedProductParentCategory] = useState(null);
-  
+
   const [selectedProductSemester, setSelectedProductSemester] = useState(null);
-  const [deleteSuccesMessage,setDeleteSuccesMessage]=useState(false);
-  const[updateSuccesMessage,setupdateSuccesMessage]=useState(false);
-  const[addSuccesMessage,setaddSuccesMessage]=useState(false);
-  const[wrongMessage,setWrongMessage]=useState(false);
+  const [deleteSuccesMessage, setDeleteSuccesMessage] = useState(false);
+  const [updateSuccesMessage, setupdateSuccesMessage] = useState(false);
+  const [addSuccesMessage, setaddSuccesMessage] = useState(false);
+  const [wrongMessage, setWrongMessage] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-   const[refresh,setRefresh]=useState(false)
-   const role = useSelector((state) => state.user.role);
-   
+  const [refresh, setRefresh] = useState(false)
+  const role = useSelector((state) => state.user.role);
+  const [ugChecked, setUgChecked] = useState(false);
+  const [pgChecked, setPgChecked] = useState(false);
+  const[checked,setChecked]=useState(true);
+
   const jwtToken = localStorage.getItem("jwt");
 
   useEffect(() => {
-   
-   
+
+
     console.log("fdsj")
-    async function fetchData(token){
+    async function fetchData(token) {
       console.log("-------fist start-------")
-      const products= await getProducts(token);
+      const products = await getProducts(token);
       console.log("--------------------------------------------------")
       console.log("-----------hai--------");
       console.log("ejfsld")
-      
-      if(products.statuscode ==='200 OK')
-      {
+
+      if (products.statuscode === '200 OK') {
         console.log("jfsd")
         console.log(products.result)
         setBooks(products.result)
+        setBooks2(products.result)
         console.log("----books------");
       }
     }
     fetchData(jwtToken);
-    
-  },[refresh]);
+
+  }, [!refresh]);
   if (!jwtToken) {
-    
+
     return <div className='erooor'>Please log in to access the Product table</div>;
   }
-  if(role==='USER')
-  {
+  if (role === 'USER') {
     return <div className='erooor'>You can't Acces This page</div>;
   }
 
@@ -69,62 +72,61 @@ const ProductTable = () => {
     setSearchQuery(e.target.value);
   };
 
-  const handleUpdate = (id,bookTitle,bookDescription,bookPrice,bookDiscountedPrice,bookDiscountPresent,bookQuantity,bookAuthor,bookParentCategory,bookCourse,bookSubjcet,bookUniversity,bookSemester,books) => {
+  const handleUpdate = (id, bookTitle, bookDescription, bookPrice, bookDiscountedPrice, bookDiscountPresent, bookQuantity, bookAuthor, bookParentCategory, bookCourse, bookSubjcet, bookUniversity, bookSemester, books) => {
     // Logic to handle updating a product with 'id'
     console.log(`Update product with ID: ${id}`);
     setSelectedProductId(id);
-     setSelectedProductTitle(bookTitle);
-     setSelectedProductDescription(bookDescription);
-     setSelectedProductPrice(bookPrice);
-     setSelectedProductDisCountedPrice(bookDiscountedPrice);
-     setSelectedProductDiscountPresent(bookDiscountPresent);
-     setSelectedProductQuantity(bookQuantity);
-     setSelectedProductCourse(bookCourse);
-     setSelectedProductSubjcet(bookSubjcet);
-     setSelectedProductUniversity(bookUniversity);
-     setSelectedProductAuthor(bookAuthor);
-     setSelectedProductParentCategory(bookParentCategory);
-   
-     setSelectedProductSemester(bookSemester);
+    setSelectedProductTitle(bookTitle);
+    setSelectedProductDescription(bookDescription);
+    setSelectedProductPrice(bookPrice);
+    setSelectedProductDisCountedPrice(bookDiscountedPrice);
+    setSelectedProductDiscountPresent(bookDiscountPresent);
+    setSelectedProductQuantity(bookQuantity);
+    setSelectedProductCourse(bookCourse);
+    setSelectedProductSubjcet(bookSubjcet);
+    setSelectedProductUniversity(bookUniversity);
+    setSelectedProductAuthor(bookAuthor);
+    setSelectedProductParentCategory(bookParentCategory);
+
+    setSelectedProductSemester(bookSemester);
     setShowUpdateProduct(true);
     // Implement update functionality
   };
 
 
-    
-     async function deleteBook(id){
-        try{
-          console.log(id)
-           const deleteResponse=await  deleteProduct(jwtToken,id)
-           console.log(deleteResponse.statuscode);
-           console.log("-------DELETED------")
-           if(deleteResponse.statuscode==='200 OK')
-           {
-               setDeleteSuccesMessage(true);
-               setTimeout(()=>{
-                setDeleteSuccesMessage(false)
-               },3000)
-               setBooks(books.filter((book) => book.id !== id));
-           }
-           else{
-            setWrongMessage(true);
-            setTimeout(()=>{
-             setWrongMessage(false)
-            },3000)
 
-           }
+  async function deleteBook(id) {
+    try {
+      console.log(id)
+      const deleteResponse = await deleteProduct(jwtToken, id)
+      console.log(deleteResponse.statuscode);
+      console.log("-------DELETED------")
+      if (deleteResponse.statuscode === '200 OK') {
+        setDeleteSuccesMessage(true);
+        setTimeout(() => {
+          setDeleteSuccesMessage(false)
+        }, 3000)
+        setBooks(books.filter((book) => book.id !== id));
+      }
+      else {
+        setWrongMessage(true);
+        setTimeout(() => {
+          setWrongMessage(false)
+        }, 3000)
 
-        }
-        catch(err){
-          setWrongMessage(true);
-          setTimeout(()=>{
-           setWrongMessage(false)
-          },3000)
+      }
 
-        }
-     }
-    // Implement delete functionality
-  
+    }
+    catch (err) {
+      setWrongMessage(true);
+      setTimeout(() => {
+        setWrongMessage(false)
+      }, 3000)
+
+    }
+  }
+  // Implement delete functionality
+
   const handleAddProduct = () => {
     setShowAddProduct(true);
   };
@@ -136,100 +138,162 @@ const ProductTable = () => {
   };
 
   const handleProductUpdated = () => {
-    
+
     setShowUpdateProduct(false);
     setupdateSuccesMessage(true);
-    setTimeout(()=>{
+    setTimeout(() => {
       setupdateSuccesMessage(false)
-    },2000)
+    }, 2000)
 
   };
   const handleProductAdded = () => {
-    
-   setShowAddProduct(false)
+
+    setShowAddProduct(false)
     setaddSuccesMessage(true);
-    setTimeout(()=>{
+    setTimeout(() => {
       setaddSuccesMessage(false)
-    },2000)
+    }, 2000)
 
   };
- 
+  const filterUgProducts=()=>{
+    setChecked(false)
+    setBooks(books2)
+    console.log("hai kumar")
+    const filteredUGBooks = books2.filter(book => book.parentCategory.name==="UG")
+     console.log(filteredUGBooks)
+
+      setBooks(filteredUGBooks)
+      
+     
+    }
+    const filterPgProducts=()=>{
+     setChecked(false)
+      setBooks(books2)
+      console.log("hai kumar")
+      const filteredPGBooks = books2.filter(book => book.parentCategory.name==="PG")
+       console.log(filteredPGBooks)
+  
+        setBooks(filteredPGBooks)
+        
+       
+      }
+      const handleRadioChange = () => {
+        setRefresh(!refresh);
+        setChecked(true); // Or setChecked(!checked) if you want to toggle checked state
+      };
 
   return (
     <div className="product-table-container">
-       {/* <NavBar/> */}
+      {/* <NavBar/> */}
       {deleteSuccesMessage && <div className='deleteSucces'>Deleted SUccesFully</div>}
       {updateSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
       {addSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
       {wrongMessage && <div className='wrongMessage'>NOT FOUND</div>}
-      { showAddProduct ? (
-        <AddProduct  handleProductAdded={handleProductAdded} handleBack={handleBack} />
+      {showAddProduct ? (
+        <AddProduct handleProductAdded={handleProductAdded} handleBack={handleBack} />
       ) : showUpdateProduct ? (
         <UpdateProduct productId={selectedProductId} handleProductUpdated={handleProductUpdated} bookTitle={selectedProductTitle} bookDescription={selectedProductDescription} bookPrice={selectedProductPrice} bookDiscountedPrice={selectedProductDiscountedPrice} bookDiscountPresent={selectedProductDiscountPresent} bookQuantity={selectedProductQuantity} bookCourse={selectedProductCourse} bookParentCategory={selectedProductParentCategory} bookSubjcet={selectedProductSubjcet} bookUniversity={selectedProductUniversity}
-        bookAuthor={selectedProductAuthor} bookSemester={selectedProductSemester} handleBack={handleBack} />
+          bookAuthor={selectedProductAuthor} bookSemester={selectedProductSemester} handleBack={handleBack} />
       ) : (
         <div>
-        <div className="search-bar">
+          <div className="search-bar">
             <input type="text" placeholder="Search by Book Name" value={searchQuery} onChange={handleSearchInputChange} />
           </div>
-      <table className="product-table">
-        <thead>
-          <tr>
-          <th>Product ID</th>
-            <th>Product Name</th>
-            <th>Product Description</th>
-            <th>Price</th>
-            <th>Discounted Price</th>
-            <th>Discount Present</th>
-        
-            <th>Type</th>
-            <th>Author</th>
-            <th>Product Category</th>
-        
-            <th>Course </th>
+          <div className='maindivforaddandfilter'>
+          <div className='filteroptionsdiv'>
+            <div className='allfilter'>
+              <label>
+                <input
+                  type="radio"
+                  name="filter"
+                  value="All"
+                  onClick={handleRadioChange} checked={checked} />
+                All
+              </label>
+            </div>
+            <div className='ugfilter'>
+              <label>
+                <input
+                  type="radio"
+                  name="filter"
+                  value="ug"
+                onClick={filterUgProducts}/>
+                UG
+              </label>
+            </div>
+            <div className='pgfilter'>
+              <label>
+                <input
+                  type="radio"
+                  name="filter"
+                  value="pg"
+                  onClick={filterPgProducts}/>
+                PG
+              </label>
+            </div>
+          </div>
+          {!showAddProduct && !showUpdateProduct && (
           
-            <th>Subject </th>
-            <th>University</th>
-            <th>Semester Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {books.filter((book) => book.status!='false' && book.title.toLowerCase().includes(searchQuery.toLowerCase())).map((book) => (
-            <tr key={book.name}>
-                <td>{book.id}</td>
-              <td>{book.title}</td>
-                <td>{book.description}</td>
-                <td>{book.price}</td>
-                <td>{book.discountedPrice}</td>
-                <td>{book.discountPresent}</td>
-             
-                <td>{book.type}</td>
-                <td>{book.author}</td>
-               <td>{book.parentCategory.name}</td>
-               {/* <td>{book.subCategory.name}</td> */}
-              <td>{book.course.courseName}</td>
-             
-              <td>{book.subject.subjectName}</td>
-              <td>{book.university.universityName}</td>
-              <td>{book.semester.name}</td> 
-              <td>
-                <button onClick={() => handleUpdate (book.id,book.title,book.description,book.price,book.discountedPrice,book.discountPresent,book.quantity,book.author,book.parentCategory.name,book.course.courseName,book.subject.subjectName,book.university.universityName,book.semester.name,books)}>Update</button>
-                <button onClick={() => deleteBook(book.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table></div>)}
-      {books.filter((book) => book.title.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
-      
-          <div className="no-user-message">No Product Exists</div>
-        )}
-      {!showAddProduct && !showUpdateProduct && (
         <button className="add-product-btn" onClick={handleAddProduct}>
           Add Product
         </button>
       )}
+      </div>
+
+          <table className="product-table">
+            <thead>
+              <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Product Description</th>
+                <th>Price</th>
+                <th>Discounted Price</th>
+                <th>Discount Present</th>
+
+                <th>Type</th>
+                <th>Author</th>
+                <th>Product Category</th>
+
+                <th>Course </th>
+
+                <th>Subject </th>
+                <th>University</th>
+                <th>Semester Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {books.filter((book) => book.status != 'false' && book.title.toLowerCase().includes(searchQuery.toLowerCase())).map((book) => (
+                <tr key={book.name}>
+                  <td>{book.id}</td>
+                  <td>{book.title}</td>
+                  <td>{book.description}</td>
+                  <td>{book.price}</td>
+                  <td>{book.discountedPrice}</td>
+                  <td>{book.discountPresent}</td>
+
+                  <td>{book.type}</td>
+                  <td>{book.author}</td>
+                  <td>{book.parentCategory.name}</td>
+                  {/* <td>{book.subCategory.name}</td> */}
+                  <td>{book.course.courseName}</td>
+
+                  <td>{book.subject.subjectName}</td>
+                  <td>{book.university.universityName}</td>
+                  <td>{book.semester.name}</td>
+                  <td>
+                    <button onClick={() => handleUpdate(book.id, book.title, book.description, book.price, book.discountedPrice, book.discountPresent, book.quantity, book.author, book.parentCategory.name, book.course.courseName, book.subject.subjectName, book.university.universityName, book.semester.name, books)}>Update</button>
+                    <button onClick={() => deleteBook(book.id)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table></div>)}
+      {books.filter((book) => book.title.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
+
+        <div className="no-user-message">No Product Exists</div>
+      )}
+   
     </div>
   );
 };

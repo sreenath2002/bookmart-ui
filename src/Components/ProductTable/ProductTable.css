@@ -1,6 +1,7 @@
 .product-table-container {
-  margin: 20px;
+ 
   font-family: Arial, sans-serif;
+  padding: 40px;
 }
 
 /* Styles for messages */
@@ -11,7 +12,15 @@
   color: #fff;
   border-radius: 5px;
 }
-
+.filteroptionsdiv{
+  display: flex;
+  
+  
+}
+.maindivforaddandfilter{
+  display: flex;
+  justify-content: space-between;
+}
 .deleteSucces {
   background-color: #4caf50; /* Green color for success message */
 }
@@ -102,37 +111,44 @@ button.delete-btn:hover {
 
 /* Responsive table */
 /* Media query for responsiveness */
+/* Your existing styles */
+
+/* Media query for tablets */
 @media screen and (max-width: 768px) {
-  /* Adjustments for smaller screens */
+  .product-table-container {
+    padding: 20px; /* Adjust padding for smaller screens */
+  }
 
+  /* Adjust styles for search bar on smaller screens */
   .search-bar input[type="text"] {
-    font-size: 12px; /* Decrease font size for search bar */
-    padding: 6px;
-    /* Adjust padding for smaller screens */
+    font-size: 12px; /* Decrease font size */
   }
 
-  .product-table th,
-  .product-table td {
-    padding: 6px; /* Adjust padding for table cells */
-    font-size: 12px;
-     /* Decrease font size for table cells */
-  }
-  .product-table{
-    margin-left: 600px;
-
-  }
-
+  /* Adjust styles for buttons on smaller screens */
   button {
-    padding: 6px 10px; /* Adjust padding for buttons */
-    font-size: 12px; /* Decrease font size for buttons */
+    padding: 6px 10px; /* Reduce padding */
+    font-size: 8px; /* Decrease font size */
   }
 }
-/* @media screen and (max-width: 768px){
-  .product-table-container {
 
+/* Media query for mobile devices */
+@media screen and (max-width: 480px) {
+  .product-table-container {
+    padding: 10px; /* Further adjust padding for smaller screens */
   }
 
-} */
+  /* Adjust styles for search bar on smaller screens */
+  .search-bar input[type="text"] {
+    width: 80%; /* Adjust width for better fit on small screens */
+  }
+
+  /* Adjust styles for buttons on smaller screens */
+  button {
+    padding: 4px 8px; /* Reduce padding further */
+    font-size: 6px; /* Decrease font size */
+  }
+}
+
 
 
 

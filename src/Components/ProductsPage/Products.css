@@ -3,10 +3,11 @@
   
   padding: 20px;
   font-family: Arial, sans-serif;
-  background-image: url('/public/Images/marialaura-gionfriddo-50G3FvyQxX0-unsplash.jpg');
+  /* background-image: url('/public/Images/marialaura-gionfriddo-50G3FvyQxX0-unsplash.jpg'); */
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
+  background-color: aliceblue;
   min-height: 600px;
   width:100vw ; /* Adjust the height to your preference */
 }
@@ -16,10 +17,36 @@
 /* Container for dropdowns */
 .dropdown-container {
   display: flex;
-  flex-wrap: wrap;
-  margin-top:  42px;
+  margin-top: 42px;
   gap: 10px;
   justify-content: center;
+  background: linear-gradient(135deg, rgba(121, 156, 167, 0.5), rgba(195, 120, 120, 0.5));
+  padding: 30px;
+  border-radius: 20px;
+  width: 70%;
+  box-shadow: 15px 10px 8px rgba(0, 0, 0, 0.2); /* Box shadow */
+}
+
+.subdivofproducts{
+  background-color: rgba(241, 229, 229, 0.5);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.filterproductdivcontainer{
+  display: flex;
+  justify-content: space-between;
+}
+
+.filterbuttonproducts {
+  /* Add your styles here */
+  /* For example: */
+  margin-left: auto; /* This will push the div to the right end */
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 /* Styles for individual dropdowns */
@@ -205,10 +232,28 @@
 .wishlist-icon:hover {
   color: #3498db;
 }
-.nobooks{
+.nobooks {
   font-size: x-large;
-  color: #f5f5f5;
+  color: #131212;
+  margin: auto;
+  margin-left: 85%;
 }
+.goback{
+  font-size: 1rem;
+  color: blue;
+  margin-left: 60px;
+  cursor: pointer;
+
+}
+.pleaseselectoptions{
+  font-size: 1rem;
+  color: red;
+}
+.goback:hover {
+  text-decoration: underline;
+}
+
+
 
 
 .mybutton {

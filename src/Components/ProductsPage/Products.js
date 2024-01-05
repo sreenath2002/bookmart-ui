@@ -71,6 +71,7 @@ const Products = () => {
   const[showRemoveFilter,setShowRemoveFilter]=useState('');
   // State for sorting
   const [sortOrder, setSortOrder] = useState('');
+  const[pleseslect,setPleseSelect]=useState();
 
   // Apply filters based on selections
 
@@ -227,27 +228,42 @@ const Products = () => {
     }
 
   }
-  const filterProducts=(categoryofbook,courseofbook,subjcetofbook,semesterofbook,universityofbook)=>{
-    const filteredBooks = books.filter(book => (book.parentCategory
-      .name === categoryofbook) && (book.course.courseName === courseofbook) && (book.subject.subjectName === subjcetofbook) && (book.semester.name === semesterofbook) &&
-      (book.university.universityName === universityofbook));
+  const filterProducts = () => {
+    if (!selectedCategory && !selectedCourse && !selectedSubject && !selectedSemester && !selectedUniversity) {
 
-      setBooks(filteredBooks)
-      if(filteredBooks.length !=0)
-      {
-        setShowRemoveFilter(true)
-      }
-     
+      setPleseSelect(true)
+      setShowRemoveFilter(false)
+      setTimeout(()=>{
+        setPleseSelect(false)
+      },2000)
+}
+    const filteredBooks = books.filter((book) =>
+      (!selectedCategory || book.parentCategory.name === selectedCategory) &&
+      (!selectedCourse || book.course.courseName === selectedCourse) &&
+      (!selectedSubject || book.subject.subjectName === selectedSubject) &&
+      (!selectedSemester || book.semester.name === selectedSemester) &&
+      (!selectedUniversity || book.university.universityName === selectedUniversity)
+    );
+  
+    setBooks(filteredBooks);
+  
+    if (filteredBooks.length > 0) {
+
+      setShowRemoveFilter(true)
     }
+   
+  };
+  
     const handleRemoveFilter=()=>{
      
-      setRefresh(!refresh)
+      
       setShowRemoveFilter(false)
       setSelectedCategory('')
       setSelectedCourse('')
       setSelectedSemester('')
       setSelectedSubject('')
       setSelectedUniversity('')
+      setRefresh(!refresh)
     }
 
 
@@ -256,21 +272,14 @@ const Products = () => {
       <NavBar />
 
       <Row className="product-page">
-
-
+      {books.length >0 &&
+        
         <div className='dropdown-container'>
+          
           <div class="dropdown">
             <span>Category</span>
             <div class="dropdown-content">
-              <label key="all">
-                <input
-                  type="radio"
-                  name="category"
-                  value="All"
-                  onChange={() => handleSubjcet('All')}
-                />
-                All
-              </label>
+              
               {bookcategories.map((category) => (
                 <label key={category.id}>
                   <input
@@ -334,7 +343,7 @@ const Products = () => {
                 booksemesters.map((semester) => (
                   <label key={semester.id}>
                     <input
-                      type="radio"
+                     type="radio"
                       name="semester"
                       value={semester.name}
                       onChange={() => setSelectedSemester(semester.name)}
@@ -348,20 +357,12 @@ const Products = () => {
           <div class="dropdown">
             <span>University</span>
             <div class="dropdown-content">
-              <label key="all">
-                <input
-                  type="radio"
-                  name="university"
-                  value="All"
-                  onChange={() => handleSubjcet('All')}
-                />
-                All
-              </label>
+             
               <div class="dropdown-content">
                 {bookuniversities.map((university) => (
                   <label key={university.id}>
                     <input
-                      type="radio"
+                    type="radio"
                       name="university"
                       value={university.name}
                       onChange={() => setSelectedUniversity(university.universityName)}
@@ -375,37 +376,24 @@ const Products = () => {
             </div>
           </div>
 
-          <div class="dropdown1" onClick={() => filterProducts(selectedCategory, selectedCourse, selectedSubject, selectedSemester, selectedUniversity)}>
+          <div class="dropdown1" onClick={() => filterProducts()}>
             <span>Filter</span>
-            {/* <div class="dropdown-content">
-              <label>
-                <input type="radio" name="discountrange" value="lowToHigh" onclick="handleSortChange('lowToHigh')" />
-                10%-15%
-              </label>
-              <label>
-                <input type="radio" name="category" value="highToLow" onclick="handleSortChange('highToLow')" />
-                15%-30%
-              </label>
-
-            </div> */}
+           
           </div>
           {/* <!-- Price Range --> */}
          {showRemoveFilter && <div class="dropdown" >
             {/* <span>Remove Filter</span> */}
-            <FaTimes className='removeflitericon' onClick={handleRemoveFilter} />
-            {/* <div class="dropdown-content">
-              <label>
-                <input type="radio" name="pricerange" value="lowToHigh" onclick="handleSortChange('lowToHigh')" />
-                Rs.99-Rs.299
-              </label>
-              <label>
-                <input type="radio" name="category" value="highToLow" onclick="handleSortChange('highToLow')" />
-                Rs.299-Rs.599
-              </label>
-            </div> */}
+            <FaTimes className='removeflitericon' onClick={()=>handleRemoveFilter()} />
+            
           </div>}
-        </div>
+         
+        </div>}
+        {pleseslect &&<p className='pleaseselectoptions'>Please select options</p>}
+        {/* <div class="filterproductdivcontainer">
 
+  <div class='filterbuttonproducts'>Filter</div>
+  
+</div> */}
        {books.length >0 ?(
         <div className='setCards'>
 
@@ -480,7 +468,7 @@ const Products = () => {
           {serverError && (
             <div className='serverError'><h4 className='serverError'>{serverError}</h4></div>
           )}
-        </div>) : <p className='nobooks'>No Books Available</p>}
+        </div>) : (<div className='nobooks'>No Books Available <br></br><span className='goback' onClick={()=>handleRemoveFilter()}>Go Back</span></div>)}
 
       </Row>
 
@@ -517,3 +505,24 @@ export default Products;
             </Dropdown>
           </div> */}
 {/* Display Books */ }
+{/* <div class="dropdown-content">
+              <label>
+                <input type="radio" name="pricerange" value="lowToHigh" onclick="handleSortChange('lowToHigh')" />
+                Rs.99-Rs.299
+              </label>
+              <label>
+                <input type="radio" name="category" value="highToLow" onclick="handleSortChange('highToLow')" />
+                Rs.299-Rs.599
+              </label>
+            </div> */}
+             {/* <div class="dropdown-content">
+              <label>
+                <input type="radio" name="discountrange" value="lowToHigh" onclick="handleSortChange('lowToHigh')" />
+                10%-15%
+              </label>
+              <label>
+                <input type="radio" name="category" value="highToLow" onclick="handleSortChange('highToLow')" />
+                15%-30%
+              </label>
+
+            </div> */}

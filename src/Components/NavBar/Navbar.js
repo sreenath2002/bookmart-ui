@@ -13,6 +13,7 @@ const NavBar = () => {
   const firstName=useSelector((state)=>state.user.firstName)
   const lastName=useSelector((state)=>state.user.lastName)
   const jwtToken = localStorage.getItem("jwt");
+  const profilephoto=useSelector((state)=>state.user.profileImage)
   const navigate=useNavigate()
   const handleToggle = () => {
     setExpanded(!expanded);
@@ -94,7 +95,7 @@ const NavBar = () => {
           <Nav className="me-auto">
             {/* Add user-related components/icons to the left side */}
             <Nav.Item className="d-flex align-items-center">
-              <Image src="profile.jpg" roundedCircle width={30} height={30}  />
+             {(profilephoto && jwtToken)? (<Image src={profilephoto} roundedCircle width={30} height={30}  /> ) : <Image src="profile"  roundedCircle width={30} height={30}  />} 
              {jwtToken? <span className="user-name">{firstName}{lastName}</span>:<span className="user-name">Welcome User</span>}
             </Nav.Item>
           </Nav>

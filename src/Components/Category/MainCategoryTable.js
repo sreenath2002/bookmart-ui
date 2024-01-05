@@ -107,7 +107,7 @@ const MainCategoryTable = () => {
   };
 
   return (
-    <div className="table-container">
+    <div className="categorytable-container">
       <AdminNavbar/>
       {deleteSuccesMessage && <div className='deleteSucces'>Deleted SUccesFully</div>}
       {/* {updateSuccesMessage && <div className='deleteSucces'>Updated SUccesFully</div>}
@@ -119,7 +119,7 @@ const MainCategoryTable = () => {
       ) : showUpdateCategory ? (
         <UpdateCategory categoryId={selectedCategoryId} name={selectedCategoryName}  handleBack={handleBack} />
       ) : (
-        <table className="user-table">
+        <table className="category-table">
           <thead>
             <tr>
               <th>Category ID</th>

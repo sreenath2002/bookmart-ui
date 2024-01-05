@@ -100,7 +100,7 @@ const CardComponent = () => {
             <img src="Images/order2.jpg" alt="Small Image 1" className="card-image" />
             
           </div>
-          <div className="small-card4" onClick={handleShowProductTable}>
+          {/* <div className="small-card4" onClick={handleShowProductTable}>
             
           <div className='admindiv'>
               <h3>60</h3>
@@ -108,7 +108,7 @@ const CardComponent = () => {
            </div>
             <img src="Images/51JDhCpkycL._AC_UF1000,1000_QL80_.jpg" alt="Small Image 2" className="card-image" />
            
-          </div>
+          </div> */}
         </div>
         </div>
         

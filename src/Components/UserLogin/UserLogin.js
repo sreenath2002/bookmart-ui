@@ -123,7 +123,7 @@ const UserLogin = () => {
           console.log(response.data.id)
           if(response.data.role === "USER")
           {
-            dispatch(setUser({email,id:response.data.id,path:'/Home',firstName:response.data.firstName,lastName:response.data.lastName,mobile:response.data.mobile,role:response.data.role}))
+            dispatch(setUser({email,id:response.data.id,path:'/Home',firstName:response.data.firstName,lastName:response.data.lastName,mobile:response.data.mobile,role:response.data.role,profileImage:response.data.profilepictute}))
             navigate('/')
           }
           
@@ -142,6 +142,7 @@ const UserLogin = () => {
    
 
   return (
+
     <div className="logincontainer">
       <div className="row justify-content-center">
         <div className="col-lg-12">

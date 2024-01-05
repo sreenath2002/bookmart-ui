@@ -24,6 +24,7 @@ const StockmanagementTable = () => {
   const [bookError, setBookError] = useState();
   const [selectedBookname, setSelectedBookname] = useState();
   const jwtToken = localStorage.getItem("jwt");
+  const [refresh,setRefresh]=useState(false)
   useEffect(() => {
     fetchData(jwtToken);
 
@@ -49,7 +50,7 @@ const StockmanagementTable = () => {
         console.error("Error fetching product data:", error);
       }
     }
-  }, [jwtToken]);
+  }, [!refresh]);
 
   const handleAddClick = () => {
     setShowAddForm(true);
@@ -191,14 +192,25 @@ const StockmanagementTable = () => {
     setMainTable(false);
 
   }
+  const handleCloseStockUpdateForm=()=>{
+ setShowUpdateForm(false)
+ setMainTable(true)
+  }
+  const handleCloseStockAddForm=()=>{
+    setShowAddForm(false)
+    setMainTable(true)
+     }
 
   return (
-    <div className="tables-container">
+    <div className="stocktables-container">
       <AdminNavbar />
       {/* Main Table */}
       {mainTable ? (
-        <div className="table-container">
-          <h2>Main Table</h2>
+        <div className="stocktable-container">
+         <div className="button-container">
+            <button onClick={handleAddClick}>Add</button>
+
+          </div>
           <table className="table">
             <thead>
               <tr>
@@ -223,20 +235,18 @@ const StockmanagementTable = () => {
                 ))}
               </tbody>) : <div>No Stocks Added</div>}
           </table>
-          <div className="button-container">
-            <button onClick={handleAddClick}>Add</button>
-
-          </div>
+          
         </div>
       ) : null}
 
       {/* Add Form */}
       {showAddForm && (
-        <div className="table-container">
+        <div className="addstocktable-container">
           {succesmessage && <p className='stokaddsucces'>New Stock added</p>}
 
 
           {stockErrorMessage && <p className='stokaddfaild'>Internal Server Error</p>}
+          <span className="closestockupdateform" onClick={() =>handleCloseStockAddForm()}>&times;</span>
           <h2>Add Stock</h2>
           <form onSubmit={handleAddFormSubmit}>
             <div>
@@ -268,9 +278,10 @@ const StockmanagementTable = () => {
 
       {/* Update Form */}
       {showUpdateForm && (
-        <div className="table-container">
+        <div className="updatestocktable-container">
           {succesmessage && <p className='stokaddsucces'>Stock Updated</p>}
           {stockErrorMessage && <p className='stokaddfaild'>Internal Server Error</p>}
+          <span className="closestockupdateform" onClick={() => handleCloseStockUpdateForm()}>&times;</span>
           <h2>Update Stock</h2>
           <form onSubmit={handleUpdateFormSubmit}>
 

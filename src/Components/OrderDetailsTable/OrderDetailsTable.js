@@ -4,7 +4,7 @@ import { FaEye, FaEdit } from 'react-icons/fa';
 import './OrderDetailsTable.css';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import { statuschange, getOrders, getAllstatusNames,getStatusOfTheProduct } from '../../axios/service/adminServices';
-
+import { useNavigate } from 'react-router-dom';
 import { gettheorderStatus } from '../../axios/service/userService.s';
 import { useEffect } from 'react';
 const OrderDetailsTable = () => {
@@ -26,7 +26,13 @@ const OrderDetailsTable = () => {
   const jwtToken = localStorage.getItem("jwt");
   const[detailsStatus,setStatusDetails]=useState([]);
   const [showbutton, setShowButton] = useState(true);
+  const navigate = useNavigate()
   useEffect(() => {
+
+    if(!jwtToken)
+    {
+      navigate('/AdminLogin')
+    }
 
     featchData()
     console.log("fdsj")
@@ -42,7 +48,7 @@ const OrderDetailsTable = () => {
       if (allorders.statuscode === '200 OK') {
 
         setorderDetails(allorders.result)
-
+        console.log(allorders.result)
 
         console.log("---cart------");
       }
@@ -58,9 +64,10 @@ const OrderDetailsTable = () => {
   }, [!refresh]);
 
   const openDetails = (order, qty, pri) => {
+   
     setTotalAmt(qty * pri);
     setSelectedOrder(order);
-    handlegetstatus();
+
     console.log(order);
     setShowDetails(true);
   };
@@ -148,45 +155,58 @@ const OrderDetailsTable = () => {
   return (
     <div>
       <AdminNavbar />
-      <div className='containertable'>
-        {orderDetails && orderDetails.length >0 ?
-        (<table>
-          <thead>
-            <tr>
-              <th>Product Image</th>
-              <th>Product Details</th>
-              <th>Ordered User Name</th>
-              <th>Actions</th>
+      {
+  orderDetails && orderDetails.length > 0 ? (
+    <div className='ordercontainertable'>
+      <table>
+        <thead>
+          <tr>
+            <th>Product Image</th>
+            <th>Product Details</th>
+            <th>Ordered User Name</th>
+            <th>Actions</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orderDetails.map((order) => (
+            <tr key={order.id}>
+              <td>
+                {order.product.images[0] && order.product.images[0].imageUrl && (
+                  <img src={order.product.images[0].imageUrl} alt="Product" />
+                )}
+              </td>
+              <td>
+                <p className='headingpara'>{order.product.title}</p>
+                <p className='descriptionpara'>
+                  {order.product.parentCategory && order.product.parentCategory.name} | {order.product.course && order.product.course.courseName} {order.product.subject && order.product.subject.subjectName} | {order.product.university && order.product.university.universityName} | {order.product.semester && order.product.semester.name}
+                </p>
+              </td>
+              <td>
+                <p>{order.user}</p>
+              </td>
+              <td>
+                <div className='actions'>
+                  <FaEye onClick={() => openDetails(order.id, order.quantity, order.price)} />
+                 {order.currentstatus[0].statusId !=6 && (<FaEdit onClick={() => openEdit(order.id)} />) }
+                </div>
+              </td>
+              <td>
+              <p className='status'> <span className={order.currentstatus[0].status === 'Order Cancelled'  ? 'sta red' : 'sta green'}>{order.currentstatus[0].status}</span></p>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {orderDetails.map((order) => (
-              <tr key={order.id}>
-                <td>
-                  <Image src={order.product.images[0].imageUrl} alt="Product" thumbnail />
-                </td>
-                <td>
-                  <p className='headingpara'>{order.product.title}</p>
-                  <p className='descriptionpara'>{order.product.parentCategory.name} | {order.product.course.courseName} {order.product.subject.subjectName} | {order.product.university.universityName} |
-                    {order.product.semester.name}</p>
-                </td>
-                <td>
-                  <p>{order.user}</p>
-
-                </td>
-                <td>
-                  <div className='actions'>
-                    <FaEye onClick={() => openDetails(order.id, order.quantity, order.price)} />
-                    <FaEdit onClick={() => openEdit(order.id)} />
-
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>) : (<><div>No Orders</div></>)
-        }
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <div className='noorders' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        No Orders
       </div>
+  )
+}
+
+     
 
       {showDetails && (
         <div className='custom-modal'>
@@ -220,9 +240,9 @@ const OrderDetailsTable = () => {
                   <div className='payinfo'>
                     <h5>Payment Details</h5>
                     <p className='methodname'> Payment Method : <span className='sta'>{selectedOrder.paymentType.typeName}</span> </p>
-                    <p className='methodname'>Total amount : ${totalamt}</p>
+                    {/* <p className='methodname'>Total amount : ${totalamt}</p> */}
                   </div>
-                  <p className='status'>Order Status: <span className={statusName === 'Order Cancelled' || statusName === 'Unable to fetch Status' ? 'sta red' : 'sta green'}>{statusName}</span></p>
+                  <p className='status'>Order Status: <span className={selectedOrder.currentstatus[0].status === 'Order Cancelled' || selectedOrder.currentstatus[0].status=== 'Unable to fetch Status' ? 'sta red' : 'sta green'}>{selectedOrder.currentstatus[0].status}</span></p>
                 </div>
               ))}
           </div>

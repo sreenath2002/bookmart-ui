@@ -1,6 +1,9 @@
 .App {
 justify-content: baseline;
-margin: 0;
+margin-top: 25px;
+width: 100vw;
+height: 100vh;
+
 }
 
 .App-logo {

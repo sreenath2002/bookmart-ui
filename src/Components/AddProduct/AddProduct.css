@@ -43,6 +43,9 @@ input[type='file'] {
   color: red;
   margin-top: 5px;
 }
+.productadded{
+  color: green;
+}
 
 button {
   padding: 10px 20px;

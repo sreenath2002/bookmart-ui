@@ -406,10 +406,16 @@ const Checkout = () => {
   };
   const handleOrderLine =async (orderId)=>{
     try{
+      const half = selectedCoupondiscount ? selectedCoupondiscount / 2 : 0;
+       
       console.log("helooooooo")
       const productIdList = products.map(book => book.product.id);
       const qty = products.map(book => book.quantity);
-      const price = products.map(book => book.product.discountedPrice);
+      const price = products.map(book =>{
+        const discountedPrice = book.product.discountedPrice;
+        const discountedAmount = (discountedPrice * half) / 100;
+        return (discountedPrice - discountedAmount)*qty;
+      });
       const orderDetails = {
         productIdList: productIdList,
         orderId: orderId,
@@ -805,7 +811,7 @@ else{
                 </>
               )}
 
-              <button onClick={handleShowAddressPopup}>Change</button>
+              <button onClick={handleShowAddressPopup}>ADD</button>
             </div>
 
             {showAddressPopup && <div className="overlay" />}
@@ -984,7 +990,7 @@ else{
           )}
            {showCouponPopup && <div className="overlay" />}
           {showCouponPopup && (
-            <div className="payment-popup">
+            <div className="payment-popup">set
               
               {validacouponoptions && validacouponoptions.length > 0 ? (
 

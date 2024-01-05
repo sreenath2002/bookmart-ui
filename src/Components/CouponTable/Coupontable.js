@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import './Coupontable.css'
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 
-import { getCouponsList, addNewCoupon, updateCoupon,deleteCoupon } from '../../axios/service/adminServices';
+import { getCouponsList, addNewCoupon, updateCoupon, deleteCoupon, getCouponsCount } from '../../axios/service/adminServices';
 const Coupontable = () => {
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [showAddForm, setShowAddForm] = useState(false);
@@ -13,26 +13,30 @@ const Coupontable = () => {
     const [couponStartDate, setCouponStartDate] = useState();
     const [couponEndDate, setCouponEndDate] = useState();
     const [couponDiscount, setCouponDiscount] = useState();
+    const [countofcoupons, setCountOfCoupons] = useState();
     const jwtToken = localStorage.getItem("jwt");
     const [refresh, setRefresh] = useState(false)
-    const[selectedCouponId,setSelectedCouponId]=useState();
-    const[couponIdError,setCouponIdError]=useState();
-    const[validDateError,setValidDateError]=useState();
-    const[expDateError,setExpError]=useState();
-    const[discountError,setDiscountError]=useState();
-    const[responseSuucesmg,setReponseSucccesMsg]=useState();
-    const[responseFalidMsg,setResponseFalidMsg]=useState();
-    const[responseSuucesmg1,setReponseSucccesMsg1]=useState();
-    const[responseSuucesmg2,setReponseSucccesMsg2]=useState();
+    const [selectedCouponId, setSelectedCouponId] = useState();
+    const [couponIdError, setCouponIdError] = useState();
+    const [validDateError, setValidDateError] = useState();
+    const [expDateError, setExpError] = useState();
+    const [discountError, setDiscountError] = useState();
+    const [responseSuucesmg, setReponseSucccesMsg] = useState();
+    const [responseFalidMsg, setResponseFalidMsg] = useState();
+    const [responseExistsMsg, setResponseExistsMsg] = useState();
+    const [responseSuucesmg1, setReponseSucccesMsg1] = useState();
+    const [responseSuucesmg2, setReponseSucccesMsg2] = useState();
     useEffect(() => {
         fetchData(jwtToken);
 
         async function fetchData(token) {
             try {
                 const allCoupons = await getCouponsList(token);
-
+                const countofactivecoupons = await getCouponsCount(token)
                 // Ensure 'id' is defined or passed correctly
-
+                if (countofactivecoupons.statuscode === '200 OK') {
+                    setCountOfCoupons(countofactivecoupons.result);
+                }
                 if (allCoupons.statuscode === '200 OK' && allCoupons.message === "Coupons retrieved successfully") {
 
                     setCouponsList(allCoupons.result)
@@ -53,10 +57,10 @@ const Coupontable = () => {
     }, [!refresh]);
     const validateForm = () => {
         let isValid = true;
-    
-      
+
+
         const couponRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{4,}$/;
-    
+
         if (couponCode.trim() === '') {
             setCouponIdError("Please provide Coupon Code");
             isValid = false;
@@ -68,10 +72,10 @@ const Coupontable = () => {
             }
             isValid = false;
         }
-    
+
         return isValid;
     };
-    
+
 
 
 
@@ -79,11 +83,11 @@ const Coupontable = () => {
         setSelectedCouponId(couponId)
         setShowTable(false)
         setShowUpdateForm(true);
-     
+
     };
 
     const handleAddNewCoupon = () => {
-      
+
         setShowTable(false)
         setShowAddForm(true);
         console.log('Adding a new coupon');
@@ -101,120 +105,131 @@ const Coupontable = () => {
         setRefresh(!refresh)
         setShowTable(true)
     };
-    const handleUpdateSubmit = async(e) => {
+    const handleUpdateSubmit = async (e) => {
         e.preventDefault();
-        if(validateForm()){
+        if (validateForm()) {
 
-            try{
-                const updateCouponDetails={
-                    code:couponCode,
-                    startdate:couponStartDate,
-                    exprDate:couponEndDate,
-                    discountRate:couponDiscount
+            try {
+                const updateCouponDetails = {
+                    code: couponCode,
+                    startdate: couponStartDate,
+                    exprDate: couponEndDate,
+                    discountRate: couponDiscount
                 }
                 console.log()
-                const couponupdated=await updateCoupon(jwtToken,selectedCouponId,updateCouponDetails)
-                if(couponupdated.statuscode === '200 OK')
-                {
-                    setReponseSucccesMsg(true);
-                    setTimeout(()=>{
-                        setReponseSucccesMsg(false);
-                    },2000);
+                const couponupdated = await updateCoupon(jwtToken, selectedCouponId, updateCouponDetails)
+                if (couponupdated.message === 'exists') {
+                    setResponseExistsMsg(true)
+                    setTimeout(() => {
+                        setResponseExistsMsg(false)
+                    }, 2000)
                 }
-                else{
+                else if (couponupdated.statuscode === '200 OK') {
+                    setReponseSucccesMsg(true);
+                    setTimeout(() => {
+                        setReponseSucccesMsg(false);
+                        handleCloseUpdateForm();
+                    }, 1000);
+                }
+                else {
                     setResponseFalidMsg(true);
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         setResponseFalidMsg(false);
-                    },2000);
+                    }, 2000);
                 }
 
             }
-            catch{
+            catch {
                 setResponseFalidMsg(true);
-                setTimeout(()=>{
+                setTimeout(() => {
                     setResponseFalidMsg(false);
-                },2000);
+                }, 2000);
 
             }
         }
-        
+
         // setShowUpdateForm(false);
     };
 
-    const handleDelete = async(deleteId) => {
-      
-        
+    const handleDelete = async (deleteId) => {
 
-            try{
-                
-                console.log(deleteId)
-              
-                const coupondeleted=await deleteCoupon(jwtToken,deleteId)
-                console.log(deleteId)
-                if(coupondeleted.statuscode === '200 OK')
-                {
-                    setReponseSucccesMsg2(true);
-                    setTimeout(()=>{
-                        setReponseSucccesMsg2(false);
-                    },2000);
-                    setRefresh(!refresh);
-                }
-                else{
-                    console.log("mmm")
-                    setResponseFalidMsg(true);
-                    setTimeout(()=>{
-                        setResponseFalidMsg(false);
-                    },2000);
-                }
 
+
+        try {
+
+            console.log(deleteId)
+
+            const coupondeleted = await deleteCoupon(jwtToken, deleteId)
+            console.log(deleteId)
+            if (coupondeleted.statuscode === '200 OK') {
+                setReponseSucccesMsg2(true);
+                setTimeout(() => {
+                    setReponseSucccesMsg2(false);
+                }, 2000);
+                setRefresh(!refresh);
             }
-            catch{
-                console.log("m22")
+            else {
+                console.log("mmm")
                 setResponseFalidMsg(true);
-                setTimeout(()=>{
+                setTimeout(() => {
                     setResponseFalidMsg(false);
-                },2000);
-
+                }, 2000);
             }
-      
-        
+
+        }
+        catch {
+            console.log("m22")
+            setResponseFalidMsg(true);
+            setTimeout(() => {
+                setResponseFalidMsg(false);
+            }, 2000);
+
+        }
+
+
         // setShowUpdateForm(false);
     };
-    const handleAddSubmit = async(e) => {
+    const handleAddSubmit = async (e) => {
         e.preventDefault();
-        if(validateForm()){
+        if (validateForm()) {
 
-            try{
-                const addCouponDetails={
-                    code:couponCode,
-                    startdate:couponStartDate,
-                    exprDate:couponEndDate,
-                    discountRate:couponDiscount
+            try {
+                const addCouponDetails = {
+                    code: couponCode,
+                    startdate: couponStartDate,
+                    exprDate: couponEndDate,
+                    discountRate: couponDiscount
                 }
                 console.log(addCouponDetails)
-                const couponadded=await addNewCoupon(jwtToken,addCouponDetails)
-                if(couponadded.statuscode === '201 CREATED')
-                {
-                    setReponseSucccesMsg1(true);
-                    setTimeout(()=>{
-                        setReponseSucccesMsg1(false);
-                    },2000);
+                const couponadded = await addNewCoupon(jwtToken, addCouponDetails)
+                if (couponadded.message === 'exists') {
+                    setResponseExistsMsg(true)
+                    setTimeout(() => {
+                        setResponseExistsMsg(false)
+                    }, 2000)
                 }
-                else{
+                else if (couponadded.statuscode === '201 CREATED') {
+                    setReponseSucccesMsg1(true);
+                    setTimeout(() => {
+                        setReponseSucccesMsg1(false);
+                        handleCloseAddForm();
+                    }, 1000);
+                }
+                else {
                     console.log("09090909090909")
                     setResponseFalidMsg(true);
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         setResponseFalidMsg(false);
-                    },2000);
+                    }, 2000);
                 }
 
             }
-            catch{
+            catch {
                 console.log("0")
                 setResponseFalidMsg(true);
-                setTimeout(()=>{
+                setTimeout(() => {
                     setResponseFalidMsg(false);
-                },2000);
+                }, 2000);
 
             }
         }
@@ -224,57 +239,65 @@ const Coupontable = () => {
     return (
         <div>
             <AdminNavbar />
+            <div className='coupontablemaindiv'>
 
-
-            {showtable && (<>
-                <button className='addcouponbtn' onClick={handleAddNewCoupon}>Add New Coupon</button>
-
-                <table>
-                {responseFalidMsg && <span className='couponerr'>Internal Server Error</span>}
-                {responseSuucesmg2 && <span className='updatecouponsucces'>Coupon Deleted SuccesFully</span>}
-                    <thead>
-                        <tr>
-                            <th>Coupon Code</th>
-                            <th>Valid From Date</th>
-                            <th>Valid Upto Date</th>
-                            <th>Discount</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        {couponsList.length > 0 ? (
-                            couponsList.map(coupon => (
-                                <tr key={coupon.id}>
-                                    <td>{coupon.code}</td>
-                                    <td>{coupon.valid_fromDate.split('T')[0]}</td>
-                                    <td>{coupon.valid_uptoDate.split('T')[0]}</td>
-                                    <td>{coupon.discount}</td>
-                                    <td style={{ color: coupon.is_activeState ? 'green' : 'red' }}>
-                                        {coupon.is_activeState ? 'Active' : 'Expired'}
-                                    </td>
-                                    <td>
-                                        {coupon.is_activeState && (
-                                            <button className='updatecouponbtn' onClick={() => handleUpdate(coupon.id)}>Update</button>
-                                        )}
-                                       
-                                            <button className='deletecouponbtn' onClick={() => handleDelete(coupon.id)}>Delete</button>
-                                      
-                                    </td>
-                                </tr>
-                            ))
-                        ) : couponsList.length ==0 ?(
+                {showtable && (<>
+                    <button className='addcouponbtn' onClick={handleAddNewCoupon}>Add New Coupon</button>
+                    <div className='couponscountmaindiv'>
+                        <div className='subdivcount'>
+                        <h2 className='couponcountnumber'>{countofcoupons}</h2> 
+                        <h6 className='couponactive'>Active Coupons</h6>
+                        </div>
+                  
+                        
+                    </div>
+                    <table className='coupontable'>
+                        {responseFalidMsg && <span className='couponerr'>Internal Server Error</span>}
+                        {responseSuucesmg2 && <span className='updatecouponsucces'>Coupon Deleted SuccesFully</span>}
+                        <thead>
                             <tr>
-                                <td colSpan="6" >No Coupons</td>
+                                <th>Coupon Code</th>
+                                <th>Valid From Date</th>
+                                <th>Valid Upto Date</th>
+                                <th>Discount</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
-                        ) : (<tr>
-                            <td colSpan="6"className='coupontableserverError' >Internal Server Error</td>
-                        </tr>) }
+                        </thead>
+                        <tbody>
 
-                    </tbody>
-                </table>
-            </>) }
+                            {couponsList.length > 0 ? (
+                                couponsList.map(coupon => (
+                                    <tr key={coupon.id}>
+                                        <td>{coupon.code}</td>
+                                        <td>{coupon.valid_fromDate.split('T')[0]}</td>
+                                        <td>{coupon.valid_uptoDate.split('T')[0]}</td>
+                                        <td>{coupon.discount}</td>
+                                        <td style={{ color: coupon.is_activeState ? 'green' : 'red' }}>
+                                            {coupon.is_activeState ? 'Active' : 'Expired'}
+                                        </td>
+                                        <td>
+                                            {coupon.is_activeState && (
+                                                <button className='updatecouponbtn' onClick={() => handleUpdate(coupon.id)}>Update</button>
+                                            )}
+
+                                            <button className='deletecouponbtn' onClick={() => handleDelete(coupon.id)}>Delete</button>
+
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : couponsList.length == 0 ? (
+                                <tr>
+                                    <td colSpan="6" >No Coupons</td>
+                                </tr>
+                            ) : (<tr>
+                                <td colSpan="6" className='coupontableserverError' >Internal Server Error</td>
+                            </tr>)}
+
+                        </tbody>
+                    </table>
+                </>)}
+            </div>
 
             {/* Update Coupon Form */}
             {showUpdateForm && (
@@ -284,16 +307,17 @@ const Coupontable = () => {
                         <h2>Update Coupon</h2>
                         <form onSubmit={handleUpdateSubmit}>
                             {responseFalidMsg && <span className='couponerr'>Internal Server Error</span>}
+                            {responseExistsMsg && <span className='couponerr'>Coupon Already Exists</span>}
                             {responseSuucesmg && <span className='updatecouponsucces'>Coupon Updated SuccesFully</span>}
                             <label htmlFor="couponId">Coupon ID:</label>
                             <input type="text" id="couponCode" name="couponCode" onChange={(e) => { setCouponCode(e.target.value) }} required />
-                             {couponIdError && <span className='couponerr'>{couponIdError}</span>}
+                            {couponIdError && <span className='couponerr'>{couponIdError}</span>}
                             <label htmlFor="startDate">Start Date:</label>
                             <input type="date" id="couponStartDate" name="startDate" onChange={(e) => { setCouponStartDate(e.target.value) }} required />
                             {validDateError && <span className='couponerr'>{validDateError}</span>}
                             <label htmlFor="endDate">End Date:</label>
                             <input type="date" id="couponEndDate" name="endDate" onChange={(e) => { setCouponEndDate(e.target.value) }} required />
-                             {expDateError && <span className='couponerr'>{expDateError}</span>}
+                            {expDateError && <span className='couponerr'>{expDateError}</span>}
                             <label htmlFor="couponDiscount">Discount:</label>
                             <input type="number" id="discount" name="discount" onChange={(e) => { setCouponDiscount(e.target.value) }} required />
                             {discountError && <span className='couponerr'>{discountError}</span>}
@@ -310,7 +334,8 @@ const Coupontable = () => {
                         <span className="close" onClick={handleCloseAddForm}>&times;</span>
                         <h2>Add Coupon</h2>
                         <form onSubmit={handleAddSubmit}>
-                        {responseFalidMsg && <span className='couponerr'>Internal Server Error</span>}
+                            {responseFalidMsg && <span className='couponerr'>Internal Server Error</span>}
+                            {responseExistsMsg && <span className='couponerr'>Coupon Already Exists</span>}
                             {responseSuucesmg1 && <span className='updatecouponsucces'>Coupon Added SuccesFully</span>}
                             <label htmlFor="couponId">Coupon ID:</label>
                             <input type="text" id="couponCode" name="couponId" onChange={(e) => { setCouponCode(e.target.value) }} required />
@@ -322,7 +347,7 @@ const Coupontable = () => {
                             <input type="date" id="couponEndDate" name="endDate" onChange={(e) => { setCouponEndDate(e.target.value) }} required />
                             {expDateError && <span className='couponerr'>{expDateError}</span>}
                             <label htmlFor="discount">Discount:</label>
-                            <input type="number" id="discount"name="discount" onChange={(e) => { setCouponDiscount(e.target.value) }} required />
+                            <input type="number" id="discount" name="discount" onChange={(e) => { setCouponDiscount(e.target.value) }} required />
                             {discountError && <span className='couponerr'>{discountError}</span>}
                             <button type="submit">Submit</button>
                         </form>

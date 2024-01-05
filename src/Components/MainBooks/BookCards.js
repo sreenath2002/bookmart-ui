@@ -171,6 +171,7 @@ const BookCards = () => {
       <Row className="justify-content-center" >
 
         <Col xs={12} className='main'>
+          <div className='secodarydiv'>
           <h2 className='newarriwal-heading'>New Arrivals</h2>
           <h5 className='view-all'>View All</h5>
           <div className="scrolling-wrapper" ref={scrollingWrapperRef}>
@@ -219,18 +220,24 @@ const BookCards = () => {
                       <Button className='mybutton' variant="primary" onClick={() => handleShopNow(newArrivalbook.id)}>Shop Now</Button>
                     </Card.Body>
                   </div>
+                  
+              
                 </div>
+                
 
               </Card>
+                
 
             ))}
-          </div>
-          <button className="scroll-btn left" onClick={scrollLeft}>
-            &lt;
-          </button>
-          <button className="scroll-btn right" onClick={scrollRight}>
-            &gt;
-          </button>
+            
+            </div>
+            <button className="scroll-btn left" onClick={scrollLeft}>
+                &lt;
+              </button>
+              <button className="scroll-btn right" onClick={scrollRight}>
+                &gt;
+              </button>
+              </div>
         </Col>
       </Row>
       <div className='samllDiscounddiv'>
@@ -275,7 +282,8 @@ const BookCards = () => {
         </div>
       </div>
       <Row className="justify-content-center">
-        <Col xs={12}>
+        <Col xs={12} className='sciencebooksdiv'>
+        <div className='secodarydiv'>
           <h2 className='newarriwal-heading'>Science </h2>
           <h5 className='view-all'>View All</h5>
           <div className="scrolling-wrapper">
@@ -333,10 +341,12 @@ const BookCards = () => {
           <button className="scroll-btn right" onClick={scrollRight}>
             &gt;
           </button>
+          </div>
         </Col>
       </Row>
       <Row className="justify-content-center">
-        <Col xs={12}>
+        <Col xs={12} className='commercebookdiv'>
+        <div className='secodarydiv'>
           <h2 className='newarriwal-heading'>Commerce</h2>
           <h5 className='view-all'>View All</h5>
           <div className="scrolling-wrapper">
@@ -393,10 +403,12 @@ const BookCards = () => {
           <button className="scroll-btn right" onClick={scrollRight}>
             &gt;
           </button>
+          </div>
         </Col>
       </Row>
       <Row className="justify-content-center">
-        <Col xs={12}>
+        <Col xs={12} className='languagebooksdiv'>
+        <div className='secodarydiv'>
           <h2 className='newarriwal-heading'>Language </h2>
           <h5 className='view-all'>View All</h5>
           <div className="scrolling-wrapper">
@@ -452,6 +464,7 @@ const BookCards = () => {
           <button className="scroll-btn right" onClick={scrollRight}>
             &gt;
           </button>
+          </div>
         </Col>
         {serverError && <div className="overlay" />}
         {serverError && (

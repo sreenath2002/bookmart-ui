@@ -73,9 +73,9 @@ const AddUser= () => {
 }
 
   return (
-    <div className="update-user-form-container">
-      <form  className="update-user-form">
-        <div className="form-group">
+    <div className="update-addcategory-form-container">
+      <form  className="update-addcategory-form">
+        <div className="addcategoryform-group">
           
         {success && <div className="registration-success">Added SuccesFully</div>}
         {errorMessage && <div className="registration-error">Category Already</div>}

@@ -1,12 +1,15 @@
-.containertable {
+.ordercontainertable {
     width: 100%;
-    margin: 0 auto;
+  margin-top: 70px;
+  padding: 30px;
   }
   
   table {
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
+    margin-left: auto;
+    margin-right: auto;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
@@ -18,7 +21,7 @@
   }
   .actions{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
   }
   
   th {
@@ -73,7 +76,7 @@
     text-align: left;
     margin-left: 8px;
   }
-  .red {
+  .red,.cancelled {
     color: red; /* or any other red color you prefer */
   }
   .sta{

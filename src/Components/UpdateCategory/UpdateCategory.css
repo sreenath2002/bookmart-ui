@@ -1,20 +1,22 @@
 /* UpdateUserForm.css */
 
-.update-user-form-container {
+.update-category-form-container {
     max-width: 400px;
     margin: 0 auto;
   }
   
-  .update-user-form {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  .update-category-form {
+    background-color: #ccc;
+    padding: 40px;
+    width: 30%;
+    border-radius: 10px;
+    position: absolute;
+   top: 50%; /* Position at 50% from the top of the parent */
+    left: 50%; /* Position at 50% from the left of the parent */
+    transform: translate(-50%, -50%); 
   }
   
-  .form-group {
+  .categoryform-group {
     margin-bottom: 15px;
   }
   

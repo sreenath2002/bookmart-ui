@@ -4,16 +4,19 @@
   margin: 50px auto;
   max-width: 400px;
   padding: 20px;
-  border-radius: 10px;
+ 
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #3494e6, #ec6ead);
+ 
   color: #fff;
+ 
 }
 
 
 .userlogin-container {
   padding: 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #3494e6, #ec6ead);
 }
 
 .userlogin-form h1 {

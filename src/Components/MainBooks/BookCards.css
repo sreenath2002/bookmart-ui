@@ -6,10 +6,35 @@
   padding: 0 15px;
 }
 
-.main {
+.secodarydiv {
+  text-align: center;
+   /* Reduced padding */
+  margin-top: 10px; /* Reduced margin top */
+padding: 20px;
+  background: linear-gradient(135deg, rgba(183, 230, 242, 0.5), rgba(236, 199, 199, 0.5));
+  box-shadow: 12px 14px 8px rgba(141, 120, 120, 0.1); /* Adding box shadow */
+  border-radius: 20px; /* Rounded corners */
+  transition: transform 0.3s ease-in-out; /* Smooth transition on hover */
+
+}
+.main,.sciencebooksdiv,.commercebookdiv,.languagebooksdiv{
+  padding: 50px;
+}
+
+.newarriwal-heading{
   text-align: center;
 }
-/* Enhanced CSS Styles */
+
+
+
+ /* .main:hover,
+.sciencebooksdiv:hover,
+.commercebookdiv:hover,
+.languagebooksdiv:hover {
+  transform: scale(1.05); 
+} */
+
+
 .samllDiscounddiv {
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -210,7 +235,8 @@
   border-color: #0a0a0a;
   display: flex;
   overflow-x: auto;
-  padding: 30px;
+  padding: 300px;
+
   scroll-behavior: smooth;
   padding: 20px 0; /* Adjust padding as needed */
 }
@@ -232,11 +258,11 @@
 }
 
 .scroll-btn.left {
-  left: 10px; /* Adjust left button position */
+  left: 150px; /* Adjust left button position */
 }
 
 .scroll-btn.right {
-  right: 10px;
+  right: 150px;
   margin-bottom: 20px; /* Adjust right button position */
 }
 

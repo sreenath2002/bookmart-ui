@@ -65,9 +65,9 @@ const UpdateUser = (props) => {
 }
 
   return (
-    <div className="update-user-form-container">
-      <form  className="update-user-form">
-        <div className="form-group">
+    <div className="update-category-form-container">
+      <form  className="update-category-form">
+        <div className="categoryform-group">
           
         {success && <div className="registration-success">Updated Successfully!</div>}
         {errorMessage && <div className="registration-error"> Category Not Updated!</div>}

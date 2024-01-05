@@ -394,6 +394,17 @@ export const  getCouponsList= async (token) => {
     const { data } = await axiosAdminInstance.get(`/getCouponsList`, config);
     return data;
 };
+export const  getCouponsCount= async (token) => {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosAdminInstance.get(`/coupons/active/count`, config);
+    return data;
+};
 export const  addNewCoupon= async (token,addCouponDetails) => {
     const config = {
         headers: {

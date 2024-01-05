@@ -437,3 +437,33 @@ export const getProductIdFromWishlist= async (userId) => {
 
 
 
+export const addReviewRequest = async (token, productId,reviewDetails) => {
+   
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.post(`/addreview/${productId}`, reviewDetails, config);
+    return data;
+
+};
+
+export const getallreviews = async (token, productId) => {
+   
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/reviews/${productId}`, config);
+    return data;
+
+};
+
+
+

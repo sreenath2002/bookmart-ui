@@ -1,6 +1,6 @@
 /* Table.css */
 
-.tables-container {
+.stocktables-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -8,23 +8,34 @@
     margin-top: 20px;
   }
   
-  .table-container {
+  .stocktable-container{
     width: 100%;
-    margin: 0px;
+   
     align-items: center;
     /* max-width: 400px; */
-    padding: 20px;
+    padding: 50px;
+
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    /* background-color: #f9f9f9; */
   }
   
-  .table-container h2 {
+  .addstocktable-container h2 {
     margin-top: 0;
     margin-bottom: 15px;
     font-size: 1.2em;
     text-align: center;
     color: #333;
+  }
+  .addstocktable-container,.updatestocktable-container{
+    background-color: #ccc;
+    border-radius: 12px;
+    padding: 50px;
+    position: absolute;
+    top: 50%; /* Position at 50% from the top of the parent */
+    left: 50%; /* Position at 50% from the left of the parent */
+    transform: translate(-50%, -50%); 
+    
   }
   
   .table {
@@ -48,10 +59,17 @@
   .table th {
     background-color: #f0f0f0;
   }
+  .closestockupdateform{
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
   
   .button-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end; /* Align items to the right end */
     gap: 10px;
     margin-top: 20px;
   }

@@ -121,10 +121,9 @@ const Checkout = () => {
       console.log(address)
       console.log("--------------------------------------------------")
       console.log("-----------hai--------");
-      console.log(cartDetails.result)
-      console.log(cartDetails.statuscode)
-      console.log(cartDetails)
-      console.log(cartDetails.result)
+      console.log(paymentMethods)
+      console.log(validcoupons)
+    
 
       if (cartDetails.statuscode === '200 OK') {
         console.log("jfsd")
@@ -139,18 +138,20 @@ const Checkout = () => {
         setAddressDetails(address.result);
         console.log(addressDetails)
       }
-      if (validcoupons.statuscode === '200 OK' &&  validcoupons.result.length > 0) {
-        setvalidcouponoptions(validcoupons.result);
-
-      }
+      
       if (paymentMethods.statuscode === '200 OK' && paymentMethods.result.length > 0) {
        setPaymentTypes(paymentMethods.result);
+       console.log("//////>>>>>")
         console.log(paymentTypes);
       }
       if(countries.msg==="countries and cities retrieved")
         {
           setCountries(countries.data);
           console.log(countries.data)
+        }
+        if (validcoupons.statuscode === '200 OK' &&  validcoupons.result.length > 0) {
+          setvalidcouponoptions(validcoupons.result);
+  
         }
     }
     catch{
@@ -344,7 +345,7 @@ const Checkout = () => {
         handler: function (response) {
           setShowPaymentPopup(false)
           console.log(response);
-          alert(response.razorpay_payment_id);
+          // alert(response.razorpay_payment_id);
           setTimeout(()=>{
             setLoading(false)
           

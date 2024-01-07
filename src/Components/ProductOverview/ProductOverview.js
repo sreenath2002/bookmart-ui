@@ -3,16 +3,17 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { getProductSelectedProductDetails } from '../../axios/service/productsService';
 import ReactImageZoom from 'react-image-zoom';
 import StarIcon from '../Star/StarIcon';
-import { getallreviews, addReviewRequest,getwalletamt } from '../../axios/service/userService.s';
+import { useNavigate } from 'react-router-dom';
+import { getallreviews, addReviewRequest,getwalletamt,addToCart,getProductIdFromCart} from '../../axios/service/userService.s';
 import './ProductOverview.css';
 
 const ProductOverview = (props) => {
   const [selecteddBookDetails, setNewArrivalBookDetails] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [mainImage, setMainImage] = useState('');
-
+   const navigate =useNavigate();
   const [error, setError] = useState(null);
-
+  const [cartproductIds, setcartproductProdutIds] = useState([]);
   const jwtToken = localStorage.getItem("jwt");
   const userid = localStorage.getItem("id")
   const [newReview, setNewReview] = useState();
@@ -23,6 +24,7 @@ const ProductOverview = (props) => {
   const [reviewAddedFailed, setReviewAddedFailedMessage] = useState();
   const[ratingavg,setAvg]=useState()
   const[walletamount,setWalletAmount]=useState(0);
+  const[errorserver,setServerError]=useState();
   const [reviews, setReviews] = useState([
 
     // Add more reviews as needed
@@ -44,9 +46,17 @@ const ProductOverview = (props) => {
   useEffect(() => {
     async function fetchData(jwtToken, id) {
       try {
-        const newArrivalsDetails = await getProductSelectedProductDetails(jwtToken, id);
-          
 
+        const newArrivalsDetails = await getProductSelectedProductDetails(jwtToken, id);
+          const cartProdutIds = await getProductIdFromCart(userid);
+          if(cartProdutIds.statuscode === '200 OK' && cartProdutIds.result.length >0)
+          {
+            setcartproductProdutIds(cartProdutIds.result)
+          }
+          else{
+            setcartproductProdutIds([])
+          }
+           
         if (newArrivalsDetails.statuscode === '200 OK') {
           setNewArrivalBookDetails(newArrivalsDetails.result);
 
@@ -136,10 +146,51 @@ const ProductOverview = (props) => {
     }
 
   }
+  const handleAddToCart = async (bookId) => {
+    if (jwtToken) {
+      try {
 
+        const productInfo = {
+
+          userId: userid,
+          productId: bookId,
+          quantity: 1,
+
+        }
+        console.log("productDetails===", productInfo)
+        const addtocart = await addToCart(jwtToken, productInfo)
+        console.log("lsdhgck")
+        console.log("addDetails", addtocart)
+
+        if (addtocart.statuscode === '200 OK') {
+          setRefresh(!refresh)
+          console.log("Added to cart")
+        } else {
+          setServerError("Internal Server Error")
+          setTimeout(() => {
+            setServerError(false)
+          }, 2000)
+        }
+
+      }
+
+      catch (err) {
+        setServerError("Internal Server Error")
+        setTimeout(() => {
+          setServerError(false)
+        }, 2000)
+
+      }
+    }
+    else {
+      navigate('/UserLogin')
+    }
+
+  }
   return (
     <div className='overview'>
       <div className="product-row">
+        {errorserver && <div>{errorserver}</div>}
         {/* Main product image */}
         <div md={6} className="d-flex justify-content-center align-items-center">
           <div>
@@ -177,12 +228,16 @@ const ProductOverview = (props) => {
               <span className="discountedprice">{selecteddBookDetails.discountPresent}% OFF</span>
             </p>
             <div className="action-buttons">
-              <Button variant="primary" className="add-to-cart-button">
+              {cartproductIds && cartproductIds.includes(selecteddBookDetails.id) ? 
+               (<Button variant="primary" className="add-to-cart-button" >
+               Added to Cart
+             </Button>) :  (<Button variant="primary" className="add-to-cart-button" onClick={()=>handleAddToCart(selecteddBookDetails.id)}>
                 Add to Cart
-              </Button>
-              <Button variant="success" className="buy-now-button">
+              </Button>)}
+             
+              {/* <Button variant="success" className="buy-now-button">
                 Buy Now
-              </Button>
+              </Button> */}
             </div>
 
             <p className="product-info">Description</p>

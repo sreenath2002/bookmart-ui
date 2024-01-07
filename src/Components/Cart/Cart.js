@@ -260,7 +260,7 @@ const Cart = () => {
 </Link>
       </div>
       </>
-      )  : (<><div>Cart is Empty</div></>)}
+      )  : (<><div className='emptycart'>Cart is Empty</div></>)}
     </div>
   );
 };

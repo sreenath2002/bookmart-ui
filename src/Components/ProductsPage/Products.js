@@ -266,7 +266,10 @@ const Products = () => {
       setRefresh(!refresh)
     }
 
-
+    const handleShopNow = (id) => {
+      // Navigate to the ProductOverview component with the provided ID
+      navigate(`/ProductDetails/${id}`);
+    };
   return (
     <Container fluid>
       <NavBar />
@@ -406,7 +409,7 @@ const Products = () => {
                   <div key={index} className='booklist'>
                     <div className='d-flex justify-content-evenly'>
                       {setOfFour.filter((book) => book.status != 'false').map((book) => (
-                        <Card key={book.id} className="book-card">
+                        <Card key={book.id} className="book-card" onClick={()=>handleShopNow(book.id)}>
                           <div className='cardss'>
                             <div className="zoom-image-container">
                               <img

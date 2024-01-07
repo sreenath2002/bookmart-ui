@@ -478,6 +478,19 @@ export const getwalletamt = async (token,userId) => {
     return data;
 
 };
+export const gettransactionamt = async (token,userId) => {
+   
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    };
+    const { data } = await axiosUserInstance.get(`/transaction/${userId}`, config);
+    return data;
+
+};
 
 
 

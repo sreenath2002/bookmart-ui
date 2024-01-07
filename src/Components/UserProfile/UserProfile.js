@@ -4,8 +4,8 @@ import './UserProfile.css';
 import { useEffect } from 'react';
 import imageCompression from 'browser-image-compression';
 import { updateUser } from '../../axios/service/adminServices';
-import { editProfile, passwordUpdate,addAddress,allAddress,addProfileImage,getwalletamt } from '../../axios/service/userService.s';
-import { getAllCountries ,getAllCities,getAllStates} from '../../axios/service/AddresDetails';
+import { editProfile, passwordUpdate, addAddress, allAddress, addProfileImage, getwalletamt, gettransactionamt } from '../../axios/service/userService.s';
+import { getAllCountries, getAllCities, getAllStates } from '../../axios/service/AddresDetails';
 import { updateUserValidation, changePasswordValidation, addressValidation } from '../../validation/validation';
 import { userInfo } from '../../axios/service/userService.s';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,7 +19,7 @@ import { connect } from 'formik';
 const UserProfile = () => {
 
   const id = useSelector((state) => state.user.id)
-  const[walletamount,setWalletAmount]=useState(0);
+  const [walletamount, setWalletAmount] = useState(0);
   const jwtToken = localStorage.getItem("jwt");
   const [userImage, setUserImage] = useState(null);
   const [showProducts, setShowProducts] = useState(false);
@@ -36,7 +36,7 @@ const UserProfile = () => {
   const [errorMessage2, seterrorMessage2] = useState('')
   const [addresses, setAddresses] = useState([]);
   const [showAddAddress, setShowAddAddress] = useState(false);
-  
+
 
   const [emailValidationError, setEmailError] = useState(false)
   const [mobilenumberError, setMobileNumberError] = useState(false);
@@ -51,9 +51,9 @@ const UserProfile = () => {
   const [oldPasswordError, setOldPasswordError] = useState();
   const [newPasswordError, setNewPassWorError] = useState();
   const [retypedPasswordError, setRetypedPasswordError] = useState();
-  const[addresAddedSucces,setAddresAddedSucces]=useState();
-  const[upadateSucces,setUpdateSucces]=useState();
-  const[addresNotAddedMEssage,setAddresNotAddedMessage]=useState();
+  const [addresAddedSucces, setAddresAddedSucces] = useState();
+  const [upadateSucces, setUpdateSucces] = useState();
+  const [addresNotAddedMEssage, setAddresNotAddedMessage] = useState();
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
 
@@ -85,22 +85,28 @@ const UserProfile = () => {
   const [phonenumberError, setPhoneNumberError] = useState('');
 
   const [newAddress, setNewAddress] = useState([]);
-  const[countries,setCountries]=useState([]);
-  const[citiesOptions,setCitiesOptions]=useState([]);
+  const [countries, setCountries] = useState([]);
+  const [citiesOptions, setCitiesOptions] = useState([]);
 
-  const[stateOptions,setStateOptions]=useState([]);
- const navigate = useNavigate();
- const[profileimg,setProfileImg]=useState();
+  const [stateOptions, setStateOptions] = useState([]);
+  const navigate = useNavigate();
+  const [profileimg, setProfileImg] = useState();
 
- const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const [showHistoryModal, setSSHowHistoryModel] = useState(false)
+
+  const [transactions, setTransactions] = useState([]);
+  const [historyerror, setTransactionhistoryInternaerror] = useState();
+
   useEffect(() => {
     fetchData(jwtToken);
 
     async function fetchData(token) {
       try {
         const usersData = await userInfo(token, id); // Ensure 'id' is defined or passed correctly
-        const  addressData= await allAddress(token,id)
-        const countries=await getAllCountries();
+        const addressData = await allAddress(token, id)
+        const countries = await getAllCountries();
 
         if (usersData.statuscode === '200 OK') {
           const userData = usersData.result;
@@ -116,19 +122,17 @@ const UserProfile = () => {
         } else {
           console.log("Failed to fetch user data");
         }
-        if(addressData.statuscode==='200 OK' && addressData.result !=[] )
-        {
+        if (addressData.statuscode === '200 OK' && addressData.result != []) {
           setNewAddress(addressData.result);
         }
         else {
           console.log("Failed to fetch address data");
         }
-        if(countries.msg==="countries and cities retrieved")
-        {
+        if (countries.msg === "countries and cities retrieved") {
           setCountries(countries.data);
           console.log(countries.data)
         }
-        
+
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -139,61 +143,84 @@ const UserProfile = () => {
   //    setShowAddAddress(false)
   //    setEditMode(false)
   // }
-const handleNavigateToOrders=()=>{
-  navigate('/orders');
-}
-
-const handleIconClick = async() => {
-  console.log("haiiiiii")
-  const amountofwallet=await getwalletamt(jwtToken,id);
-  console.log("ha222")
-  if(amountofwallet.statuscode==='200 OK' && amountofwallet.message==='Wallet Amount')
-  {
-    console.log("hai")
-    setWalletAmount(amountofwallet.result)
+  const handleNavigateToOrders = () => {
+    navigate('/orders');
   }
-  else{
-    setWalletAmount(0)
-    
-  }
-  setShowModal(true);
- 
-};
-const handleCloseClick = () => {
-  setShowModal(false);
-};
 
-  const handleGetStates= async(selectedCountry) =>{
+  const handleshowhistory = async () => {
+    try {
+      const transamoutnt = await gettransactionamt(jwtToken, id);
+      if (transamoutnt.statuscode === '200 OK' && transamoutnt.message === 'transcations') {
+        setTransactions(transamoutnt.result)
+      }
+      else{
+        setTransactions([])
+      }
+    }
+    catch {
+      setTransactionhistoryInternaerror(true)
+      setTimeout(() => {
+        setTransactionhistoryInternaerror(false)
+      }, 4000)
+    }
+    setSSHowHistoryModel(true);
+
+  }
+  const handleclosehistory = () => {
+    setSSHowHistoryModel(false);
+
+  }
+
+  const handleIconClick = async () => {
+    console.log("haiiiiii")
+    const amountofwallet = await getwalletamt(jwtToken, id);
+    console.log("ha222")
+    if (amountofwallet.statuscode === '200 OK' && amountofwallet.message === 'Wallet Amount') {
+      console.log("hai")
+      setWalletAmount(amountofwallet.result)
+    }
+    else {
+      setWalletAmount(0)
+
+    }
+    setShowModal(true);
+
+  };
+  const handleCloseClick = () => {
+    setShowModal(false);
+  };
+
+  const handleGetStates = async (selectedCountry) => {
     setCountry(selectedCountry)
     console.log(selectedCountry)
-   const countynameDetails = {
-    country: selectedCountry
-   }
+    const countynameDetails = {
+      country: selectedCountry
+    }
 
     const sta = await getAllStates(countynameDetails)
     console.log("Hiiii")
     console.log(sta)
     if (sta.msg === `states in ${selectedCountry} retrieved`) {
-       console.log("haiiiiiiiiiiiiiiiiiiiiiii") 
+      console.log("haiiiiiiiiiiiiiiiiiiiiiii")
       console.log(sta.data)
       setStateOptions(sta.data.states);
     }
 
 
   }
-  const handleAllCities= async(selectedState) =>{
+  const handleAllCities = async (selectedState) => {
     setState(selectedState)
     console.log(selectedState)
-   const countrystateDetails = {
-    country: country,
-    state:selectedState
-   }
+    const countrystateDetails = {
+      country: country,
+      state: selectedState
+    }
 
     const cit = await getAllCities(countrystateDetails)
     console.log("Hiiii")
     console.log(cit)
     if (cit.msg === `cities in state ${selectedState} of country ${country} retrieved`) {
-       console.log("haiiiiiiiiiiiiiiiiiiiiiii") 
+      console.log("haiiiiiiiiiiiiiiiiiiiiiii")
       console.log(cit.data)
       setCitiesOptions(cit.data);
     }
@@ -222,50 +249,50 @@ const handleCloseClick = () => {
     setPasswordEditMode(true);
   }
 
-  
-const handleImageChange = async (e) => {
-  const file = e.target.files[0];
 
-  if (file) {
-    try {
-      const options = {
-        maxSizeMB: 0.5, // Max size in MB
-        maxWidthOrHeight: 1920, // Maximum width or height of the image
-        useWebWorker: true,
-      };
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
 
-      // Compress the image
-      const compressedFile = await imageCompression(file, options);
-
-      // Convert the compressed image to Base64
-      const reader = new FileReader();
-      reader.readAsDataURL(compressedFile);
-      reader.onloadend = async () => {
-        const base64data = reader.result;
-
-        // Prepare data with Base64 URL
-        const addprofileimagedetails = {
-          imageUrl: base64data, // Pass the Base64 URL
+    if (file) {
+      try {
+        const options = {
+          maxSizeMB: 0.5, // Max size in MB
+          maxWidthOrHeight: 1920, // Maximum width or height of the image
+          useWebWorker: true,
         };
 
-        console.log(addprofileimagedetails);
+        // Compress the image
+        const compressedFile = await imageCompression(file, options);
 
-        // Perform the image upload with Base64 data
-        const uploadingprofilrimage = await addProfileImage(jwtToken, addprofileimagedetails,id);
-        setRefresh(!refresh);
-        if (uploadingprofilrimage.statuscode === '200 OK') {
-          
+        // Convert the compressed image to Base64
+        const reader = new FileReader();
+        reader.readAsDataURL(compressedFile);
+        reader.onloadend = async () => {
+          const base64data = reader.result;
+
+          // Prepare data with Base64 URL
+          const addprofileimagedetails = {
+            imageUrl: base64data, // Pass the Base64 URL
+          };
+
+          console.log(addprofileimagedetails);
+
+          // Perform the image upload with Base64 data
+          const uploadingprofilrimage = await addProfileImage(jwtToken, addprofileimagedetails, id);
           setRefresh(!refresh);
-          console.log("Image upload successful");
-        } else {
-          console.log("Image not uploaded");
-        }
-      };
-    } catch (error) {
-      console.error('Image compression error:', error);
+          if (uploadingprofilrimage.statuscode === '200 OK') {
+
+            setRefresh(!refresh);
+            console.log("Image upload successful");
+          } else {
+            console.log("Image not uploaded");
+          }
+        };
+      } catch (error) {
+        console.error('Image compression error:', error);
+      }
     }
-  }
-};
+  };
   const handleSaveChanges = () => {
 
     setEditMode(false);
@@ -522,7 +549,7 @@ const handleImageChange = async (e) => {
 
 
         }
-      
+
         else {
           setAddresNotAddedMessage(true);
           setTimeout(() => {
@@ -593,7 +620,7 @@ const handleImageChange = async (e) => {
         </div>
         <div className="user-options">
           <button onClick={() => setShowProducts(!showProducts)}>Show My Products</button>
-          <button onClick={ handleNavigateToOrders}>My Orders</button>
+          <button onClick={handleNavigateToOrders}>My Orders</button>
           <button onClick={() => setShowRevenue(!showRevenue)}>My Revenue</button>
         </div>
       </div>}
@@ -603,10 +630,10 @@ const handleImageChange = async (e) => {
           // Edit mode input fields
           <>
             <div className="edit-details">
-            <h2>Edit Profile</h2>
-            <FontAwesomeIcon icon={faTimes} className="close-icon" onClick={handleEditProfileClose} />
-            
-            {upadateSucces  &&<p className='profileupdatesuccesmessage'>Profile Updated Succesfully</p>}
+              <h2>Edit Profile</h2>
+              <FontAwesomeIcon icon={faTimes} className="close-icon" onClick={handleEditProfileClose} />
+
+              {upadateSucces && <p className='profileupdatesuccesmessage'>Profile Updated Succesfully</p>}
               {errorMessagePassword && <div className="registration-error1">User Not Updated!</div>}
               {errorMessage2 && <p className="registration-error1">Ineternal Server Error</p>}
               <label>
@@ -632,7 +659,7 @@ const handleImageChange = async (e) => {
         ) : passwordEditmode ? (
           <>
             <div className="edit-details">
-       
+
               {errorMessagePassword && <div className="registration-error">Previous </div>}
               {passwordChangesMEssage && <h6>PassWord Updated SuccesFully</h6>}
               {errorMessage2 && <div className="registration-error">Ineternal Server Error</div>}
@@ -656,17 +683,17 @@ const handleImageChange = async (e) => {
         ) : showAddAddress ? (
           <>
             <div className='add-address'>
-            {errorMessage2 && <p className="registration-error">Ineternal Server Error</p>}
-            {addresAddedSucces && <p className="succes">Address Added Succesfully</p>}
-            {addresNotAddedMEssage && <p className="registration-error">Not added</p>}
-             
+              {errorMessage2 && <p className="registration-error">Ineternal Server Error</p>}
+              {addresAddedSucces && <p className="succes">Address Added Succesfully</p>}
+              {addresNotAddedMEssage && <p className="registration-error">Not added</p>}
+
               <h2>Add Address</h2>
 
               <div>
                 <input
                   type="text"
                   placeholder='First Name'
-                  
+
                   onChange={(e) => { setName(e.target.value) }}
                 />
                 {/* {nameError && <div className="error">{nameError}</div>} */}
@@ -677,8 +704,8 @@ const handleImageChange = async (e) => {
                   onChange={(e) => { setSecondName(e.target.value) }}
                 />
                 <div className='errordiv'>
-                {nameError && <div className="error">{nameError}</div>}
-                {secondNameError2 && <div className="error">{secondNameError2}</div>}
+                  {nameError && <div className="error">{nameError}</div>}
+                  {secondNameError2 && <div className="error">{secondNameError2}</div>}
                 </div>
                 <input
                   type="text"
@@ -690,12 +717,12 @@ const handleImageChange = async (e) => {
                 <input
                   type="text"
                   placeholder='Street Address'
-                  onChange={(e) => {setStreetAddress(e.target.value) }}
+                  onChange={(e) => { setStreetAddress(e.target.value) }}
                 />
-                 <div className='errordiv'>
-                {buildingNumberError && <p className="error">{buildingNumberError}</p>}
-                {streetAddressError && <p className="error">{streetAddressError}</p>}
-                 </div>
+                <div className='errordiv'>
+                  {buildingNumberError && <p className="error">{buildingNumberError}</p>}
+                  {streetAddressError && <p className="error">{streetAddressError}</p>}
+                </div>
                 {/* Other input fields and error handling */}
               </div>
 
@@ -711,18 +738,18 @@ const handleImageChange = async (e) => {
 
                 onChange={(e) => { setCountry(e.target.value) }}
               /> */}
-                {/* <label htmlFor="category">Category</label> */}
-          <select id="country" name="country" value={country} onChange={(e) => { handleGetStates(e.target.value) }} required>
-            <option value="">Select Country</option>
-            {countries.map(name => (
-              <option key={name.country} value={name.country}>
-                {name.country}
-              </option>
-            ))}
-          </select>
-               <div className='errordiv'>
-               {landMarkError && <p className="error">{landMarkError}</p>}
-              {countryError && <p className="error">{countryError}</p>}
+              {/* <label htmlFor="category">Category</label> */}
+              <select id="country" name="country" value={country} onChange={(e) => { handleGetStates(e.target.value) }} required>
+                <option value="">Select Country</option>
+                {countries.map(name => (
+                  <option key={name.country} value={name.country}>
+                    {name.country}
+                  </option>
+                ))}
+              </select>
+              <div className='errordiv'>
+                {landMarkError && <p className="error">{landMarkError}</p>}
+                {countryError && <p className="error">{countryError}</p>}
               </div>
 
               {/* <input
@@ -734,24 +761,24 @@ const handleImageChange = async (e) => {
               /> */}
               {/* {cityError && <p className="error">{cityError}</p>} */}
               <select id="state" name="state" value={state} onChange={(e) => { handleAllCities(e.target.value) }} required>
-            <option value="">Select State</option>
-            {stateOptions.map(state=> (
-              <option key={state.name} value={state.name}>
-                {state.name}
-              </option>
-            ))}
-          </select>
-          <select id="city" name="city" value={city} onChange={(e) => { setCity(e.target.value) }} required>
-            <option value="">Select City</option>
-            {citiesOptions.map(city=> (
-              <option key={city} value={city}>
-                {city}
-              </option>
-            ))}
-          </select>
-               <div className='errordiv'>
-               {cityError && <p className="error">{cityError}</p>}
-              {stateError && <p className="error">{stateError}</p>}
+                <option value="">Select State</option>
+                {stateOptions.map(state => (
+                  <option key={state.name} value={state.name}>
+                    {state.name}
+                  </option>
+                ))}
+              </select>
+              <select id="city" name="city" value={city} onChange={(e) => { setCity(e.target.value) }} required>
+                <option value="">Select City</option>
+                {citiesOptions.map(city => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
+              <div className='errordiv'>
+                {cityError && <p className="error">{cityError}</p>}
+                {stateError && <p className="error">{stateError}</p>}
               </div>
               <input
                 type="text"
@@ -768,36 +795,76 @@ const handleImageChange = async (e) => {
 
                 onChange={(e) => { setPhoneNumber(e.target.value) }}
               />
-                <div className='errordiv'>
-               {zipcodeError && <p className="error">{zipcodeError}</p>}
-              {phonenumberError && <p className="error">{phonenumberError}</p>}
-                    </div>
-              <button onClick={handleAddresFormValidation }>Save Address</button>
+              <div className='errordiv'>
+                {zipcodeError && <p className="error">{zipcodeError}</p>}
+                {phonenumberError && <p className="error">{phonenumberError}</p>}
+              </div>
+              <button onClick={handleAddresFormValidation}>Save Address</button>
             </div>
           </>
         ) : (
           <>
             {/* User Details section */}
             <div className="user-details">
-            <div onClick={handleIconClick} className="wallet-icon" style={{ textAlign: 'right' }}>
-        <MdAccountBalanceWallet size={30} color="blue" style={{ verticalAlign: 'middle' }} />
-      </div>
-            
-      {showModal && (
-        <div className={`walletmodal ${showModal ? 'slide-in' : 'slide-out'}`}>
-          <div className="walletmodal-content">
-            <div style={{ marginBottom: '20px' }}>
-            <h2>Wallet Information  <AiFillDollarCircle size={40} color="gold" /></h2>
-             
-              <h1 className='walletamount'>{walletamount}</h1>
-             
-            </div>
-           
-          
-            <button onClick={handleCloseClick}>Close</button>
-          </div>
-        </div>
-      )}
+              <div onClick={handleIconClick} className="wallet-icon" style={{ textAlign: 'right' }}>
+                <MdAccountBalanceWallet size={30} color="blue" style={{ verticalAlign: 'middle' }} />
+              </div>
+
+              {showModal && (
+                <div className={`walletmodal ${showModal ? 'slide-in' : 'slide-out'}`}>
+                  <div className="walletmodal-content">
+                    <div style={{ marginBottom: '20px' }}>
+                      <h2>Wallet Information  <AiFillDollarCircle size={40} color="gold" /></h2>
+
+                      <h1 className='walletamount'>{walletamount}</h1>
+
+                    </div>
+                    <div className="history" onClick={handleshowhistory}>History</div>
+
+                    <button onClick={handleCloseClick}>Close</button>
+                  </div>
+                </div>
+              )}
+              {showHistoryModal && (
+                <div className="history-modal-overlay">
+                  <div className="history-modal">
+                    <div className="history-modal-content">
+                      {historyerror && <div style={{ color: 'red', fontWeight: 'bold' }}>Internal Server Error</div>}
+
+                      <div>
+                        <h2>Transaction History</h2>
+                        {transactions.length > 0 ? (<table>
+                          <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Amount</th>
+                              <th>Status</th>
+                              {/* Add more table headers if needed */}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {transactions.map((transaction, index) => {
+                              const transactionDate = new Date(transaction[0]);
+                              const formattedDate = transactionDate.toISOString().split('T')[0];
+
+                              return (
+                                <tr key={index}>
+                                  <td>{formattedDate}</td>
+                                  <td>{transaction[1]}</td>
+                                  <td>Paid</td>
+                                  {/* Add more table cells for additional transaction details */}
+                                </tr>
+                              );
+                            })}
+
+                          </tbody>
+                        </table>) : (<div>No Reacords </div>)}
+                      </div>
+                      <button onClick={handleclosehistory}>Close</button>
+                    </div>
+                  </div>
+                </div>
+              )}
               <h2>User Details</h2>
               <p>
                 <strong>Name:</strong> {firstName} {lastName}

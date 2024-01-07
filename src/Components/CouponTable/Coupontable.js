@@ -241,7 +241,7 @@ const Coupontable = () => {
             <AdminNavbar />
             <div className='coupontablemaindiv'>
 
-                {showtable && (<>
+                { (<>
                     <button className='addcouponbtn' onClick={handleAddNewCoupon}>Add New Coupon</button>
                     <div className='couponscountmaindiv'>
                         <div className='subdivcount'>
@@ -286,7 +286,7 @@ const Coupontable = () => {
                                         </td>
                                     </tr>
                                 ))
-                            ) : couponsList.length == 0 ? (
+                            ) : couponsList.length === 0 ? (
                                 <tr>
                                     <td colSpan="6" >No Coupons</td>
                                 </tr>
@@ -296,7 +296,7 @@ const Coupontable = () => {
 
                         </tbody>
                     </table>
-                </>)}
+                </>) }
             </div>
 
             {/* Update Coupon Form */}

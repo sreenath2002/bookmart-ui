@@ -192,7 +192,7 @@ const Wishlist = () => {
 
      
       </>
-      ) : (<><div>Wishlist is Empty</div></>)}
+      ) : (<><div className='emptywishlist'>Wishlist is Empty</div></>)}
     </div>
   );
 };

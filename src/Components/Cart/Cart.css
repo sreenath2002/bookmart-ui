@@ -63,6 +63,13 @@
 background-color: green;
   cursor: pointer;
 }
+
+.emptycart{
+  font-size: x-large;
+  color: #131212;
+  margin: auto;
+ margin-top: 20%;
+}
 .discountperscent{
   font-size: .9rem;
   color: #4caf50;

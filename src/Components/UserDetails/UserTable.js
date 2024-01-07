@@ -183,7 +183,7 @@ const UserTable = () => {
   };
 
   return (
-    <div className="table-container">
+    <div className="userdetailstable-container">
       
        
       {deleteSuccesMessage && <div className='deleteSucces'>Deleted SUccesFully</div>}

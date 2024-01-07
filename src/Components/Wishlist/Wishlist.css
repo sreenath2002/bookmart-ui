@@ -14,6 +14,12 @@
     
   
   }
+  .emptywishlist{
+    font-size: x-large;
+    color: #131212;
+    margin: auto;
+   margin-top: 20%;
+  }
   .wishlist-items p{
     text-align: left;
     
